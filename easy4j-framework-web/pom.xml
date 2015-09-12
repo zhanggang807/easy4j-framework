@@ -9,6 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <dependencies>
+
+        <dependency>
+            <artifactId>xk-common-spring-base</artifactId>
+            <groupId>com.mm.common</groupId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
     <artifactId>easy4j-framework-web</artifactId>
 
 
