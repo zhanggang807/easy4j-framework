@@ -5,9 +5,12 @@ import com.google.common.base.Strings;
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.annotation.Annotation;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * <p>类扫描器</p>
@@ -66,11 +69,30 @@ public class ClassScanner {
             if(protocol.equals("file")) {
                 String packagePath = url.getPath();
                 addClass(classFilter, packagePath, packageName) ;
+            } else if(protocol.equals("jar")){
+                addClassFromJar(url , classFilter);
             }
 
         }
 
         return classFilter.getClassList();
+    }
+
+    private static void  addClassFromJar(URL url ,ClassFilter classFilter) throws Exception {
+        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+        JarFile jarFile = jarURLConnection.getJarFile();
+        Enumeration<JarEntry> jarEntries = jarFile.entries();
+        while (jarEntries.hasMoreElements()) {
+            JarEntry jarEntry = jarEntries.nextElement();
+            String jarEntryName = jarEntry.getName();
+            // 判断该 entry 是否为 class
+            if (jarEntryName.endsWith(".class")) {
+                // 获取类名
+                String className = jarEntryName.substring(0, jarEntryName.lastIndexOf(".")).replaceAll("/", ".");
+                // 执行添加类操作
+                doAddClass(classFilter, className);
+            }
+        }
     }
 
 
@@ -116,7 +138,7 @@ public class ClassScanner {
 
     private static void doAddClass(ClassFilter classFilter, String className) {
         // 加载类
-        Class<?> cls = null;
+        Class<?> cls ;
         try {
             cls = Class.forName(className, false,Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
