@@ -90,7 +90,7 @@ public class ClassScanner {
 
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
 
-                if(packageName != null && !packageName.isEmpty()){
+                if(!Strings.isNullOrEmpty(packageName)){
                     className = packageName + "." + className;
                 }
 
