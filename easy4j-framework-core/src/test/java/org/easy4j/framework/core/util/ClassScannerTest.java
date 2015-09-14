@@ -1,4 +1,4 @@
-package org.easy4j.framework.util;
+package org.easy4j.framework.core.util;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,6 +10,7 @@ import org.junit.Test;
  * @created date 15-9-14
  */
 public class ClassScannerTest {
+
     @Before
     public void setUp() throws Exception {
 
