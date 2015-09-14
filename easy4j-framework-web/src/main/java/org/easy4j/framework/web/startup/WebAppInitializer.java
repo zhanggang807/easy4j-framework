@@ -1,6 +1,5 @@
 package org.easy4j.framework.web.startup;
 
-import org.easy4j.framework.core.util.ClassScanner;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.startup.config.WebMvcConfig;
 import org.springframework.core.io.ClassPathResource;
@@ -14,16 +13,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import java.io.IOException;
 import java.util.Properties;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * <p>
@@ -103,7 +92,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         if(scanBasePackage != null){
             servletAppContext.scan(scanBasePackage);
         }
-        servletAppContext.scan("com.man.controller" ,"com.service.util");
+
         Class<?>[] configClasses = getServletConfigClasses();
         if (!ObjectUtils.isEmpty(configClasses)) {
             servletAppContext.register(configClasses);
