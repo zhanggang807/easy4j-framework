@@ -1,5 +1,6 @@
 package org.easy4j.framework.web.startup;
 
+import org.easy4j.framework.core.util.ClassScanner;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.startup.config.WebMvcConfig;
 import org.springframework.core.io.ClassPathResource;
@@ -58,6 +59,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
             if(basePackage != null && !basePackage.isEmpty()) {
                 scanBasePackage = StringUtils.commaDelimitedListToStringArray(basePackage) ;
             }
+
 
         } catch (IOException ex) {
             throw new IllegalStateException("Could not load 'WebAppInitializer.properties': " + ex.getMessage());
