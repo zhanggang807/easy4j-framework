@@ -27,5 +27,7 @@ public class ClassScannerTest {
     public void testGetClassList() throws Exception{
         ClassScanner.getClassList("org.easy4j.framework");
         List<Class<?>> classList = ClassScanner.getClassList("com.google.common.util.concurrent");
+        List<Class<?>> classList02 = ClassScanner.getClassListByAnnotationType("org.easy4j.framework",TestDemo.class);
+
     }
 }
