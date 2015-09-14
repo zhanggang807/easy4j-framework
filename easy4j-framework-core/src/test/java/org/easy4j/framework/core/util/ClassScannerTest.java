@@ -1,6 +1,7 @@
 package org.easy4j.framework.core.util;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,8 @@ public class ClassScannerTest {
     public void testGetClassList() throws Exception{
         ClassScanner.getClassList("org.easy4j.framework");
         List<Class<?>> classList = ClassScanner.getClassList("com.google.common.util.concurrent");
-        List<Class<?>> classList02 = ClassScanner.getClassListByAnnotationType("org.easy4j.framework",TestDemo.class);
+        List<Class<?>> classList02 = ClassScanner.getClassListByAnnotationType("org.easy4j.framework", TestDemo.class);
 
+        Assert.assertTrue(classList02.contains(AnnotationTest.class));
     }
 }
