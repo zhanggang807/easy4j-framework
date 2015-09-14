@@ -1,10 +1,8 @@
-package org.easy4j.framework.core;
+package org.easy4j.framework.util;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.annotation.Annotation;
 
 /**
  * @author bjliuyong

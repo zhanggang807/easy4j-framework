@@ -1,4 +1,4 @@
-package org.easy4j.framework.core;
+package org.easy4j.framework.util;
 
 
 import java.lang.annotation.Annotation;

@@ -1,4 +1,4 @@
-package org.easy4j.framework.core;
+package org.easy4j.framework.util;
 
 import com.google.common.base.Strings;
 
@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ClassScanner {
      * @return
      * @throws Exception
      */
-    public static List<Class<?>>  getAllClassList(String packageName) throws Exception{
+    public static List<Class<?>>  getClassList(String packageName) throws Exception{
         return getClassList(packageName , new ClassFilter() {});
     }
 
@@ -126,6 +125,5 @@ public class ClassScanner {
 
         classFilter.add(cls);
     }
-
 
 }
