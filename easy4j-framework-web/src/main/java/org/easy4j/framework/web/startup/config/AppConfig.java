@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ImportResource;
  * @created date 15-9-11
  */
 @Configuration
-@ImportResource("classpath:spring-config.xml")
+@ImportResource("classpath:spring/**.xml")
 public class AppConfig {
 
 }
