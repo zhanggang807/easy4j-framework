@@ -28,8 +28,6 @@ import java.util.Properties;
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    private static final String  DEFAULT_APP_SETTING = "WebAppInitializer.properties";
-
     public static String scanBasePackage ;
 
     public static String[] scanExtMvcPackages ;
@@ -37,7 +35,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 
     static {
-        ClassPathResource resource = new ClassPathResource(DEFAULT_APP_SETTING, WebAppInitializer.class);
+        ClassPathResource resource = new ClassPathResource("WebAppInitializer.properties", WebAppInitializer.class);
         try {
             Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 
@@ -149,6 +147,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     }
 
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        //clear
+        scanBasePackage = null ;
+        scanExtMvcPackages = null ;
+        scanExtAppPackages = null ;
     }
 }
 
