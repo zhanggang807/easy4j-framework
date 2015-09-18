@@ -12,6 +12,7 @@
 
         <module>easy4j-framework-core</module>
         <module>easy4j-framework-web</module>
+        <module>easy4j-framework-example</module>
 
     </modules>
 

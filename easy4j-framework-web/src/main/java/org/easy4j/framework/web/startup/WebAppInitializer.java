@@ -10,7 +10,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -31,7 +35,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
      */
     public static final String APP_EXT_SETTING_FILE = "base.setting.filename";
 
-    public static String[] scanBasePackage ;
+    public static String scanBasePackage ;
+
+    public static String[] scanExtMvcPackages ;
+    public static String[] scanExtAppPackages ;
 
 
     static {
@@ -43,12 +50,18 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
             Properties appExtProperties = PropertiesLoaderUtils.loadProperties(appExtResource);
 
-            String basePackage = appExtProperties.getProperty("base.package");
+            scanBasePackage = appExtProperties.getProperty("base.package");
 
-            if(basePackage != null && !basePackage.isEmpty()) {
-                scanBasePackage = StringUtils.commaDelimitedListToStringArray(basePackage) ;
+            String mvcPackages = appExtProperties.getProperty("base.mvc.package");
+            String appPackages = appExtProperties.getProperty("base.app.package");
+
+            if(mvcPackages != null && mvcPackages.length() > 0){
+                scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
             }
 
+            if(appPackages != null && appPackages.length() > 0){
+                scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
+            }
 
         } catch (IOException ex) {
             throw new IllegalStateException("Could not load 'WebAppInitializer.properties': " + ex.getMessage());
@@ -67,9 +80,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
         AnnotationConfigWebApplicationContext rootAppContext = new AnnotationConfigWebApplicationContext();
 
-        if(scanBasePackage != null){
-            rootAppContext.scan(scanBasePackage);
-        }
+        register(rootAppContext ,
+                new String[]{   scanBasePackage + ".service" ,
+                                scanBasePackage + ".dao" ,
+                                scanBasePackage + ".manager"} ,scanExtAppPackages);
 
         Class<?>[] configClasses = getRootConfigClasses();
         if (!ObjectUtils.isEmpty(configClasses)) {
@@ -89,15 +103,38 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected WebApplicationContext createServletApplicationContext() {
         AnnotationConfigWebApplicationContext servletAppContext = new AnnotationConfigWebApplicationContext();
 
-        if(scanBasePackage != null){
-            servletAppContext.scan(scanBasePackage);
-        }
+        register(servletAppContext , new String[]{
+                scanBasePackage + ".controller" , scanBasePackage + ".action"} ,scanExtMvcPackages);
 
         Class<?>[] configClasses = getServletConfigClasses();
         if (!ObjectUtils.isEmpty(configClasses)) {
             servletAppContext.register(configClasses);
         }
         return servletAppContext;
+    }
+
+    private void register(AnnotationConfigWebApplicationContext annotationConfigWebApplicationContext,String basePackage[] , String[] extScanPackages){
+
+        int baseLen = basePackage == null ? 0 : basePackage.length ;
+        int extLen = extScanPackages == null ? 0 : extScanPackages.length ;
+
+        if(baseLen + extLen == 0)
+            return;
+
+        String[] scanPackages = new String[(baseLen + extLen)];
+
+        if(basePackage != null) {
+            System.arraycopy(basePackage ,0  ,scanPackages ,0 ,baseLen);
+        }
+
+        if(extScanPackages != null){
+            System.arraycopy(extScanPackages ,0  ,scanPackages ,baseLen ,extLen);
+        }
+
+        if(scanPackages.length > 0 ){
+            annotationConfigWebApplicationContext.scan(scanPackages);
+        }
+
     }
 
 
@@ -114,6 +151,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
     }
 }
 
