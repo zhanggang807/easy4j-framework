@@ -30,11 +30,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     private static final String  DEFAULT_APP_SETTING = "WebAppInitializer.properties";
 
-    /**
-     * 应用默认扩展文件名称
-     */
-    public static final String APP_EXT_SETTING_FILE = "base.setting.filename";
-
     public static String scanBasePackage ;
 
     public static String[] scanExtMvcPackages ;
@@ -46,7 +41,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         try {
             Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 
-            ClassPathResource appExtResource = new ClassPathResource(properties.getProperty(APP_EXT_SETTING_FILE) + ".properties" ) ;
+            ClassPathResource appExtResource = new ClassPathResource(properties.getProperty("base.config.filename") + ".properties" ) ;
 
             Properties appExtProperties = PropertiesLoaderUtils.loadProperties(appExtResource);
 
