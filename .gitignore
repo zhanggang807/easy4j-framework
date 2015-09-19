@@ -1,4 +1,13 @@
+# Maven #
+target/
+
+# IDEA #
+.idea/
 *.iml
 *.ipr
 *.iws
-.idea/
+
+# Eclipse #
+.settings/
+.classpath
+.project
