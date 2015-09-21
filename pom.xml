@@ -15,8 +15,6 @@
         <module>easy4j-framework-example</module>
         <module>easy4j-framework-spring</module>
         <module>easy4j-framework-dao</module>
-        <module>easy4j-plugin-velocity</module>
-        <module>easy4j-framework-velocity</module>
 
     </modules>
 
