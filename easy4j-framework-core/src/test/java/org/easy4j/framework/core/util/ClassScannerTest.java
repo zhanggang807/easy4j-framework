@@ -1,5 +1,7 @@
 package org.easy4j.framework.core.util;
 
+import org.easy4j.framework.core.plugin.Plugin;
+import org.easy4j.framework.core.plugin.PluginAdapter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +31,9 @@ public class ClassScannerTest {
         ClassScanner.getClassList("org.easy4j.framework");
         List<Class<?>> classList = ClassScanner.getClassList("com.google.common.util.concurrent");
         List<Class<?>> classList02 = ClassScanner.getClassListByAnnotationType("org.easy4j.framework", TestDemo.class);
+        List<Class<?>> classList03 = ClassScanner.getClassListBySuperClass("org.easy4j.framework", Plugin.class);
 
         Assert.assertTrue(classList02.contains(AnnotationTest.class));
+        Assert.assertTrue(classList03.contains(PluginAdapter.class));
     }
 }

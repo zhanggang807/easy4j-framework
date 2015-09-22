@@ -42,7 +42,7 @@ public abstract class ClassFilter {
         return new ClassFilter() {
             @Override
             public boolean accept(Class<?> cls) {
-                return cls.isAssignableFrom(superClass);
+                return superClass.isAssignableFrom(cls);
             }
         } ;
     }
