@@ -22,5 +22,12 @@ public class IndexController {
 
     }
 
+    @RequestMapping(value = "/vm")
+    public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+
+        return "index";
+
+    }
+
 
 }
