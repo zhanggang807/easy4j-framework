@@ -10,15 +10,6 @@
     <bean id="velocityConfigurer"
           class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
         <property name="resourceLoaderPath" value="WEB-INF/vm" />
-        <property name="configLocation" value="classpath:velocity.properties"/>
-        <property name="velocityProperties">
-            <props>
-                <prop key="input.encoding">utf-8</prop>
-                <prop key="output.encoding">utf-8</prop>
-
-               <!-- <prop key="velocimacro.library">macro.vm</prop>-->
-            </props>
-        </property>
     </bean>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">

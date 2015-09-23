@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class IndexController {
 
-    @RequestMapping(value = "/")
+    /*@RequestMapping(value = "/")
     public ModelAndView index(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 
         return new ModelAndView("index.jsp");
 
-    }
+    }*/
 
-    @RequestMapping(value = "/vm")
+    @RequestMapping(value = "/")
     public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 
         return "index";

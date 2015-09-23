@@ -52,9 +52,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
                 scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
             }
 
-            if(appPackages != null && appPackages.length() > 0){
-                scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
-            }
+            appPackages  =
+                    appPackages == null ?
+                            "org.easy4j.framework.web.bean.processor" : ("org.easy4j.framework.web.bean.processor," + appPackages) ;
+
+            scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
 
         } catch (IOException ex) {
             throw new IllegalStateException("Could not load 'WebAppInitializer.properties': " + ex.getMessage());
