@@ -5,7 +5,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
@@ -24,6 +23,8 @@ public class ViewBeanPostProcessor implements BeanPostProcessor ,BeanFactoryAwar
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
+       /* DefaultListableBeanFactory  beanFactory = null ;
+        beanFactory.destroyBean();*/
         if(bean instanceof VelocityLayoutViewResolver){
             return postProcessBeforeInitialization((VelocityLayoutViewResolver) bean);
         } else if (bean instanceof VelocityConfigurer) {
