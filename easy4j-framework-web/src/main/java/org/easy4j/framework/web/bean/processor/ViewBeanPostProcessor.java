@@ -70,30 +70,30 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
         mergeVelocityConfigFile(velocityProperties);
 
-        velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
+        String resourceLoaderPath = velocityProperties.getProperty(VelocityConstants.RESOURCE_LOADER_PATH);
 
-        String resourceLoaderPath = velocityProperties.getProperty("resourceLoaderPath", "classpath:tpl/");
+        initMacro(velocityProperties);
+
         velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath",resourceLoaderPath) ; //WEB-INF/vm
         velocityConfigurerBuilder.addPropertyValue("preferFileSystemAccess",false) ; //WEB-INF/vm
+        velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
 
-        ClassPathResource macroResource = new ClassPathResource("tpl/macro.vm");
-        if(macroResource.exists()){
-            velocityProperties.setProperty("velocimacro.library","macro.vm");
-        }
 
-        /* defualt<property name="exposeSpringMacroHelpers" value="false"/>*/
-        /* defualt <property name="layoutKey" value="layout"/>*/
-        /* defualt <property name="screenContentKey" value="screen_content"/>*/
         viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding"));
         viewResolverBuilder.addPropertyValue("suffix",velocityProperties.getProperty("suffix",".vm")); //layoutViewResolver.setSuffix(".vm");
         viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
         viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
+
+        if(listableBeanFactory.containsBean("velocityTools")){
+            viewResolverBuilder.addPropertyReference("attributesMap","velocityTools");
+        }
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
 
         listableBeanFactory.registerBeanDefinition("velocityConfigurer",velocityConfigurerBuilder.getBeanDefinition());
     }
 
+    //org/apache/velocity/runtime/defaults/velocity.properties
     private Properties loadDefaultVelocityConfigFile(){
 
         ClassPathResource resource = new ClassPathResource("velocity.properties", ViewBeanPostProcessor.class);
@@ -101,6 +101,17 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
             return PropertiesLoaderUtils.loadProperties(resource);
         } catch (IOException e) {
             throw  new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 设置是否有宏 ， 默认路劲在tpl/macro.vm下面
+     * @param velocityProperties
+     */
+    private void initMacro(Properties velocityProperties){
+        ClassPathResource macroResource = new ClassPathResource("tpl/macro.vm");
+        if(macroResource.exists()){
+            velocityProperties.setProperty("velocimacro.library","macro.vm");
         }
     }
 
