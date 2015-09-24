@@ -84,16 +84,16 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         }
         //velocityProperties.setProperty("velocimacro.library","macro.vm");
         velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
-        velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath","classpath:tpl/") ; //WEB-INF/vm
+        velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath",velocityProperties.getProperty("resourceLoaderPath","classpath:tpl/")) ; //WEB-INF/vm
         velocityConfigurerBuilder.addPropertyValue("preferFileSystemAccess",false) ; //WEB-INF/vm
 
         /* defualt<property name="exposeSpringMacroHelpers" value="false"/>*/
         /* defualt <property name="layoutKey" value="layout"/>*/
         /* defualt <property name="screenContentKey" value="screen_content"/>*/
         viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding",outputEncoding));
-        viewResolverBuilder.addPropertyValue("suffix",".vm"); //layoutViewResolver.setSuffix(".vm");
-        viewResolverBuilder.addPropertyValue("layoutKey","layout");
-        viewResolverBuilder.addPropertyValue("exposePathVariables",true); //layoutViewResolver.setExposePathVariables(true);
+        viewResolverBuilder.addPropertyValue("suffix",velocityProperties.getProperty("suffix",".vm")); //layoutViewResolver.setSuffix(".vm");
+        viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
+        viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables","true")); //layoutViewResolver.setExposePathVariables(true);
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
 
