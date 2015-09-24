@@ -1,5 +1,7 @@
 package org.easy4j.framework.web.bean.processor;
 
+import org.easy4j.framework.web.startup.config.AppConfig;
+import org.easy4j.framework.web.view.ViewType;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -13,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.SpringResourceLoader;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
@@ -59,7 +62,17 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+        try{
+            ClassUtils.forName("org.apache.velocity.app.VelocityEngine",this.getClass().getClassLoader());
+            if(AppConfig.canAdapterView(ViewType.VELOCITY))
+                initVelocityViewResolver();
+        } catch (ClassNotFoundException nfe) {
+            //no-op just test
+        }
 
+    }
+
+    private void initVelocityViewResolver(){
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory)beanFactory ;
         BeanDefinitionBuilder viewResolverBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityLayoutViewResolver.class);
         BeanDefinitionBuilder velocityConfigurerBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityConfigurer.class);
