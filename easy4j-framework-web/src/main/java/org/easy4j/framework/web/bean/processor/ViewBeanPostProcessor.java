@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -38,7 +39,10 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
         if(bean instanceof VelocityLayoutViewResolver){
-            return (VelocityLayoutViewResolver) bean;
+
+            if(applicationContext.containsBean("velocityTools"))
+                ((VelocityLayoutViewResolver) bean ).setAttributesMap((Map)applicationContext.getBean("velocityTools"));
+            return  bean;
         } else if (bean instanceof VelocityConfigurer) {
             return (VelocityConfigurer) bean ;
         }
@@ -97,9 +101,9 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
         viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
 
-        if(listableBeanFactory.containsBean("velocityTools")){
+        /*if(listableBeanFactory.containsBean("velocityTools")){
             viewResolverBuilder.addPropertyReference("attributesMap","velocityTools");
-        }
+        }*/
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
 
