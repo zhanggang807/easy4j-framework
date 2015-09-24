@@ -80,11 +80,10 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
         velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath","WEB-INF/vm") ;
 
-
         /* defualt<property name="exposeSpringMacroHelpers" value="false"/>*/
         /* defualt <property name="layoutKey" value="layout"/>*/
         /* defualt <property name="screenContentKey" value="screen_content"/>*/
-        viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + outputEncoding);
+        viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding",outputEncoding));
         viewResolverBuilder.addPropertyValue("suffix",".vm"); //layoutViewResolver.setSuffix(".vm");
         viewResolverBuilder.addPropertyValue("exposePathVariables",true); //layoutViewResolver.setExposePathVariables(true);
 
