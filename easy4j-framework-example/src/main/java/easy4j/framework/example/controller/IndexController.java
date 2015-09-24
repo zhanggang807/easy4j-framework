@@ -23,9 +23,16 @@ public class IndexController {
     }*/
 
     @RequestMapping(value = "/")
-    public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+     public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 
         return "index";
+
+    }
+
+    @RequestMapping(value = "/chong")
+    public String indexChong(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+
+        return "chongzhi/jd/com/index";
 
     }
 

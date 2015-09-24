@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.velocity.SpringResourceLoader;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
@@ -53,6 +54,10 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         this.beanFactory = beanFactory ;
     }
 
+    /**
+     * 集成velocity 初始化所需的bean， viewResolver ，velocityConfigurer ， 既可以完成velocity集成
+     * @throws Exception
+     */
     @Override
     public void afterPropertiesSet() throws Exception {
 
@@ -66,6 +71,7 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
         velocityProperties.setProperty("input.encoding","utf-8");
         velocityProperties.setProperty("output.encoding",outputEncoding);
+        velocityProperties.setProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CACHE, "false");
 
         ClassPathResource classPathResource = new ClassPathResource("velocity.properties");
         if(classPathResource.exists()){
@@ -78,13 +84,15 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         }
         //velocityProperties.setProperty("velocimacro.library","macro.vm");
         velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
-        velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath","WEB-INF/vm") ;
+        velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath","classpath:tpl/") ; //WEB-INF/vm
+        velocityConfigurerBuilder.addPropertyValue("preferFileSystemAccess",false) ; //WEB-INF/vm
 
         /* defualt<property name="exposeSpringMacroHelpers" value="false"/>*/
         /* defualt <property name="layoutKey" value="layout"/>*/
         /* defualt <property name="screenContentKey" value="screen_content"/>*/
         viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding",outputEncoding));
         viewResolverBuilder.addPropertyValue("suffix",".vm"); //layoutViewResolver.setSuffix(".vm");
+        viewResolverBuilder.addPropertyValue("layoutKey","layout");
         viewResolverBuilder.addPropertyValue("exposePathVariables",true); //layoutViewResolver.setExposePathVariables(true);
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
