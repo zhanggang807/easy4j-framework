@@ -55,6 +55,7 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory)beanFactory ;
         BeanDefinitionBuilder viewResolverBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityLayoutViewResolver.class);
         BeanDefinitionBuilder velocityConfigurerBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityConfigurer.class);
