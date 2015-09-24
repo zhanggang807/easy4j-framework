@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 public class IndexController {
 
     /*@RequestMapping(value = "/")
-    public ModelAndView index(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+    public void index(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 
-        return new ModelAndView("index.jsp");
+        System.out.println("");
 
     }*/
 
