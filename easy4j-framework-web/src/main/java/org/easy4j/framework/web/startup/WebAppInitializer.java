@@ -37,32 +37,19 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 
     static {
-        ClassPathResource resource = new ClassPathResource("WebAppInitializer.properties", WebAppInitializer.class);
-        try {
-            Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+        scanBasePackage    = AppConfig.get(AppConfig.BASE_PACKAGE);
+        String appPackages = AppConfig.get(AppConfig.BASE_APP_PACKAGE);
+        String mvcPackages = AppConfig.get(AppConfig.BASE_MVC_PACKAGE);
 
-            ClassPathResource appExtResource = new ClassPathResource(properties.getProperty("base.config.filename") + ".properties" ) ;
-
-            Properties appExtProperties = PropertiesLoaderUtils.loadProperties(appExtResource);
-
-            scanBasePackage = appExtProperties.getProperty("base.package");
-
-            String mvcPackages = appExtProperties.getProperty("base.mvc.package");
-            String appPackages = appExtProperties.getProperty("base.app.package");
-
-            if(mvcPackages != null && mvcPackages.length() > 0){
-                scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
-            }
-
-            appPackages  =
-                    appPackages == null ?
-                            "org.easy4j.framework.web.bean.processor" : ("org.easy4j.framework.web.bean.processor," + appPackages) ;
-
-            scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
-
-        } catch (IOException ex) {
-            throw new IllegalStateException("Could not load 'WebAppInitializer.properties': " + ex.getMessage());
+        if(mvcPackages != null && mvcPackages.length() > 0){
+            scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
         }
+
+        appPackages  =
+                appPackages == null ?
+                        "org.easy4j.framework.web.bean.processor" : ("org.easy4j.framework.web.bean.processor," + appPackages) ;
+
+        scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
     }
 
 

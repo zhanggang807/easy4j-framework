@@ -1,5 +1,7 @@
 package org.easy4j.framework.web.bean.processor;
 
+import org.easy4j.framework.web.startup.config.AppConfig;
+import org.easy4j.framework.web.view.ViewType;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -13,10 +15,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.SpringResourceLoader;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -35,7 +39,10 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
         if(bean instanceof VelocityLayoutViewResolver){
-            return (VelocityLayoutViewResolver) bean;
+
+            if(applicationContext.containsBean("velocityTools"))
+                ((VelocityLayoutViewResolver) bean ).setAttributesMap((Map)applicationContext.getBean("velocityTools"));
+            return  bean;
         } else if (bean instanceof VelocityConfigurer) {
             return (VelocityConfigurer) bean ;
         }
@@ -59,7 +66,17 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+        try{
+            ClassUtils.forName("org.apache.velocity.app.VelocityEngine",this.getClass().getClassLoader());
+            if(AppConfig.canAdapterView(ViewType.VELOCITY))
+                initVelocityViewResolver();
+        } catch (ClassNotFoundException nfe) {
+            //no-op just test
+        }
 
+    }
+
+    private void initVelocityViewResolver(){
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory)beanFactory ;
         BeanDefinitionBuilder viewResolverBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityLayoutViewResolver.class);
         BeanDefinitionBuilder velocityConfigurerBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityConfigurer.class);
@@ -84,9 +101,9 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
         viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
 
-        if(listableBeanFactory.containsBean("velocityTools")){
+        /*if(listableBeanFactory.containsBean("velocityTools")){
             viewResolverBuilder.addPropertyReference("attributesMap","velocityTools");
-        }
+        }*/
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
 
