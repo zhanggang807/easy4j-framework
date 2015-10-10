@@ -44,7 +44,7 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
                 ((VelocityLayoutViewResolver) bean ).setAttributesMap((Map)applicationContext.getBean("velocityTools"));
             return  bean;
         } else if (bean instanceof VelocityConfigurer) {
-            return (VelocityConfigurer) bean ;
+            return  bean ;
         }
 
         return bean;
