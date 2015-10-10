@@ -15,13 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class IndexController {
 
-    /*@RequestMapping(value = "/")
-    public void index(HttpServletRequest request ,HttpServletResponse response) throws Exception{
-
-        System.out.println("");
-
-    }*/
-
     @RequestMapping(value = "/")
      public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 
