@@ -62,6 +62,9 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
     /**
      * 集成velocity 初始化所需的bean， viewResolver ，velocityConfigurer ， 既可以完成velocity集成
+     *
+     * 如果引入了velocity jar包 ，并且easy4j.view 未指定特定的视图 ， 那么就使用velocity
+     *
      * @throws Exception
      */
     @Override

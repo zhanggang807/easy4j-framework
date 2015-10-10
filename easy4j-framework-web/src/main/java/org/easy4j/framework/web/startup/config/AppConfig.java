@@ -59,7 +59,7 @@ public class AppConfig  {
 
     /**
      * //未指定视图 ，可以适应任意视图
-     * @param viewType alse see @ViewType
+     * @param viewType @see ViewType
      * @return
      */
     public static boolean canAdapterView(String viewType){
