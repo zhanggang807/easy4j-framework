@@ -1,5 +1,7 @@
 package org.easy4j.framework.web.view;
 
+import org.springframework.beans.factory.BeanFactory;
+
 /**
  * @author bjliuyong
  * @version 1.0
@@ -21,7 +23,7 @@ public class JspViewAdaptorProcessor implements ViewAdaptorProcessor {
      * 注册ViewResolver
      */
     @Override
-    public void registerViewResolver() {
+    public void registerViewResolver(BeanFactory beanFactory) {
 
     }
 }

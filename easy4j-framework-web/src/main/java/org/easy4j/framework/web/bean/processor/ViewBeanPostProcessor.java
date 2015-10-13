@@ -56,10 +56,7 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         return bean;
     }
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory ;
-    }
+
 
     /**
      * 集成velocity 初始化所需的bean， viewResolver ，velocityConfigurer ， 既可以完成velocity集成
@@ -72,97 +69,17 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
     public void afterPropertiesSet() throws Exception {
 
         ViewAdaptorProcessor viewAdaptorProcessor =  ViewAdaptorProcessorFactory.getInstance("");
+        viewAdaptorProcessor.registerViewResolver(beanFactory);
 
-        //viewAdaptorProcessor.discoverDriver();
-
-        try{
-
-            ClassUtils.forName("org.apache.velocity.app.VelocityEngine",this.getClass().getClassLoader());
-            if(AppConfig.canAdapterView(ViewType.VELOCITY))
-                initVelocityViewResolver();
-        } catch (ClassNotFoundException nfe) {
-            //no-op just test
-        }
-
-    }
-
-    private void initVelocityViewResolver(){
-        DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory)beanFactory ;
-        BeanDefinitionBuilder viewResolverBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityLayoutViewResolver.class);
-        BeanDefinitionBuilder velocityConfigurerBuilder = BeanDefinitionBuilder.rootBeanDefinition(VelocityConfigurer.class);
-
-        Properties velocityProperties = loadDefaultVelocityConfigFile();
-
-        velocityProperties.setProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CACHE, "true");
-
-        mergeVelocityConfigFile(velocityProperties);
-
-        String resourceLoaderPath = velocityProperties.getProperty(VelocityConstants.RESOURCE_LOADER_PATH);
-
-        initMacro(velocityProperties);
-
-        velocityConfigurerBuilder.addPropertyValue("resourceLoaderPath",resourceLoaderPath) ; //WEB-INF/vm
-        velocityConfigurerBuilder.addPropertyValue("preferFileSystemAccess",false) ; //WEB-INF/vm
-        velocityConfigurerBuilder.addPropertyValue("velocityProperties",velocityProperties) ;
-
-
-        viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding"));
-        viewResolverBuilder.addPropertyValue("suffix",velocityProperties.getProperty("suffix",".vm")); //layoutViewResolver.setSuffix(".vm");
-        viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("layoutKey","layout"));
-        viewResolverBuilder.addPropertyValue("layoutUrl",velocityProperties.getProperty(VelocityConstants.VELOCITY_LAYOUT_URL,
-                VelocityConstants.VELOCITY_LAYOUT_URL_VALUE));
-        viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
-
-        if(listableBeanFactory.containsBean("velocityTools")){
-            viewResolverBuilder.addPropertyReference("attributesMap","velocityTools");
-        }
-
-        listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
-
-        listableBeanFactory.registerBeanDefinition("velocityConfigurer",velocityConfigurerBuilder.getBeanDefinition());
-    }
-
-    //org/apache/velocity/runtime/defaults/velocity.properties
-    private Properties loadDefaultVelocityConfigFile(){
-
-        ClassPathResource resource = new ClassPathResource("velocity.properties", ViewBeanPostProcessor.class);
-        try {
-            return PropertiesLoaderUtils.loadProperties(resource);
-        } catch (IOException e) {
-            throw  new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 设置是否有宏 ， 默认路劲在tpl/macro.vm下面
-     * @param velocityProperties
-     */
-    private void initMacro(Properties velocityProperties){
-        ClassPathResource macroResource = new ClassPathResource("tpl/macro.vm");
-        if(macroResource.exists()){
-            velocityProperties.setProperty("velocimacro.library","macro.vm");
-        }
-    }
-
-    /**
-     * 如果classpath 下面有velocity.properties 文件 将其进行合并， 并且覆盖默认值
-     * @param velocityProperties
-     */
-    private void mergeVelocityConfigFile(Properties velocityProperties){
-
-        ClassPathResource classPathResource = new ClassPathResource("velocity.properties");
-        if(classPathResource.exists()){
-            try {
-                Properties customProperties = PropertiesLoaderUtils.loadProperties(classPathResource);
-                velocityProperties.putAll(customProperties);
-            } catch (IOException e) {
-                new RuntimeException(e);
-            }
-        }
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory ;
     }
 }
