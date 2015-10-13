@@ -29,5 +29,10 @@ public class IndexController {
 
     }
 
+    @RequestMapping(value = "/vm")
+    public String webInf(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+        return request.getParameter("vm");
+    }
+
 
 }
