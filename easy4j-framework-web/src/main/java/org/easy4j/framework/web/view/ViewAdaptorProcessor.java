@@ -10,6 +10,14 @@ import org.springframework.beans.factory.BeanFactory;
 public interface ViewAdaptorProcessor {
 
     /**
+     * 判断是否支持该视图
+     *
+     * @param viewType
+     * @return
+     */
+    boolean support(String viewType);
+
+    /**
      * 发现有没有支持该视图的相关class文件
      * @return
      */

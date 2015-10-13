@@ -9,6 +9,11 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public class JspViewAdaptorProcessor implements ViewAdaptorProcessor {
 
+    @Override
+    public boolean support(String viewType) {
+        return ViewType.JSP.equals(viewType);
+    }
+
     /**
      * 发现有没有支持该视图的相关class文件
      *
