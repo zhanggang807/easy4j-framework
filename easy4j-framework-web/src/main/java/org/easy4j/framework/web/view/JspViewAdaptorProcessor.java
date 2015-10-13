@@ -13,8 +13,8 @@ public class JspViewAdaptorProcessor implements ViewAdaptorProcessor {
      * @return
      */
     @Override
-    public boolean discover() {
-        return false;
+    public boolean discoverDriver() {
+        return true;
     }
 
     /**

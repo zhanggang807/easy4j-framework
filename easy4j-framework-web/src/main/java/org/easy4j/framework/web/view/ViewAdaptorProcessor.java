@@ -11,7 +11,7 @@ public interface ViewAdaptorProcessor {
      * 发现有没有支持该视图的相关class文件
      * @return
      */
-    boolean discover();
+    boolean discoverDriver();
 
 
     /**

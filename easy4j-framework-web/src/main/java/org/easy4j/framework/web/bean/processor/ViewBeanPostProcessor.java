@@ -69,6 +69,7 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
     @Override
     public void afterPropertiesSet() throws Exception {
         try{
+
             ClassUtils.forName("org.apache.velocity.app.VelocityEngine",this.getClass().getClassLoader());
             if(AppConfig.canAdapterView(ViewType.VELOCITY))
                 initVelocityViewResolver();

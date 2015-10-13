@@ -1,5 +1,7 @@
 package org.easy4j.framework.web.view;
 
+import org.easy4j.framework.web.view.velocity.VelocityViewAdaptorProcessor;
+
 /**
  *
  * 视图适配处理器工厂
@@ -9,4 +11,24 @@ package org.easy4j.framework.web.view;
  * @created date 15-10-13
  */
 public class ViewAdaptorProcessorFactory {
+
+
+    /**
+     * 根据视图类型返回不同的视图处理器
+     * @param type
+     * @return
+     */
+    public static ViewAdaptorProcessor getInstance(String type){
+
+        if(type == null || type.isEmpty()){
+            return new VelocityViewAdaptorProcessor();
+        }
+
+        if(type.equals(ViewType.JSP)){
+            return new JspViewAdaptorProcessor();
+        } else if(type.equals(ViewType.VELOCITY)){
+            return new VelocityViewAdaptorProcessor();
+        }
+        throw new RuntimeException("can not find right ViewAdaptorProcessor class");
+    }
 }
