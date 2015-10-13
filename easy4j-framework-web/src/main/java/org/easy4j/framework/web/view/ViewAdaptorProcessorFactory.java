@@ -20,8 +20,15 @@ public class ViewAdaptorProcessorFactory {
      */
     public static ViewAdaptorProcessor getInstance(String type){
 
+        ViewAdaptorProcessor viewAdaptorProcessor ;
+
         if(type == null || type.isEmpty()){
-            return new VelocityViewAdaptorProcessor();
+            viewAdaptorProcessor =  new VelocityViewAdaptorProcessor();
+            if(viewAdaptorProcessor.discoverDriver()){
+                return viewAdaptorProcessor ;
+            } else {
+                return new JspViewAdaptorProcessor();
+            }
         }
 
         if(type.equals(ViewType.JSP)){
@@ -29,6 +36,8 @@ public class ViewAdaptorProcessorFactory {
         } else if(type.equals(ViewType.VELOCITY)){
             return new VelocityViewAdaptorProcessor();
         }
+
+
         throw new RuntimeException("can not find right ViewAdaptorProcessor class");
     }
 }

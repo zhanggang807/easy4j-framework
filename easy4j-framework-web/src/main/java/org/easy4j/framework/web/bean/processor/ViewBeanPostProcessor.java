@@ -1,6 +1,8 @@
 package org.easy4j.framework.web.bean.processor;
 
 import org.easy4j.framework.web.startup.config.AppConfig;
+import org.easy4j.framework.web.view.ViewAdaptorProcessor;
+import org.easy4j.framework.web.view.ViewAdaptorProcessorFactory;
 import org.easy4j.framework.web.view.ViewType;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -68,6 +70,11 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        ViewAdaptorProcessor viewAdaptorProcessor =  ViewAdaptorProcessorFactory.getInstance("");
+
+        //viewAdaptorProcessor.discoverDriver();
+
         try{
 
             ClassUtils.forName("org.apache.velocity.app.VelocityEngine",this.getClass().getClassLoader());
