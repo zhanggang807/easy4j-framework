@@ -40,8 +40,8 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
         if(bean instanceof VelocityLayoutViewResolver){
 
-            if(applicationContext.containsBean("velocityTools"))
-                ((VelocityLayoutViewResolver) bean ).setAttributesMap((Map)applicationContext.getBean("velocityTools"));
+            /*if(applicationContext.containsBean("velocityTools"))
+                ((VelocityLayoutViewResolver) bean ).setAttributesMap((Map)applicationContext.getBean("velocityTools"));*/
             return  bean;
         } else if (bean instanceof VelocityConfigurer) {
             return  bean ;
