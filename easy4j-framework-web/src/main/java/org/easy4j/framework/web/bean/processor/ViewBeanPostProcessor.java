@@ -20,7 +20,6 @@ import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Properties;
 
 /**
