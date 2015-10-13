@@ -1,6 +1,8 @@
 # easy4j-framework
 easy4j-framework
 
+环境： jdk7.0+ ,tomcat7.0+
+
 遵循约定大于配置 ，特殊定制需在easy4j.properties配置
 
 默认约定如下：

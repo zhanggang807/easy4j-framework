@@ -104,9 +104,9 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
         viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
         viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
 
-        /*if(listableBeanFactory.containsBean("velocityTools")){
+        if(listableBeanFactory.containsBean("velocityTools")){
             viewResolverBuilder.addPropertyReference("attributesMap","velocityTools");
-        }*/
+        }
 
         listableBeanFactory.registerBeanDefinition("viewResolver",viewResolverBuilder.getBeanDefinition());
 
