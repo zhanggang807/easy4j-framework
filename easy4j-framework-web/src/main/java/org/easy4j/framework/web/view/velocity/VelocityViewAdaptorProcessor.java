@@ -25,6 +25,10 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
 
     @Override
     public boolean support(String viewType) {
+
+        if(viewType == null || viewType.isEmpty())
+            return true ;
+
         return ViewType.VELOCITY.equalsIgnoreCase(viewType);
     }
 

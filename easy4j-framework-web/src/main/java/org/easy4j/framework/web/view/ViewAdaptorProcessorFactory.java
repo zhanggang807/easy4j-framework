@@ -2,6 +2,11 @@ package org.easy4j.framework.web.view;
 
 import org.easy4j.framework.web.view.velocity.VelocityViewAdaptorProcessor;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.ServiceLoader;
+
 /**
  *
  * 视图适配处理器工厂
@@ -15,29 +20,35 @@ public class ViewAdaptorProcessorFactory {
 
     /**
      * 根据视图类型返回不同的视图处理器
-     * @param type
+     * @param viewType
      * @return
      */
-    public static ViewAdaptorProcessor getInstance(String type){
+    public static ViewAdaptorProcessor getInstance(String viewType){
 
-        ViewAdaptorProcessor viewAdaptorProcessor ;
+        Map<String,ViewAdaptorProcessor>  container = new HashMap<String,ViewAdaptorProcessor>();
+        registerProcessor(container ,new VelocityViewAdaptorProcessor());
+        registerProcessor(container ,new JspViewAdaptorProcessor());
 
-        if(type == null || type.isEmpty()){
-            viewAdaptorProcessor =  new VelocityViewAdaptorProcessor();
-            if(viewAdaptorProcessor.discoverDriver()){
-                return viewAdaptorProcessor ;
-            } else {
-                return new JspViewAdaptorProcessor();
+        ServiceLoader<ViewAdaptorProcessor> viewAdaptorProcessors =   ServiceLoader.load(ViewAdaptorProcessor.class);
+
+        Iterator<ViewAdaptorProcessor> iterator =  viewAdaptorProcessors.iterator();
+
+        while (iterator.hasNext()){
+            registerProcessor(container,iterator.next());
+        }
+
+        for(ViewAdaptorProcessor viewAdaptorProcessor : container.values()){
+            //如果没有指定特定的视图 ，自动适配
+            if(viewAdaptorProcessor.support(viewType) && viewAdaptorProcessor.discoverDriver() ){
+                return viewAdaptorProcessor;
             }
+
         }
 
-        if(type.equals(ViewType.JSP)){
-            return new JspViewAdaptorProcessor();
-        } else if(type.equals(ViewType.VELOCITY)){
-            return new VelocityViewAdaptorProcessor();
-        }
+        return new JspViewAdaptorProcessor();
+    }
 
-
-        throw new RuntimeException("can not find right ViewAdaptorProcessor class");
+    public static void registerProcessor(Map<String,ViewAdaptorProcessor> container, ViewAdaptorProcessor viewAdaptorProcessor){
+        container.put(viewAdaptorProcessor.getClass().getSimpleName(),viewAdaptorProcessor);
     }
 }

@@ -15,7 +15,6 @@ public class JspViewAdaptorProcessor implements ViewAdaptorProcessor {
     }
 
     /**
-     * 发现有没有支持该视图的相关class文件
      *
      * @return
      */
