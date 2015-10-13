@@ -4,14 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <util:map id="velocityTools">
-
         <entry key="now">
-            <bean class=""
+            <bean class="java.util.Date"/>
         </entry>
-       <!--
-        <entry key="loginUrl">
-
-        </entry>-->
     </util:map>
 
 </beans>

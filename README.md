@@ -9,7 +9,10 @@ easy4j-framework
 
 1. 自动读取 classpath 下 spring-**.xml
 2. 视图自动配置 ,根据引入的jar包适配， 类型slf4j ， 例如 使用velocity， 只需要引用velocity 所需要的jar包
-    velocity模板路劲，首先自动从WEB-INF/vm 下的文件查找， 然后从classpath:tpl
+velocity模板路劲，首先自动从WEB-INF/vm 下的文件查找， 然后从classpath:tpl ，自动读取velocityTools bean 当做velocity 工具
+，velocityTools bean 必须为Map的实例
+
+
 
 
 

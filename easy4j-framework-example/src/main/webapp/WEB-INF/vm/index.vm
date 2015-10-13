@@ -1,2 +1,3 @@
 你好   I come from WEB-INF/vm directory
-      hello velocity
+
+<h3>current time :$now.getTime()</h3>
