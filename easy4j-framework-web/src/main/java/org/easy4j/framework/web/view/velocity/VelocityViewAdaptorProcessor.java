@@ -86,6 +86,8 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
 
         Properties properties = new Properties();
         properties.put("input.encoding","utf-8");
+        properties.put("output.encoding","utf-8");
+        properties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
         return properties;
     }
 
