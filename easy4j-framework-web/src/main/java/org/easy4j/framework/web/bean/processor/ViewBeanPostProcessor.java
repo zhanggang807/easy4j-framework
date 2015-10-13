@@ -101,7 +101,9 @@ public class ViewBeanPostProcessor implements BeanPostProcessor,ApplicationConte
 
         viewResolverBuilder.addPropertyValue("contentType","text/html;charset=" + velocityProperties.getProperty("output.encoding"));
         viewResolverBuilder.addPropertyValue("suffix",velocityProperties.getProperty("suffix",".vm")); //layoutViewResolver.setSuffix(".vm");
-        viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("suffix","layout"));
+        viewResolverBuilder.addPropertyValue("layoutKey",velocityProperties.getProperty("layoutKey","layout"));
+        viewResolverBuilder.addPropertyValue("layoutUrl",velocityProperties.getProperty(VelocityConstants.VELOCITY_LAYOUT_URL,
+                VelocityConstants.VELOCITY_LAYOUT_URL_VALUE));
         viewResolverBuilder.addPropertyValue("exposePathVariables",velocityProperties.getProperty("exposePathVariables", "true")); //layoutViewResolver.setExposePathVariables(true);
 
         if(listableBeanFactory.containsBean("velocityTools")){
