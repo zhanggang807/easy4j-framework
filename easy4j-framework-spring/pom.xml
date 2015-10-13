@@ -13,7 +13,7 @@
     <artifactId>easy4j-framework-spring</artifactId>
 
     <properties>
-        <org.springframework.version>4.0.7.RELEASE</org.springframework.version>
+        <org.springframework.version>4.1.0.RC2</org.springframework.version>
     </properties>
 
     <dependencies>
