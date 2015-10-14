@@ -101,6 +101,12 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
         velocityProperties.put("output.encoding","utf-8");
         velocityProperties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
 
+        String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
+
+        if(!Strings.isNullOrEmpty(layoutUrl)){
+            velocityProperties.put(VelocityConstants.VELOCITY_LAYOUT_URL,layoutUrl);
+        }
+
         return velocityProperties;
     }
 
@@ -114,13 +120,6 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
         if(classPathResource.exists()){
             try {
                 Properties customProperties = PropertiesLoaderUtils.loadProperties(classPathResource);
-
-                String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
-
-                if(!Strings.isNullOrEmpty(layoutUrl)){
-                    velocityProperties.put(VelocityConstants.VELOCITY_LAYOUT_URL,layoutUrl);
-                }
-
                 velocityProperties.putAll(customProperties);
             } catch (IOException e) {
                 new RuntimeException(e);
