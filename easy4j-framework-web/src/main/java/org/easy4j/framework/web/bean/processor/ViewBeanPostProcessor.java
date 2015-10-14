@@ -1,28 +1,18 @@
 package org.easy4j.framework.web.bean.processor;
 
-import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.view.ViewAdaptorProcessor;
 import org.easy4j.framework.web.view.ViewAdaptorProcessorFactory;
-import org.easy4j.framework.web.view.ViewType;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.velocity.SpringResourceLoader;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * @author bjliuyong
