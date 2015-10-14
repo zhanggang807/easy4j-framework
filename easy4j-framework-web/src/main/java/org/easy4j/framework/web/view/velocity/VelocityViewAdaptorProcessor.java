@@ -1,6 +1,8 @@
 package org.easy4j.framework.web.view.velocity;
 
+import com.google.common.base.Strings;
 import org.easy4j.framework.web.bean.processor.VelocityConstants;
+import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.view.ViewAdaptorProcessor;
 import org.easy4j.framework.web.view.ViewType;
 import org.springframework.beans.factory.BeanFactory;
@@ -94,11 +96,12 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
     //org/apache/velocity/runtime/defaults/velocity.properties
     private Properties loadDefaultVelocityConfigFile(){
 
-        Properties properties = new Properties();
-        properties.put("input.encoding","utf-8");
-        properties.put("output.encoding","utf-8");
-        properties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
-        return properties;
+        Properties velocityProperties = new Properties();
+        velocityProperties.put("input.encoding","utf-8");
+        velocityProperties.put("output.encoding","utf-8");
+        velocityProperties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
+
+        return velocityProperties;
     }
 
     /**
@@ -111,6 +114,13 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
         if(classPathResource.exists()){
             try {
                 Properties customProperties = PropertiesLoaderUtils.loadProperties(classPathResource);
+
+                String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
+
+                if(!Strings.isNullOrEmpty(layoutUrl)){
+                    velocityProperties.put(VelocityConstants.VELOCITY_LAYOUT_URL,layoutUrl);
+                }
+
                 velocityProperties.putAll(customProperties);
             } catch (IOException e) {
                 new RuntimeException(e);
