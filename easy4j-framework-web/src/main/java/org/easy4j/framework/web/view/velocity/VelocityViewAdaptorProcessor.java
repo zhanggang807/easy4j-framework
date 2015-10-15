@@ -41,14 +41,7 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
      */
     @Override
     public boolean discoverDriver() {
-
-        try {
-            ClassUtils.forName("org.apache.velocity.app.VelocityEngine", this.getClass().getClassLoader());
-        } catch (ClassNotFoundException e) {
-            return false ;
-        }
-
-        return true;
+        return ClassUtils.isPresent("org.apache.velocity.app.VelocityEngine", this.getClass().getClassLoader());
     }
 
     /**
