@@ -16,10 +16,14 @@ import java.util.List;
  * @author liuyong
  * @version 1.0
  * @created date 15-9-10
+ *
+ * MVC 默认配置启动类
+ *
+ * EnableWebMvc equal <mvc:annotation-driven />
+ *
  */
 @Configuration
-@EnableWebMvc          //<mvc:annotation-driven />
-/*@ImportResource({"classpath:spring-mvc.xml"})*/
+@EnableWebMvc
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private static final String FastJsonHttpMessageConverter = "com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" ;
