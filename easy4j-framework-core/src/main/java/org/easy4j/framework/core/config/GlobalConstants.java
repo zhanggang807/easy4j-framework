@@ -5,6 +5,9 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
+ *
+ * 全局配置
+ *
  * @author bjliuyong
  * @version 1.0
  * @created date 15-10-16
