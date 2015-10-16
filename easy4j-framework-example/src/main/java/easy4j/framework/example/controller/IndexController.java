@@ -48,7 +48,6 @@ public class IndexController {
 
     @RequestMapping(value = "/str")
     public @ResponseBody String  str(HttpServletRequest request ,HttpServletResponse response) throws Exception{
-
         return "this is string 你好";
 
     }
