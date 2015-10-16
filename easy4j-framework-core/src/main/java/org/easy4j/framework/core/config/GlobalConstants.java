@@ -1,6 +1,7 @@
 package org.easy4j.framework.core.config;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
@@ -23,10 +24,20 @@ public class GlobalConstants {
 
     static {
 
+        InputStream inputStream = null;
         try {
-            easy4jProperties.load(GlobalConstants.class.getResourceAsStream("easy4j.properties"));
+            inputStream = GlobalConstants.class.getClassLoader().getResourceAsStream("easy4j.properties");
+            easy4jProperties.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("can not find easy4j.properties from classpath");
+        } finally {
+            if(inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    //no-op
+                }
+            }
         }
 
     }
