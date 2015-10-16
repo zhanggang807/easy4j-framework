@@ -1,10 +1,11 @@
 package org.easy4j.framework.web.startup.config;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.nio.charset.Charset;
@@ -21,6 +22,8 @@ import java.util.List;
 /*@ImportResource({"classpath:spring-mvc.xml"})*/
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+    private static final String FastJsonHttpMessageConverter = "com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" ;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -31,12 +34,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-        /*StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("utf-8"));
-        converters.add(stringHttpMessageConverter);*/
     }
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+
+        if(ClassUtils.isPresent(FastJsonHttpMessageConverter,this.getClass().getClassLoader())){
+            try {
+                converters.add((HttpMessageConverter)BeanUtils.instantiateClass(Class.forName(FastJsonHttpMessageConverter))) ;
+            } catch (ClassNotFoundException e) {
+                //no-op
+            }
+        }
 
         int len = converters.size();
 
