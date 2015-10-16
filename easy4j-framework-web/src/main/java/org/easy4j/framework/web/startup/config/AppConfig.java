@@ -50,26 +50,6 @@ public class AppConfig  {
         return appCustomConfig.getProperty(key);
     }
 
-    public static String get(String key ,String defaultVal ){
-        if(appCustomConfig == null ){
-            return defaultVal;
-        }
-        return appCustomConfig.getProperty(key,defaultVal);
-    }
-
-    /**
-     * //未指定视图 ，可以适应任意视图
-     * @param viewType @see ViewType
-     * @return
-     */
-    public static boolean canAdapterView(String viewType){
-        String view = get(EASY4J_VIEW);
-
-        if(view == null)
-            return true ;
-
-        return viewType.equals(view) ;
-    }
 
     /**
      * clear cache
