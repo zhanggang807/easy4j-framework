@@ -1,6 +1,7 @@
 package org.easy4j.framework.web.view.velocity;
 
 import com.google.common.base.Strings;
+import org.easy4j.framework.core.config.GlobalConstants;
 import org.easy4j.framework.web.bean.processor.VelocityConstants;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.view.ViewAdaptorProcessor;
@@ -90,8 +91,8 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
     private Properties loadDefaultVelocityConfigFile(){
 
         Properties velocityProperties = new Properties();
-        velocityProperties.put("input.encoding","utf-8");
-        velocityProperties.put("output.encoding","utf-8");
+        velocityProperties.put("input.encoding", GlobalConstants.CHARSET_NAME);
+        velocityProperties.put("output.encoding",GlobalConstants.CHARSET_NAME);
         velocityProperties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
 
         String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
