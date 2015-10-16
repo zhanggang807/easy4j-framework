@@ -2,6 +2,7 @@ package easy4j.framework.example.controller;
 
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -49,6 +50,13 @@ public class IndexController {
     @RequestMapping(value = "/str")
     public @ResponseBody String  str(HttpServletRequest request ,HttpServletResponse response) throws Exception{
         return "this is string 你好";
+
+    }
+
+    @RequestMapping(value = "/model")
+    public Model json(HttpServletRequest request ,HttpServletResponse response,Model model) throws Exception{
+        model.addAttribute("code",1);
+        return model;
 
     }
 
