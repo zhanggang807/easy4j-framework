@@ -1,5 +1,6 @@
 package org.easy4j.framework.web.startup.config;
 
+import org.easy4j.framework.core.config.GlobalConstants;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -65,14 +66,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     //设置StringHttpMessageConverter编码，防止乱码
     private void extendStringHttpMessageConverter(List<HttpMessageConverter<?>> converters , int position ){
-        Charset defaultCharset = Charset.forName("utf-8");
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
 
         List<MediaType> mediaTypeList = new ArrayList<MediaType>(3);
 
-        mediaTypeList.add(new MediaType("text", "html", defaultCharset));
-        mediaTypeList.add(new MediaType("text", "plain", defaultCharset));
-        mediaTypeList.add(new MediaType("*", "*", defaultCharset));
+        mediaTypeList.add(new MediaType("text", "html", GlobalConstants.CHARSET));
+        mediaTypeList.add(new MediaType("text", "plain", GlobalConstants.CHARSET));
+        mediaTypeList.add(new MediaType("*", "*", GlobalConstants.CHARSET));
 
         stringHttpMessageConverter.setSupportedMediaTypes(mediaTypeList);
         stringHttpMessageConverter.setWriteAcceptCharset(false);
