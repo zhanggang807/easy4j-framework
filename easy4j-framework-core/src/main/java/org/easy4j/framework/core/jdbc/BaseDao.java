@@ -1,5 +1,9 @@
 package org.easy4j.framework.core.jdbc;
 
+import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
+import org.easy4j.framework.core.jdbc.handler.BeanHandler;
+import org.easy4j.framework.core.jdbc.handler.BeanListHandler;
+import org.easy4j.framework.core.util.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
@@ -8,15 +12,73 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: liuyong
  * @since 1.0
  */
-public class BaseDao extends AbstractDao {
+public class BaseDao<M> extends AbstractDao {
 
     @Autowired
     private DataSource dataSource ;
+
+    protected final Class<M> beanClass;
+
+    protected String tableName ;
+
+    protected String INSERT = "$insert_";
+
+    protected ResultSetHandler<M> resultSetHandler ;
+
+    protected final Map<String ,String> sqlCache  ;
+
+    public BaseDao(){
+        this.sqlCache  = new HashMap<String, String>();
+        this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        if(beanClass != null ) {
+            this.tableName = JdbcUtils.tableName(this.beanClass);
+            //Map columnMap = new HashMap();
+            resultSetHandler = new BeanHandler<M>(beanClass ) ;
+            //resultSetHandler = new BeanHandler<M>(beanClass,new BasicRowProcessor(new BeanProcessor(columnMap) )) ;
+        }
+
+
+        _initSql();
+        initSql();
+    }
+
+    protected void initSql(){
+
+    }
+
+    /**
+     * 初始化部分SQL
+     */
+    protected void _initSql(){
+
+        String[] columns = JdbcUtils.columns(this.beanClass);
+
+        SQL insertSQL = new SQL().INSERT_INTO(tableName);
+        for(String column : columns){
+            if(column.equals("id"))
+                continue;
+            insertSQL.VALUES(column, "?");
+        }
+
+        cacheSql(INSERT , insertSQL.toString());
+
+    };
+
+    protected String sql(String key ){
+        return sqlCache.get(key);
+    }
+
+    protected String cacheSql(String key ,String value){
+        return sqlCache.put(key,value);
+    }
 
     @Override
     protected DataSource getDataSource() {
@@ -28,7 +90,28 @@ public class BaseDao extends AbstractDao {
         this.dataSource = dataSource;
     }
 
-    public <T> T insert(String sql ,Class<?> type ,Object... params) throws Exception{
+    /**
+     * 增加一条记录 ，并返回影响的行数
+     * @param m
+     * @return
+     */
+    public int save(M m) throws SQLException{
+
+        Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
+
+        String insertSql = sql(INSERT);
+        return update(insertSql,parameter);
+    }
+
+    public M findOne(String sql , Object... params)throws Exception{
+        return this.query(sql ,resultSetHandler ,params);
+    }
+
+    public List<M> queryList(String sql,Object... params) throws Exception{
+        return this.query(sql,new BeanListHandler<M>(beanClass),params);
+    }
+
+    protected <T> T insert(String sql ,Class<?> type ,Object... params) throws SQLException{
         Connection conn = this.prepareConnection();
         PreparedStatement stmt = null;
         try{
@@ -114,20 +197,28 @@ public class BaseDao extends AbstractDao {
      * @throws SQLException if a database access error occurs
      */
     public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params) throws SQLException {
-        return this.<T>query(sql, rsh, params);
+        Connection connection = this.prepareConnection();
+        try{
+            return this.<T>query(connection ,sql, rsh, params);
+        } catch (SQLException e) {
+            rethrow(e,sql,params);
+        }
+        finally {
+            close(connection);
+        }
+        return null ;
     }
 
     /**
      * Execute an SQL SELECT query without any replacement parameters.  The
      * caller is responsible for closing the connection.
      * @param <T> The type of object that the handler returns
-     * @param conn The connection to execute the query in.
      * @param sql The query to execute.
      * @param rsh The handler that converts the results into an object.
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
      */
-    public <T> T query(Connection conn, String sql, ResultSetHandler<T> rsh) throws SQLException {
+    public <T> T query(String sql, ResultSetHandler<T> rsh) throws SQLException {
         return this.<T>query(sql, rsh, (Object[]) null);
     }
 
@@ -163,7 +254,11 @@ public class BaseDao extends AbstractDao {
         } catch (SQLException e) {
             this.rethrow(e, sql, params);
         } finally {
-            close(rs);
+            try {
+                close(rs);
+            } finally {
+                close(stmt);
+            }
         }
 
         return result;
