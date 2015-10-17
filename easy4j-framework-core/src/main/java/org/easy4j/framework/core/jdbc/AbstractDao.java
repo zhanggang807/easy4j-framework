@@ -136,13 +136,25 @@ public abstract class AbstractDao {
         return autoGenerateKey ? conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS) : conn.prepareStatement(sql);
     }
 
+    /**
+     *
+     * @param resultSet
+     * @param type
+     * @param <T>
+     * @return
+     * @throws SQLException
+     */
     protected <T> T getGeneratedKey(ResultSet resultSet ,Class<?> type) throws SQLException{
 
-        if(Number.class.isAssignableFrom(type)){
-            resultSet.next();
-            return (T)resultSet.getObject(1);
-
+        try{
+            if(Number.class.isAssignableFrom(type)){
+                resultSet.next();
+                return (T)resultSet.getObject(1);
+            }
+        } finally {
+            close(resultSet);
         }
+
         return null ;
     }
 

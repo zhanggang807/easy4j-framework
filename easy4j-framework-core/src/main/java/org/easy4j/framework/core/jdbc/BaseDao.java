@@ -40,7 +40,11 @@ public class BaseDao extends AbstractDao {
         } catch (SQLException e) {
             this.rethrow(e, sql, params);
         }  finally {
-            close(conn);
+            try{
+                close(stmt);
+            } finally {
+                close(conn);
+            }
         }
         return null;
     }
