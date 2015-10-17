@@ -2,6 +2,7 @@ package easy4j.framework.example.controller;
 
 import com.google.common.collect.Maps;
 import easy4j.framework.example.dao.IndexDao;
+import easy4j.framework.example.entity.UserGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,7 +30,19 @@ public class IndexController {
 
     @RequestMapping(value = "/")
      public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
-        Object ret = indexDao.save("sdsf");
+        UserGroup userGroup = new UserGroup();
+        userGroup.setUid(100000);
+        userGroup.setGid(120000);
+        userGroup.setCreated(new Date());
+        userGroup.setModified(new Date());
+        try {
+            int i = indexDao.save(userGroup);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<UserGroup> userGroupList = indexDao.queryList("select * from s_user_role");
+
         return "index";
 
     }

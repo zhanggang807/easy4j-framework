@@ -3,6 +3,7 @@ package org.easy4j.framework.core.jdbc;
 import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
 import org.easy4j.framework.core.jdbc.handler.BeanHandler;
 import org.easy4j.framework.core.jdbc.handler.BeanListHandler;
+import org.easy4j.framework.core.jdbc.handler.SingleValueHandler;
 import org.easy4j.framework.core.util.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -110,6 +111,11 @@ public class BaseDao<M> extends AbstractDao {
     public List<M> queryList(String sql,Object... params) throws Exception{
         return this.query(sql,new BeanListHandler<M>(beanClass),params);
     }
+
+    public Object querySingleValue(String sql,Object... params) throws Exception{
+        return this.query(sql,new SingleValueHandler(),params);
+    }
+
 
     protected <T> T insert(String sql ,Class<?> type ,Object... params) throws SQLException{
         Connection conn = this.prepareConnection();

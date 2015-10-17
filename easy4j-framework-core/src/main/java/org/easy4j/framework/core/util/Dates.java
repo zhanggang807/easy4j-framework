@@ -547,11 +547,11 @@ public class Dates {
         // truncate minutes
         val.set(Calendar.MINUTE , 0);
 
-        if(field == Calendar.HOUR)
+        if(field == Calendar.HOUR_OF_DAY)
             return;
 
         // truncate hour
-        val.set(Calendar.HOUR , 0);
+        val.set(Calendar.HOUR_OF_DAY , 0);
         if(field == Calendar.DAY_OF_MONTH)
             return ;
     }
