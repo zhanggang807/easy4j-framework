@@ -18,11 +18,7 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>easy4j-framework</groupId>
-            <artifactId>easy4j-framework-spring</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>javax.servlet</groupId>

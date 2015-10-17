@@ -1,6 +1,8 @@
 package easy4j.framework.example.controller;
 
 import com.google.common.collect.Maps;
+import easy4j.framework.example.dao.IndexDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,12 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
+    @Autowired
+    private IndexDao indexDao;
+
     @RequestMapping(value = "/")
      public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
-
+        Object ret = indexDao.save("sdsf");
         return "index";
 
     }
@@ -61,4 +66,7 @@ public class IndexController {
     }
 
 
+    public void setIndexDao(IndexDao indexDao) {
+        this.indexDao = indexDao;
+    }
 }
