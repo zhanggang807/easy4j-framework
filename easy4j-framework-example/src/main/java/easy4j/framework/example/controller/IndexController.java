@@ -29,17 +29,13 @@ public class IndexController {
     private IndexDao indexDao;
 
     @RequestMapping(value = "/")
-     public String indexVm(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+     public String indexVm(HttpServletRequest request ,HttpServletResponse response) {
         UserGroup userGroup = new UserGroup();
         userGroup.setUid(100000);
         userGroup.setGid(120000);
         userGroup.setCreated(new Date());
         userGroup.setModified(new Date());
-        try {
-            int i = indexDao.save(userGroup);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        int i = indexDao.save(userGroup);
 
         List<UserGroup> userGroupList = indexDao.queryList("select * from s_user_role");
 

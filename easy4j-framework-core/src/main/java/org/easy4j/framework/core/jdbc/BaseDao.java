@@ -96,7 +96,7 @@ public class BaseDao<M> extends AbstractDao {
      * @param m
      * @return
      */
-    public int save(M m) throws SQLException{
+    public int save(M m) {
 
         Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
 
@@ -104,15 +104,15 @@ public class BaseDao<M> extends AbstractDao {
         return update(insertSql,parameter);
     }
 
-    public M findOne(String sql , Object... params)throws Exception{
+    public M findOne(String sql , Object... params) {
         return this.query(sql ,resultSetHandler ,params);
     }
 
-    public List<M> queryList(String sql,Object... params) throws Exception{
+    public List<M> queryList(String sql,Object... params) {
         return this.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 
-    public Object querySingleValue(String sql,Object... params) throws Exception{
+    public Object querySingleValue(String sql,Object... params) {
         return this.query(sql,new SingleValueHandler(),params);
     }
 
