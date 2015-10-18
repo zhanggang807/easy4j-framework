@@ -55,14 +55,16 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     /**
      * {@inheritDoc}
-     * <p>This implementation creates an {@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext},
+     * <p>This implementation creates an {@link org.easy4j.framework.web.startup.AnnotationAndXmlConfigWebApplicationContext},
      * providing it the annotated classes returned by {@link #getRootConfigClasses()}.
      * Returns {@code null} if {@link #getRootConfigClasses()} returns {@code null}.
      */
     @Override
     protected WebApplicationContext createRootApplicationContext() {
 
-        AnnotationConfigWebApplicationContext rootAppContext = new AnnotationConfigWebApplicationContext();
+        AnnotationAndXmlConfigWebApplicationContext rootAppContext = new AnnotationAndXmlConfigWebApplicationContext();
+
+        rootAppContext.setConfigLocation("classpath:spring-**.xml,classpath*:spring-config.xml");
 
         register(rootAppContext ,
                 new String[]{   scanBasePackage + ".service" ,

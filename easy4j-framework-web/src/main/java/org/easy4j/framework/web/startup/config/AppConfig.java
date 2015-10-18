@@ -20,7 +20,6 @@ import java.util.Properties;
  * @created date 15-9-11
  */
 @Configuration
-@ImportResource({"classpath:spring-**.xml"})
 public class AppConfig  {
 
     private static Properties appCustomConfig = new Properties();

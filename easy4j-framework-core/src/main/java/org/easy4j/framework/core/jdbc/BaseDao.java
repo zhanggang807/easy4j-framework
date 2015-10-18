@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class BaseDao<M> extends AbstractDao {
 
-    @Autowired
+    @Autowired(required = false)
     private DataSource dataSource ;
 
     protected final Class<M> beanClass;
