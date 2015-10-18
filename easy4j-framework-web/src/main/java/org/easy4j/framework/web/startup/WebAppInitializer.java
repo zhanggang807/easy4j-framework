@@ -44,7 +44,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         if(mvcPackages != null && mvcPackages.length() > 0){
             scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
         }
-
         appPackages  =
                 appPackages == null ?
                         "org.easy4j.framework.web.bean.processor" : ("org.easy4j.framework.web.bean.processor," + appPackages) ;
