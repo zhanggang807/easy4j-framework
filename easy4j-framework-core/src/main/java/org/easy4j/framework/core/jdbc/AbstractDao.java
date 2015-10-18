@@ -176,7 +176,7 @@ public abstract class AbstractDao {
      *             if a database access error occurs
      */
     protected void rethrow(SQLException cause, String sql, Object... params)
-            throws SQLException {
+            throws DbAccessException {
 
         String causeMessage = cause.getMessage();
         if (causeMessage == null) {
@@ -194,9 +194,8 @@ public abstract class AbstractDao {
             msg.append(Arrays.deepToString(params));
         }
 
-        SQLException e = new SQLException(msg.toString(), cause.getSQLState(),
-                cause.getErrorCode());
-        e.setNextException(cause);
+        DbAccessException e = new DbAccessException(msg.toString(), cause.getSQLState(),
+                cause);
 
         throw e;
     }
@@ -228,8 +227,8 @@ public abstract class AbstractDao {
      *             if a database access error occurs
      * @since DbUtils 1.1
      */
-    protected void close(Statement stmt) throws SQLException {
-        DbUtils.close(stmt);
+    protected void close(Statement stmt) {
+        DbUtils.closeQuietly(stmt);
     }
 
     /**
@@ -243,7 +242,7 @@ public abstract class AbstractDao {
      *             if a database access error occurs
      * @since DbUtils 1.1
      */
-    protected void close(ResultSet rs) throws SQLException {
+    protected void close(ResultSet rs) {
         DbUtils.close(rs);
     }
 

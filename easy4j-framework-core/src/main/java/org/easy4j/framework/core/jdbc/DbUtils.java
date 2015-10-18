@@ -17,11 +17,15 @@ public final class DbUtils {
      * Close a <code>Connection</code>, avoid closing if null.
      *
      * @param conn Connection to close.
-     * @throws java.sql.SQLException if a database access error occurs
+     * @throws DbAccessException if a database access error occurs
      */
-    public static void close(Connection conn) throws SQLException {
+    public static void close(Connection conn) {
         if (conn != null) {
-            conn.close();
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new DbAccessException(e);
+            }
         }
     }
 
@@ -29,11 +33,15 @@ public final class DbUtils {
      * Close a <code>ResultSet</code>, avoid closing if null.
      *
      * @param rs ResultSet to close.
-     * @throws SQLException if a database access error occurs
+     * @throws DbAccessException if a database access error occurs
      */
-    public static void close(ResultSet rs) throws SQLException {
+    public static void close(ResultSet rs)  {
         if (rs != null) {
-            rs.close();
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new DbAccessException(e);
+            }
         }
     }
 
@@ -41,24 +49,28 @@ public final class DbUtils {
      * Close a <code>Statement</code>, avoid closing if null.
      *
      * @param stmt Statement to close.
-     * @throws SQLException if a database access error occurs
+     * @throws DbAccessException if a database access error occurs
      */
-    public static void close(Statement stmt) throws SQLException {
+    public static void close(Statement stmt)  {
         if (stmt != null) {
-            stmt.close();
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                throw new DbAccessException(e);
+            }
         }
     }
 
     /**
      * Close a <code>Connection</code>, avoid closing if null and hide
-     * any SQLExceptions that occur.
+     * any DbAccessException that occur.
      *
      * @param conn Connection to close.
      */
     public static void closeQuietly(Connection conn) {
         try {
             close(conn);
-        } catch (SQLException e) { // NOPMD
+        } catch (DbAccessException e) { // NOPMD
             // quiet
         }
     }
@@ -66,7 +78,7 @@ public final class DbUtils {
     /**
      * Close a <code>Connection</code>, <code>Statement</code> and
      * <code>ResultSet</code>.  Avoid closing if null and hide any
-     * SQLExceptions that occur.
+     * DbAccessException that occur.
      *
      * @param conn Connection to close.
      * @param stmt Statement to close.
@@ -96,21 +108,21 @@ public final class DbUtils {
     public static void closeQuietly(ResultSet rs) {
         try {
             close(rs);
-        } catch (SQLException e) { // NOPMD
+        } catch (DbAccessException e) { // NOPMD
             // quiet
         }
     }
 
     /**
      * Close a <code>Statement</code>, avoid closing if null and hide
-     * any SQLExceptions that occur.
+     * any DbAccessException that occur.
      *
      * @param stmt Statement to close.
      */
     public static void closeQuietly(Statement stmt) {
         try {
             close(stmt);
-        } catch (SQLException e) { // NOPMD
+        } catch (DbAccessException e) { // NOPMD
             // quiet
         }
     }
@@ -165,15 +177,19 @@ public final class DbUtils {
      * avoid closing if null.
      *
      * @param conn Connection to rollback.  A null value is legal.
-     * @throws SQLException if a database access error occurs
+     * @throws DbAccessException if a database access error occurs
      * @since DbUtils 1.1
      */
-    public static void rollbackAndClose(Connection conn) throws SQLException {
+    public static void rollbackAndClose(Connection conn)  {
         if (conn != null) {
             try {
-                conn.rollback();
+                try {
+                    conn.rollback();
+                } catch (SQLException e) {
+                    throw new DbAccessException(e);
+                }
             } finally {
-                conn.close();
+                close(conn);
             }
         }
     }
@@ -188,7 +204,7 @@ public final class DbUtils {
     public static void rollbackAndCloseQuietly(Connection conn) {
         try {
             rollbackAndClose(conn);
-        } catch (SQLException e) { // NOPMD
+        } catch (DbAccessException e) { // NOPMD
             // quiet
         }
     }

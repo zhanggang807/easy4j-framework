@@ -117,10 +117,11 @@ public class BaseDao<M> extends AbstractDao {
     }
 
 
-    protected <T> T insert(String sql ,Class<?> type ,Object... params) throws SQLException{
-        Connection conn = this.prepareConnection();
+    protected <T> T insert(String sql ,Class<?> type ,Object... params) {
+        Connection        conn =  null ;
         PreparedStatement stmt = null;
         try{
+            conn = this.prepareConnection();
             stmt = this.prepareStatement(conn, sql,true);
             this.fillStatement(stmt, params);
             if( stmt.executeUpdate() <= 0 )
@@ -150,13 +151,12 @@ public class BaseDao<M> extends AbstractDao {
      * @throws SQLException if a database access error occurs
      * @return The number of rows updated.
      */
-    public int update(String sql, Object... params) throws SQLException {
-        Connection conn = this.prepareConnection();
+    public int update(String sql, Object... params) throws DbAccessException {
+        Connection conn = null;
         int rows = 0;
         try{
+            conn = this.prepareConnection();
             rows = this.update(conn, sql, params);
-        } catch (SQLException e) {
-            this.rethrow(e, sql, params);
         }  finally {
             close(conn);
         }
@@ -172,7 +172,7 @@ public class BaseDao<M> extends AbstractDao {
      * @return The number of rows updated.
      * @throws SQLException If there are database or parameter errors.
      */
-    private int update(Connection conn, String sql, Object... params) throws SQLException {
+    private int update(Connection conn, String sql, Object... params) {
 
 
         PreparedStatement stmt = null;
@@ -202,17 +202,14 @@ public class BaseDao<M> extends AbstractDao {
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
      */
-    public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params) throws SQLException {
-        Connection connection = this.prepareConnection();
+    public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params)  {
+        Connection connection = null;
         try{
+            connection = this.prepareConnection();
             return this.<T>query(connection ,sql, rsh, params);
-        } catch (SQLException e) {
-            rethrow(e,sql,params);
-        }
-        finally {
+        }finally {
             close(connection);
         }
-        return null ;
     }
 
     /**
@@ -224,7 +221,7 @@ public class BaseDao<M> extends AbstractDao {
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
      */
-    public <T> T query(String sql, ResultSetHandler<T> rsh) throws SQLException {
+    public <T> T query(String sql, ResultSetHandler<T> rsh)  {
         return this.<T>query(sql, rsh, (Object[]) null);
     }
 
@@ -238,13 +235,13 @@ public class BaseDao<M> extends AbstractDao {
      * @throws SQLException If there are database or parameter errors.
      */
     private <T> T query(Connection conn,  String sql, ResultSetHandler<T> rsh, Object... params)
-            throws SQLException {
+             {
         if (conn == null) {
-            throw new SQLException("Null connection");
+            throw new DbAccessException("Null connection");
         }
 
         if (rsh == null) {
-            throw new SQLException("Null ResultSetHandler");
+            throw new DbAccessException("Null ResultSetHandler");
         }
 
         PreparedStatement stmt = null;
@@ -271,19 +268,19 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     @Override
-    protected Connection prepareConnection() throws SQLException {
+    protected Connection prepareConnection()  {
 
         DataSource dataSource = getDataSource();
 
         if (dataSource == null) {
-            throw new SQLException(
+            throw new DbAccessException(
                     "Dao requires a DataSource to be "
                             + "invoked in this way, or a Connection should be passed in");
         }
         return DataSourceUtils.getConnection(dataSource);
     }
 
-    protected void close(Connection conn) throws SQLException {
+    protected void close(Connection conn)  {
         DataSourceUtils.releaseConnection(conn, getDataSource());
     }
 
