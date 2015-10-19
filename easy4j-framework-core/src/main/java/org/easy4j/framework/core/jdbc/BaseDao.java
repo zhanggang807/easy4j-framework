@@ -119,7 +119,7 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     public List<M> selectList(String condition, Object... params) {
-        return null;
+        return queryRunner.query("select * from " + tableName + " where " + condition,new BeanListHandler<M>(beanClass) ,params);
     }
 
 
