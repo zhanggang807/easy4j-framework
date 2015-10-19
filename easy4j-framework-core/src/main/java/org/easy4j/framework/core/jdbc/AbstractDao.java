@@ -113,30 +113,6 @@ public abstract class AbstractDao {
     }
 
     /**
-     * Factory method that creates and initializes a
-     * <code>PreparedStatement</code> object for the given SQL.
-     * <code>QueryRunner</code> methods always call this method to prepare
-     * statements for them. Subclasses can override this method to provide
-     * special PreparedStatement configuration if needed. This implementation
-     * simply calls <code>conn.prepareStatement(sql)</code>.
-     *
-     * @param conn
-     *            The <code>Connection</code> used to create the
-     *            <code>PreparedStatement</code>
-     * @param sql
-     *            The SQL statement to prepare.
-     * @param autoGenerateKey
-     *            是否需要返回数据库所产生的key
-     * @return An initialized <code>PreparedStatement</code>.
-     * @throws SQLException
-     *             if a database access error occurs
-     */
-    protected PreparedStatement prepareStatement(Connection conn, String sql ,boolean autoGenerateKey)
-            throws SQLException {
-        return autoGenerateKey ? conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS) : conn.prepareStatement(sql);
-    }
-
-    /**
      *
      * @param resultSet
      * @param type

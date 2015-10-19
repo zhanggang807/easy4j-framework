@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +32,8 @@ public class BaseDao<M> extends AbstractDao {
     protected ResultSetHandler<M> resultSetHandler ;
 
     protected final Map<String ,String> sqlCache  ;
+
+    private static QueryRunner queryRunner = new QueryRunner();
 
     public BaseDao(){
         this.sqlCache  = new HashMap<String, String>();
@@ -113,7 +112,7 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     public Object querySingleValue(String sql,Object... params) {
-        return this.query(sql,new SingleValueHandler(),params);
+        return this.query(sql, new SingleValueHandler(), params);
     }
 
 
@@ -122,7 +121,7 @@ public class BaseDao<M> extends AbstractDao {
         PreparedStatement stmt = null;
         try{
             conn = this.prepareConnection();
-            stmt = this.prepareStatement(conn, sql,true);
+            stmt = queryRunner.prepareStatement(conn, sql,Statement.RETURN_GENERATED_KEYS);
             this.fillStatement(stmt, params);
             if( stmt.executeUpdate() <= 0 )
                 throw new SQLException("insert.sql.error");
@@ -179,7 +178,7 @@ public class BaseDao<M> extends AbstractDao {
         int rows = 0;
 
         try {
-            stmt = this.prepareStatement(conn, sql,false);
+            stmt = queryRunner.prepareStatement(conn, sql);
             this.fillStatement(stmt, params);
             rows = stmt.executeUpdate();
 
@@ -203,69 +202,21 @@ public class BaseDao<M> extends AbstractDao {
      * @throws SQLException if a database access error occurs
      */
     public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params)  {
+
         Connection connection = null;
-        try{
-            connection = this.prepareConnection();
-            return this.<T>query(connection ,sql, rsh, params);
-        }finally {
-            close(connection);
-        }
-    }
-
-    /**
-     * Execute an SQL SELECT query without any replacement parameters.  The
-     * caller is responsible for closing the connection.
-     * @param <T> The type of object that the handler returns
-     * @param sql The query to execute.
-     * @param rsh The handler that converts the results into an object.
-     * @return The object returned by the handler.
-     * @throws SQLException if a database access error occurs
-     */
-    public <T> T query(String sql, ResultSetHandler<T> rsh)  {
-        return this.<T>query(sql, rsh, (Object[]) null);
-    }
-
-    /**
-     * Calls query after checking the parameters to ensure nothing is null.
-     * @param conn The connection to use for the query call.
-     * @param sql The SQL statement to execute.
-     * @param params An array of query replacement parameters.  Each row in
-     * this array is one set of batch replacement values.
-     * @return The results of the query.
-     * @throws SQLException If there are database or parameter errors.
-     */
-    private <T> T query(Connection conn,  String sql, ResultSetHandler<T> rsh, Object... params)
-             {
-        if (conn == null) {
-            throw new DbAccessException("Null connection");
-        }
-
-        if (rsh == null) {
-            throw new DbAccessException("Null ResultSetHandler");
-        }
-
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        T result = null;
 
         try {
-            stmt = this.prepareStatement(conn, sql,false);
-            this.fillStatement(stmt, params);
-            rs = this.wrap(stmt.executeQuery());
-            result = rsh.handle(rs);
-
+            connection = this.prepareConnection();
+            return queryRunner.query(connection, sql, rsh, params);
         } catch (SQLException e) {
-            this.rethrow(e, sql, params);
+            rethrow(e, sql, params);
         } finally {
-            try {
-                close(rs);
-            } finally {
-                close(stmt);
-            }
+            close(connection);
         }
 
-        return result;
+        return null ;
     }
+
 
     @Override
     protected Connection prepareConnection()  {

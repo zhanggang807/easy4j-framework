@@ -51,13 +51,9 @@ public final class DbUtils {
      * @param stmt Statement to close.
      * @throws DbAccessException if a database access error occurs
      */
-    public static void close(Statement stmt)  {
+    public static void close(Statement stmt) throws SQLException {
         if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                throw new DbAccessException(e);
-            }
+            stmt.close();
         }
     }
 
@@ -122,7 +118,7 @@ public final class DbUtils {
     public static void closeQuietly(Statement stmt) {
         try {
             close(stmt);
-        } catch (DbAccessException e) { // NOPMD
+        } catch (SQLException e) { // NOPMD
             // quiet
         }
     }
