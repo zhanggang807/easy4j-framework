@@ -114,7 +114,27 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     public List<M> queryList(String condition,Object... params) {
-        String sql = "select * from " + tableName + " where " + condition ;
+
+        String sql = "select * from " + tableName ;
+        if(condition != null && !condition.isEmpty()){
+            sql = sql + " where " + condition ;
+        }
+        return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
+    }
+
+    public List<M> queryList(String condition ,int rows,Object ... params){
+
+        if(rows <= 0){
+            return queryList(condition, params);
+        }
+
+        String sql = "select * from " + tableName ;
+        if(condition != null && !condition.isEmpty()){
+            sql = sql + " where " + condition ;
+        }
+
+        sql = sql + " limit 0 " + rows ;
+
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 
