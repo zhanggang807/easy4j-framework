@@ -118,5 +118,9 @@ public class BaseDao<M> extends AbstractDao {
         return queryRunner.query(sql, new SingleValueHandler(), params);
     }
 
+    public List<M> selectList(String condition, Object... params) {
+        return null;
+    }
+
 
 }
