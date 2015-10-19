@@ -163,7 +163,7 @@ public class QueryRunner  extends AbstractQueryRunner{
      * @throws SQLException if a database access error occurs
      * @since 1.6
      */
-    public boolean insert(Connection conn, String sql) throws SQLException {
+    public int insert(Connection conn, String sql) throws SQLException {
         return insert(conn, sql, (Object[]) null);
     }
 
@@ -177,7 +177,7 @@ public class QueryRunner  extends AbstractQueryRunner{
      * @throws SQLException if a database access error occurs
      * @since 1.6
      */
-    public boolean insert(Connection conn, String sql ,Object... params) throws SQLException {
+    public int insert(Connection conn, String sql ,Object... params) throws SQLException {
         return insert(conn, false, sql, params);
     }
 
@@ -270,7 +270,7 @@ public class QueryRunner  extends AbstractQueryRunner{
         ResultSet resultSet = null ;
 
         try {
-            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt = this.prepareStatement(conn ,sql, Statement.RETURN_GENERATED_KEYS);
             this.fillStatement(stmt, params);
             stmt.executeUpdate();
             resultSet = stmt.getGeneratedKeys();
@@ -302,7 +302,7 @@ public class QueryRunner  extends AbstractQueryRunner{
      * @throws SQLException If there are database or parameter errors.
      * @since 1.6
      */
-    public boolean insert(Connection conn, boolean closeConn, String sql,  Object... params)
+    public int insert(Connection conn, boolean closeConn, String sql,  Object... params)
             throws SQLException {
 
         PreparedStatement stmt = null;
@@ -323,6 +323,6 @@ public class QueryRunner  extends AbstractQueryRunner{
             }
         }
 
-        return rows > 0;
+        return rows;
     }
 }

@@ -99,12 +99,12 @@ public class BaseDao<M> extends AbstractDao {
      * @param m
      * @return
      */
-    public int save(M m) {
+    public boolean save(M m) {
 
         Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
 
         String insertSql = sql(INSERT);
-        return update(insertSql,parameter);
+        return this.insert(insertSql,parameter);
     }
 
     public M queryObject(String sql ,Object ... params){
@@ -123,29 +123,32 @@ public class BaseDao<M> extends AbstractDao {
         return this.query(sql, new SingleValueHandler(), params);
     }
 
+    protected <T> T insert(String sql ,Class<T> tClass , Object... params) {
 
-    protected <T> T insert(String sql ,Class<?> type ,Object... params) {
-
-        Connection        conn =  null ;
-        PreparedStatement stmt = null;
+        Connection        conn = null ;
         try{
             conn = this.prepareConnection();
-            queryRunner.insert(conn ,sql ,params);
-            stmt = queryRunner.prepareStatement(conn, sql, Statement.RETURN_GENERATED_KEYS);
-            this.fillStatement(stmt, params);
-            if( stmt.executeUpdate() <= 0 )
-                throw new SQLException("insert.sql.error");
-            return getGeneratedKey(stmt.getGeneratedKeys(),type);
+            return queryRunner.insert(conn ,sql ,null,params);
         } catch (SQLException e) {
             this.rethrow(e, sql, params);
         }  finally {
-            try{
-                close(stmt);
-            } finally {
-                close(conn);
-            }
+            close(conn);
         }
         return null;
+    }
+
+    protected boolean insert(String sql ,Object... params) {
+
+        Connection        conn =  null ;
+        try{
+            conn = this.prepareConnection();
+            return queryRunner.insert(conn ,sql ,params);
+        } catch (SQLException e) {
+            this.rethrow(e, sql, params);
+        }  finally {
+            close(conn);
+        }
+        return false;
     }
 
     @Override
