@@ -20,9 +20,6 @@ import java.util.Map;
  */
 public class BaseDao<M> extends AbstractDao {
 
-
-    private DataSource dataSource ;
-
     protected final Class<M> beanClass;
 
     protected String tableName ;
@@ -83,12 +80,9 @@ public class BaseDao<M> extends AbstractDao {
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
-
         if(queryRunner == null){
             queryRunner = new QueryRunner(dataSource);
         }
-
-        this.dataSource = dataSource;
     }
 
     protected QueryRunner getQueryRunner(){
