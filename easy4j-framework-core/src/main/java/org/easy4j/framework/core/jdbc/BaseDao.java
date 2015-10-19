@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class BaseDao<M> extends AbstractDao {
 
-    @Autowired(required = false)
+
     private DataSource dataSource ;
 
     protected final Class<M> beanClass;
@@ -33,7 +33,7 @@ public class BaseDao<M> extends AbstractDao {
 
     protected final Map<String ,String> sqlCache  ;
 
-    protected static QueryRunner queryRunner = new QueryRunner();
+    protected static QueryRunner queryRunner ;
 
     public BaseDao(){
         this.sqlCache  = new HashMap<String, String>();
@@ -80,13 +80,14 @@ public class BaseDao<M> extends AbstractDao {
         return sqlCache.put(key,value);
     }
 
-    @Override
-    protected DataSource getDataSource() {
-        return dataSource;
-    }
 
-
+    @Autowired
     public void setDataSource(DataSource dataSource) {
+
+        if(queryRunner == null){
+            queryRunner = new QueryRunner(dataSource);
+        }
+
         this.dataSource = dataSource;
     }
 
@@ -104,124 +105,24 @@ public class BaseDao<M> extends AbstractDao {
         Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
 
         String insertSql = sql(INSERT);
-        return this.insert(insertSql,parameter) > 0;
+        return queryRunner.insert(insertSql,parameter) > 0;
     }
 
     public M queryObject(String sql ,Object ... params){
-        return this.query(sql ,resultSetHandler ,params);
+        return queryRunner.query(sql ,resultSetHandler ,params);
     }
 
     public M findOne(String sql , Object... params) {
-        return this.query(sql, resultSetHandler, params);
+        return queryRunner.query(sql, resultSetHandler, params);
     }
 
     public List<M> queryList(String sql,Object... params) {
-        return this.query(sql,new BeanListHandler<M>(beanClass),params);
+        return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 
     public Object querySingleValue(String sql,Object... params) {
-        return this.query(sql, new SingleValueHandler(), params);
+        return queryRunner.query(sql, new SingleValueHandler(), params);
     }
-
-    protected <T> T insert(String sql ,Class<T> tClass , Object... params) {
-
-        Connection        conn = null ;
-        try{
-            conn = this.prepareConnection();
-            return queryRunner.insert(conn ,sql ,null,params);
-        } catch (SQLException e) {
-            this.rethrow(e, sql, params);
-        }  finally {
-            close(conn);
-        }
-        return null;
-    }
-
-    protected int insert(String sql ,Object... params) {
-
-        Connection        conn =  null ;
-        try{
-            conn = this.prepareConnection();
-            return queryRunner.insert(conn ,sql ,params);
-        } catch (SQLException e) {
-            this.rethrow(e, sql, params);
-        }  finally {
-            close(conn);
-        }
-        return 0;
-    }
-
-    @Override
-    protected Connection prepareConnection()  {
-
-        DataSource dataSource = getDataSource();
-
-        if (dataSource == null) {
-            throw new DbAccessException(
-                    "Dao requires a DataSource to be "
-                            + "invoked in this way, or a Connection should be passed in");
-        }
-        return DataSourceUtils.getConnection(dataSource);
-    }
-
-    @Override
-    protected void close(Connection conn)  {
-        DataSourceUtils.releaseConnection(conn, getDataSource());
-    }
-
-
-    //==============================private method=========================================================
-    /**
-     * Calls update after checking the parameters to ensure nothing is null.
-     * @param sql The SQL statement to execute.
-     * @param params An array of update replacement parameters.  Each row in
-     * this array is one set of update replacement values.
-     * @return The number of rows updated.
-     * @throws SQLException If there are database or parameter errors.
-     */
-    private int update(String sql, Object... params) {
-
-        Connection connection = null ;
-        int rows = 0;
-
-        try {
-            connection = this.prepareConnection();
-            rows = queryRunner.update(connection ,sql ,params);
-        } catch (SQLException e) {
-            this.rethrow(e, sql, params);
-        } finally {
-            close(connection);
-        }
-
-        return rows;
-    }
-
-    /**
-     * Execute an SQL SELECT query with replacement parameters.  The
-     * caller is responsible for closing the connection.
-     * @param <T> The type of object that the handler returns
-     * @param sql The query to execute.
-     * @param rsh The handler that converts the results into an object.
-     * @param params The replacement parameters.
-     * @return The object returned by the handler.
-     * @throws SQLException if a database access error occurs
-     */
-    private  <T> T query(String sql, ResultSetHandler<T> rsh, Object... params)  {
-
-        Connection connection = null;
-        T result = null ;
-        try {
-            connection = this.prepareConnection();
-            result = queryRunner.query(connection, sql, rsh, params);
-        } catch (SQLException e) {
-            rethrow(e, sql, params);
-        } finally {
-            close(connection);
-        }
-
-        return result ;
-    }
-
 
 
 }

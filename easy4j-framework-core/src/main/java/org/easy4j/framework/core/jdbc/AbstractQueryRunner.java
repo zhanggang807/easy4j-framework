@@ -1,5 +1,7 @@
 package org.easy4j.framework.core.jdbc;
 
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
 import javax.sql.DataSource;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -120,14 +122,7 @@ public  abstract class AbstractQueryRunner {
      *             if a database access error occurs
      * @since DbUtils 1.1
      */
-    protected Connection prepareConnection() throws SQLException {
-        if (this.getDataSource() == null) {
-            throw new SQLException(
-                    "QueryRunner requires a DataSource to be "
-                            + "invoked in this way, or a Connection should be passed in");
-        }
-        return this.getDataSource().getConnection();
-    }
+    protected abstract Connection prepareConnection() throws SQLException ;
 
     /**
      * Returns the <code>DataSource</code> this runner is using.
@@ -367,7 +362,7 @@ public  abstract class AbstractQueryRunner {
      * @since DbUtils 1.1
      */
     protected void close(Connection conn) throws DbAccessException {
-        DbUtils.close(conn);
+        DataSourceUtils.releaseConnection(conn, getDataSource());
     }
 
     /**
