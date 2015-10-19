@@ -33,7 +33,7 @@ public class BaseDao<M> extends AbstractDao {
 
     protected final Map<String ,String> sqlCache  ;
 
-    private static QueryRunner queryRunner = new QueryRunner();
+    protected static QueryRunner queryRunner = new QueryRunner();
 
     public BaseDao(){
         this.sqlCache  = new HashMap<String, String>();
@@ -90,6 +90,10 @@ public class BaseDao<M> extends AbstractDao {
         this.dataSource = dataSource;
     }
 
+    protected QueryRunner getQueryRunner(){
+        return queryRunner;
+    }
+
     /**
      * 增加一条记录 ，并返回影响的行数
      * @param m
@@ -103,8 +107,12 @@ public class BaseDao<M> extends AbstractDao {
         return update(insertSql,parameter);
     }
 
-    public M findOne(String sql , Object... params) {
+    public M queryObject(String sql ,Object ... params){
         return this.query(sql ,resultSetHandler ,params);
+    }
+
+    public M findOne(String sql , Object... params) {
+        return this.query(sql, resultSetHandler, params);
     }
 
     public List<M> queryList(String sql,Object... params) {
@@ -117,11 +125,13 @@ public class BaseDao<M> extends AbstractDao {
 
 
     protected <T> T insert(String sql ,Class<?> type ,Object... params) {
+
         Connection        conn =  null ;
         PreparedStatement stmt = null;
         try{
             conn = this.prepareConnection();
-            stmt = queryRunner.prepareStatement(conn, sql,Statement.RETURN_GENERATED_KEYS);
+            queryRunner.insert(conn ,sql ,params);
+            stmt = queryRunner.prepareStatement(conn, sql, Statement.RETURN_GENERATED_KEYS);
             this.fillStatement(stmt, params);
             if( stmt.executeUpdate() <= 0 )
                 throw new SQLException("insert.sql.error");
@@ -138,54 +148,46 @@ public class BaseDao<M> extends AbstractDao {
         return null;
     }
 
-    /**
-     * Executes the given INSERT, UPDATE, or DELETE SQL statement.  The
-     * <code>Connection</code> is retrieved from the <code>DataSource</code>
-     * set in the constructor.  This <code>Connection</code> must be in
-     * auto-commit mode or the update will not be saved.
-     *
-     * @param sql The SQL statement to execute.
-     * @param params Initializes the PreparedStatement's IN (i.e. '?')
-     * parameters.
-     * @throws SQLException if a database access error occurs
-     * @return The number of rows updated.
-     */
-    public int update(String sql, Object... params) throws DbAccessException {
-        Connection conn = null;
-        int rows = 0;
-        try{
-            conn = this.prepareConnection();
-            rows = this.update(conn, sql, params);
-        }  finally {
-            close(conn);
+    @Override
+    protected Connection prepareConnection()  {
+
+        DataSource dataSource = getDataSource();
+
+        if (dataSource == null) {
+            throw new DbAccessException(
+                    "Dao requires a DataSource to be "
+                            + "invoked in this way, or a Connection should be passed in");
         }
-        return rows;
+        return DataSourceUtils.getConnection(dataSource);
     }
 
+    @Override
+    protected void close(Connection conn)  {
+        DataSourceUtils.releaseConnection(conn, getDataSource());
+    }
+
+
+    //==============================private method=========================================================
     /**
      * Calls update after checking the parameters to ensure nothing is null.
-     * @param conn The connection to use for the update call.
      * @param sql The SQL statement to execute.
      * @param params An array of update replacement parameters.  Each row in
      * this array is one set of update replacement values.
      * @return The number of rows updated.
      * @throws SQLException If there are database or parameter errors.
      */
-    private int update(Connection conn, String sql, Object... params) {
+    private int update(String sql, Object... params) {
 
-
-        PreparedStatement stmt = null;
+        Connection connection = null ;
         int rows = 0;
 
         try {
-            stmt = queryRunner.prepareStatement(conn, sql);
-            this.fillStatement(stmt, params);
-            rows = stmt.executeUpdate();
-
+            connection = this.prepareConnection();
+            rows = queryRunner.update(connection ,sql ,params);
         } catch (SQLException e) {
             this.rethrow(e, sql, params);
         } finally {
-            close(stmt);
+            close(connection);
         }
 
         return rows;
@@ -201,39 +203,22 @@ public class BaseDao<M> extends AbstractDao {
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
      */
-    public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params)  {
+    private  <T> T query(String sql, ResultSetHandler<T> rsh, Object... params)  {
 
         Connection connection = null;
-
+        T result = null ;
         try {
             connection = this.prepareConnection();
-            return queryRunner.query(connection, sql, rsh, params);
+            result = queryRunner.query(connection, sql, rsh, params);
         } catch (SQLException e) {
             rethrow(e, sql, params);
         } finally {
             close(connection);
         }
 
-        return null ;
+        return result ;
     }
 
-
-    @Override
-    protected Connection prepareConnection()  {
-
-        DataSource dataSource = getDataSource();
-
-        if (dataSource == null) {
-            throw new DbAccessException(
-                    "Dao requires a DataSource to be "
-                            + "invoked in this way, or a Connection should be passed in");
-        }
-        return DataSourceUtils.getConnection(dataSource);
-    }
-
-    protected void close(Connection conn)  {
-        DataSourceUtils.releaseConnection(conn, getDataSource());
-    }
 
 
 }

@@ -18,14 +18,7 @@ public abstract class AbstractDao {
 
     protected abstract DataSource getDataSource();
 
-    protected Connection prepareConnection() throws SQLException {
-        if (this.getDataSource() == null) {
-            throw new SQLException(
-                    "Dao requires a DataSource to be "
-                            + "invoked in this way, or a Connection should be passed in");
-        }
-        return this.getDataSource().getConnection();
-    }
+    protected abstract Connection prepareConnection() throws SQLException ;
 
     /**
      * Fill the <code>PreparedStatement</code> replacement parameters with the
@@ -187,9 +180,7 @@ public abstract class AbstractDao {
      *             if a database access error occurs
      * @since DbUtils 1.0
      */
-    protected void close(Connection conn) throws SQLException {
-        DbUtils.close(conn);
-    }
+    protected  abstract  void close(Connection conn) throws SQLException ;
 
 
     /**
