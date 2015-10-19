@@ -165,4 +165,11 @@ public class BaseDao<M> extends AbstractDao {
     }
 
 
+    //===========================sql builder================================================
+
+    private String generateSelectSql(){
+        SQL sql = new SQL();
+        sql.SELECT("*");
+        return sql.toString() ;
+    }
 }
