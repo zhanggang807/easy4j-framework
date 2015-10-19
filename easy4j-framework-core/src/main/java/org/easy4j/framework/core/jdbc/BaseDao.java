@@ -26,7 +26,7 @@ public class BaseDao<M> extends AbstractDao {
 
     protected String INSERT = "$insert_";
 
-    protected ResultSetHandler<M> resultSetHandler ;
+    protected ResultSetHandler<M> beanHandler ;
 
     protected final Map<String ,String> sqlCache  ;
 
@@ -38,7 +38,7 @@ public class BaseDao<M> extends AbstractDao {
         if(beanClass != null ) {
             this.tableName = JdbcUtils.tableName(this.beanClass);
             //Map columnMap = new HashMap();
-            resultSetHandler = new BeanHandler<M>(beanClass ) ;
+            beanHandler = new BeanHandler<M>(beanClass ) ;
             //resultSetHandler = new BeanHandler<M>(beanClass,new BasicRowProcessor(new BeanProcessor(columnMap) )) ;
         }
 
@@ -102,15 +102,19 @@ public class BaseDao<M> extends AbstractDao {
         return queryRunner.insert(insertSql,parameter) > 0;
     }
 
-    public M queryObject(String sql ,Object ... params){
-        return queryRunner.query(sql ,resultSetHandler ,params);
+    public M queryObject(String condition ,Object ... params){
+        String sql = "select * from " + tableName + " where " + condition ;
+        return queryRunner.query(sql ,beanHandler ,params);
     }
 
-    public M findOne(String sql , Object... params) {
-        return queryRunner.query(sql, resultSetHandler, params);
+    @Deprecated
+    public M findOne(String condition , Object... params) {
+        String sql = "select * from " + tableName + " where " + condition ;
+        return queryRunner.query(sql, beanHandler, params);
     }
 
-    public List<M> queryList(String sql,Object... params) {
+    public List<M> queryList(String condition,Object... params) {
+        String sql = "select * from " + tableName + " where " + condition ;
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 
@@ -118,8 +122,26 @@ public class BaseDao<M> extends AbstractDao {
         return queryRunner.query(sql, new SingleValueHandler(), params);
     }
 
-    public List<M> selectList(String condition, Object... params) {
-        return queryRunner.query("select * from " + tableName + " where " + condition,new BeanListHandler<M>(beanClass) ,params);
+    //============================ select 执行sql ===========================================================
+    // web 需要性能好些 用select 进行查询
+    /**
+     * 执行sql 查询单个bean
+     * @param sql
+     * @param params
+     * @return
+     */
+    public M selectOne(String sql, Object... params) {
+        return queryRunner.query(sql,beanHandler ,params);
+    }
+
+    /**
+     * 执行sql 查询集合
+     * @param sql
+     * @param params
+     * @return
+     */
+    public List<M> selectList(String sql, Object... params) {
+        return queryRunner.query(sql,new BeanListHandler<M>(beanClass) ,params);
     }
 
 
