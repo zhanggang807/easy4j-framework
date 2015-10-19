@@ -29,16 +29,16 @@ public class IndexController {
     private IndexDao indexDao;
 
     @RequestMapping(value = "/")
-     public String indexVm(HttpServletRequest request ,HttpServletResponse response) {
+     public String indexVm(HttpServletRequest request ,HttpServletResponse response,Model model) {
         UserGroup userGroup = new UserGroup();
         userGroup.setUid(100000);
         userGroup.setGid(120000);
         userGroup.setCreated(new Date());
         userGroup.setModified(new Date());
-        int i = indexDao.save(userGroup);
+        boolean f = indexDao.save(userGroup);
 
         List<UserGroup> userGroupList = indexDao.queryList("select * from s_user_role");
-
+        model.addAttribute("userGroupList" , userGroupList) ;
         return "index";
 
     }

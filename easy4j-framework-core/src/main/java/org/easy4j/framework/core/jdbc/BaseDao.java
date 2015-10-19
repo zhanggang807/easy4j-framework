@@ -95,7 +95,7 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     /**
-     * 增加一条记录 ，并返回影响的行数
+     * 增加一条记录
      * @param m
      * @return
      */
@@ -104,7 +104,7 @@ public class BaseDao<M> extends AbstractDao {
         Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
 
         String insertSql = sql(INSERT);
-        return this.insert(insertSql,parameter);
+        return this.insert(insertSql,parameter) > 0;
     }
 
     public M queryObject(String sql ,Object ... params){
@@ -137,7 +137,7 @@ public class BaseDao<M> extends AbstractDao {
         return null;
     }
 
-    protected boolean insert(String sql ,Object... params) {
+    protected int insert(String sql ,Object... params) {
 
         Connection        conn =  null ;
         try{
@@ -148,7 +148,7 @@ public class BaseDao<M> extends AbstractDao {
         }  finally {
             close(conn);
         }
-        return false;
+        return 0;
     }
 
     @Override
