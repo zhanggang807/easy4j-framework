@@ -30,18 +30,17 @@ public class BaseDao<M> extends AbstractDao {
 
     protected final Map<String ,String> sqlCache  ;
 
+    protected final Map<String,String> fieldColumnMapping ;
+
     protected static QueryRunner queryRunner ;
 
     public BaseDao(){
+
         this.sqlCache  = new HashMap<String, String>();
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
-        if(beanClass != null ) {
-            this.tableName = JdbcUtils.tableName(this.beanClass);
-            //Map columnMap = new HashMap();
-            beanHandler = new BeanHandler<M>(beanClass ) ;
-            //resultSetHandler = new BeanHandler<M>(beanClass,new BasicRowProcessor(new BeanProcessor(columnMap) )) ;
-        }
-
+        this.tableName = JdbcUtils.tableName(this.beanClass);
+        this.fieldColumnMapping = JdbcUtils.getFiledAndColumnMapping(this.beanClass);
+        this.beanHandler = new BeanHandler<M>(this.beanClass ) ;
 
         _initSql();
         initSql();
@@ -56,10 +55,8 @@ public class BaseDao<M> extends AbstractDao {
      */
     protected void _initSql(){
 
-        String[] columns = JdbcUtils.columns(this.beanClass);
-
         SQL insertSQL = new SQL().INSERT_INTO(tableName);
-        for(String column : columns){
+        for(String column : fieldColumnMapping.keySet()){
             if(column.equals("id"))
                 continue;
             insertSQL.VALUES(column, "?");
@@ -102,17 +99,17 @@ public class BaseDao<M> extends AbstractDao {
     }
 
     public M queryObject(String condition ,Object ... params){
-        String sql = SQLBuilder.generateSelectSQL(null , tableName,condition);
+        String sql = SQLBuilder.generateSelectSQL( null , tableName , condition );
         return selectOne(sql ,params);
     }
 
     public List<M> queryList(String condition,Object... params) {
-        String sql = SQLBuilder.generateSelectSQL(null , tableName,condition);
+        String sql = SQLBuilder.generateSelectSQL( null , tableName, condition );
         return selectList(sql,params);
     }
 
-    public List<M> queryListForPager(String condition ,int pageNumber ,int pageSize,Object ... params){
-        String sql = SQLBuilder.generateSelectSqlForPager(null , tableName,condition,pageNumber , pageSize);
+    public List<M> queryList(int pageNumber ,int pageSize ,String condition ,Object ... params){
+        String sql = SQLBuilder.generateSelectSqlForPager( null , tableName, condition , pageNumber , pageSize  );
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 

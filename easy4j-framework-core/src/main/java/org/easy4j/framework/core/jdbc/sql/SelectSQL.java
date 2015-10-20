@@ -26,14 +26,14 @@ public class SelectSQL extends AbstractSQL {
         return this ;
     }
 
-    public AbstractSQL appendSqlForPager(int pageNumber, int pageSize ){
+    public AbstractSQL appendSqlForPager(int pageNumber,int pageSize){
 
-        int pageStart = 0;
+        int start = 0 ;
 
-        if(pageNumber > 1 )
-            pageStart = (pageNumber - 1) * pageSize;
+        if(pageNumber > 1)
+            start = (pageNumber - 1) * pageSize ;
 
-        sqlBuilder.append(" LIMIT ").append(pageStart).append(",").append(pageSize);
+        sqlBuilder.append(" LIMIT ").append(start).append(",").append(pageSize);
         return this ;
     }
 }

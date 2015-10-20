@@ -14,10 +14,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -107,30 +104,29 @@ public class JdbcUtils {
     }
 
 
-    public static String[] columns(Class beanClass){
-
-        List<String> columns = new ArrayList<String>();
+    public static Map<String,String> getFiledAndColumnMapping(Class beanClass){
 
         List<Field> fields = ReflectUtils.findAllField(beanClass);
+        Map<String,String> filedMapColumnMap = new LinkedHashMap<String, String>() ;
+
         for(Field field : fields ){
             Annotation[] annotations = field.getAnnotations();
             boolean isAdded = false ;
             for (Annotation ann : annotations){
                 if (ann.annotationType().equals(Column.class)){
-                    columns.add(((Column)ann).value());
+                    filedMapColumnMap.put(field.getName(),((Column)ann).value()) ;
                     isAdded = true ;
                     break;
                 }
             }
             if(!isAdded){
                 String columnName = field.getName();
-                columns.add(translate2TableCol(columnName));
+                filedMapColumnMap.put(columnName,translate2TableCol(columnName)) ;
             }
 
         }
-        String[] ret = new String[columns.size()] ;
-        columns.toArray(ret) ;
-        return ret;
+
+        return filedMapColumnMap;
     }
 
     private static String translate2TableCol(String columnName){
