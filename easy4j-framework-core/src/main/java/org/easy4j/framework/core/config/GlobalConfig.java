@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
