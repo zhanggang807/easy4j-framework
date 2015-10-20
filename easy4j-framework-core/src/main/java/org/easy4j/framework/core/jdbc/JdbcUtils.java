@@ -82,31 +82,67 @@ public class JdbcUtils {
 
     /**
      * 获取对象字段的值 ，以Map返回
-     * @param obj
+     * @param target
+     * @return
+     */
+    public static Map<String ,Object> getFieldMap(Object target){
+        return getFieldMap(target , null);
+    }
+
+    /**
+     * 获取对象字段的值 ，以Map返回
+     * @param target
      * @param filter
      * @return
      */
-    public static Map<String ,Object> valuesMap(Object obj,PropertyFilter filter){
+    public static Map<String ,Object> getFieldMap(Object target,PropertyFilter filter) {
 
-        List<Field> fields = ReflectUtils.findAllField(obj.getClass());
+        List<Field> fields = ReflectUtils.findAllField(target.getClass());
         int size = fields.size() ;
 
-        Map<String ,Object> ret  =  new HashMap<String, Object>();
+        Map<String ,Object> ret  =  new LinkedHashMap<String, Object>();
         for(int i = 0 ; i < size ; i++  ){
             Field field = fields.get(i);
             String fieldName = field.getName() ;
             if(filter != null && filter.filter(field.getName()))
                 continue;
             ReflectionUtils.makeAccessible(field);
-            ret.put(translate2TableCol(fieldName) , ReflectionUtils.getField(field, obj));
+            ret.put(translate2TableCol(fieldName) , ReflectionUtils.getField(field,target));
         }
         return ret ;
     }
 
+    /**
+     * 获取对象字段的值 ，以Map返回
+     * @param target
+     * @param filter
+     * @return
+     */
+    public static Map<String ,Object> getFieldMap(Object target ,Map<String,String> fieldColumnMapping,PropertyFilter filter) {
 
-    public static Map<String,String> getFiledAndColumnMapping(Class beanClass){
+        List<Field> fields = ReflectUtils.findAllField(target.getClass());
+        int size = fields.size() ;
 
-        List<Field> fields = ReflectUtils.findAllField(beanClass);
+        Map<String ,Object> ret  =  new LinkedHashMap<String, Object>();
+        for(int i = 0 ; i < size ; i++  ){
+            Field field = fields.get(i);
+            String fieldName = field.getName() ;
+            if(filter != null && filter.filter(field.getName()))
+                continue;
+            ReflectionUtils.makeAccessible(field);
+            ret.put(translate2TableCol(fieldName) , ReflectionUtils.getField(field,target));
+        }
+        return ret ;
+    }
+
+    /***
+     * 获取entityClass 字段与数据库字段映射
+     * @param entityClass
+     * @return
+     */
+    public static Map<String,String> getFiledAndColumnMapping(Class entityClass){
+
+        List<Field> fields = ReflectUtils.findAllField(entityClass);
         Map<String,String> filedMapColumnMap = new LinkedHashMap<String, String>() ;
 
         for(Field field : fields ){
