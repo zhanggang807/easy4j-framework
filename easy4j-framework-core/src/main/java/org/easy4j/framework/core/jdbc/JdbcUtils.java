@@ -120,18 +120,21 @@ public class JdbcUtils {
      */
     public static Map<String ,Object> getFieldMap(Object target ,Map<String,String> fieldColumnMapping,PropertyFilter filter) {
 
-        List<Field> fields = ReflectUtils.findAllField(target.getClass());
-        int size = fields.size() ;
-
+        Set<Map.Entry<String,String>> entries = fieldColumnMapping.entrySet();
+        Class targetClass = target.getClass() ;
         Map<String ,Object> ret  =  new LinkedHashMap<String, Object>();
-        for(int i = 0 ; i < size ; i++  ){
-            Field field = fields.get(i);
-            String fieldName = field.getName() ;
-            if(filter != null && filter.filter(field.getName()))
+
+        for(Map.Entry<String,String> entry : entries){
+            String key = entry.getKey();
+
+            if(filter != null && filter.filter(key))
                 continue;
+            Field  field = ReflectionUtils.findField(targetClass,key);
+
             ReflectionUtils.makeAccessible(field);
-            ret.put(translate2TableCol(fieldName) , ReflectionUtils.getField(field,target));
+            ret.put(entry.getValue() , ReflectionUtils.getField(field,target)) ;
         }
+
         return ret ;
     }
 
