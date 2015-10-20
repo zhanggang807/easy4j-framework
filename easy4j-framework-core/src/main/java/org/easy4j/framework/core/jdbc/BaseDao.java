@@ -111,19 +111,8 @@ public class BaseDao<M> extends AbstractDao {
         return selectList(sql,params);
     }
 
-    public List<M> queryList(String condition ,int rows,Object ... params){
-
-        if(rows <= 0){
-            return queryList(condition, params);
-        }
-
-        String sql = "select * from " + tableName ;
-        if(condition != null && !condition.isEmpty()){
-            sql = sql + " where " + condition ;
-        }
-
-        sql = sql + " limit 0 " + rows ;
-
+    public List<M> queryListForPager(String condition ,int pageNumber ,int pageSize,Object ... params){
+        String sql = SQLBuilder.generateSelectSqlForPager(null , tableName,condition,pageNumber , pageSize);
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
     }
 
@@ -139,7 +128,7 @@ public class BaseDao<M> extends AbstractDao {
      * @param params
      * @return
      */
-    public M selectOne(String sql, Object... params) {
+    protected M selectOne(String sql, Object... params) {
         return queryRunner.query(sql,beanHandler ,params);
     }
 
@@ -149,7 +138,7 @@ public class BaseDao<M> extends AbstractDao {
      * @param params
      * @return
      */
-    public List<M> selectList(String sql, Object... params) {
+    protected List<M> selectList(String sql, Object... params) {
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass) ,params);
     }
 
