@@ -21,11 +21,22 @@ public abstract class AbstractSQL {
 
 
 
-    protected  AbstractSQL appendColumns(String ... columns){
+    public  AbstractSQL appendColumns(String columns){
+        //do-nothing
+        return this ;
+    }
+
+
+    public AbstractSQL appendConditions(String conditions){
+
+        if(conditions != null && !conditions.isEmpty()){
+            sqlBuilder.append(" WHERE ").append(conditions);
+        }
+
         return this;
     }
 
-    protected String build(){
+    public String build(){
         return sqlBuilder.toString();
     }
 }
