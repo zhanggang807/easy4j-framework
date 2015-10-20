@@ -8,13 +8,14 @@ import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ScopeMetadataResolver;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author: liuyong
@@ -29,7 +30,8 @@ public class AnnotationAndXmlConfigWebApplicationContext extends AnnotationConfi
     @Override
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
         loadAnnotationBeanDefinitions(beanFactory);
-        loadXmlBeanDefinitions(beanFactory);
+        if(checkParseConfigLocation())
+            loadXmlBeanDefinitions(beanFactory);
     }
 
     private void loadAnnotationBeanDefinitions(DefaultListableBeanFactory beanFactory){
@@ -114,7 +116,39 @@ public class AnnotationAndXmlConfigWebApplicationContext extends AnnotationConfi
         // Allow a subclass to provide custom initialization of the reader,
         // then proceed with actually loading the bean definitions.
         initBeanDefinitionReader(beanDefinitionReader);
+
         loadBeanDefinitions(beanDefinitionReader);
+    }
+
+    private boolean checkParseConfigLocation()  {
+
+
+        String classPath = "classpath:spring-**.xml" ;
+
+        if(checkContainsConfigLocation(classPath)){
+            setConfigLocation(classPath);
+            return true ;
+        }
+
+        String fullClassPath = "classpath*:spring-**.xml" ;
+        if(checkContainsConfigLocation(fullClassPath)){
+            setConfigLocation(fullClassPath);
+            return true ;
+        }
+
+        return false ;
+
+    }
+
+    private boolean checkContainsConfigLocation(String location){
+        ResourcePatternResolver resourcePatternResolver  = this.getResourcePatternResolver();
+        Resource[] resources = null ;
+        try {
+            resources = resourcePatternResolver.getResources(location);
+        } catch (IOException e) {
+            return false ;
+        }
+        return resources != null && resources.length > 0 ;
     }
 
     /**

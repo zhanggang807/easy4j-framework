@@ -66,8 +66,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
         AnnotationAndXmlConfigWebApplicationContext rootAppContext = new AnnotationAndXmlConfigWebApplicationContext();
 
-        rootAppContext.setConfigLocation("classpath:spring-**.xml,classpath*:spring-config.xml");
-
         register(rootAppContext ,
                 new String[]{   scanBasePackage + ".service" ,
                                 scanBasePackage + ".dao" ,
