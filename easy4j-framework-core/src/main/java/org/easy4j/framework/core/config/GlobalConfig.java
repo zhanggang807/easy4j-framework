@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.Properties;
  * @version 1.0
  * @created date 15-10-16
  */
-public class GlobalConstants {
+public class GlobalConfig {
 
     public static Properties easy4jProperties = new Properties();
 
@@ -26,7 +27,7 @@ public class GlobalConstants {
 
         InputStream inputStream = null;
         try {
-            inputStream = GlobalConstants.class.getClassLoader().getResourceAsStream("easy4j.properties");
+            inputStream = GlobalConfig.class.getClassLoader().getResourceAsStream("easy4j.properties");
             easy4jProperties.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("can not find easy4j.properties from classpath");
@@ -42,11 +43,25 @@ public class GlobalConstants {
 
     }
 
+    /**
+     * 获取全局配置 key 所对应的值
+     * @param key
+     * @param defaultVal
+     * @return
+     */
     public static String getString(String key,String defaultVal){
         if(easy4jProperties == null)
             return defaultVal ;
 
         String val = easy4jProperties.getProperty(key);
         return val == null ? defaultVal : val ;
+    }
+
+    /**
+     *  当key不在需要了 ， 删除掉 ，用完就删掉无用的 ，节省内存
+     * @param key
+     */
+    public static void remove(String key){
+        easy4jProperties.remove(key);
     }
 }

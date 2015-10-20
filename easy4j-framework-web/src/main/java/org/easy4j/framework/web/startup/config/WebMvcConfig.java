@@ -1,6 +1,6 @@
 package org.easy4j.framework.web.startup.config;
 
-import org.easy4j.framework.core.config.GlobalConstants;
+import org.easy4j.framework.core.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -69,9 +69,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
         List<MediaType> mediaTypeList = new ArrayList<MediaType>(3);
 
-        mediaTypeList.add(new MediaType("text", "html", GlobalConstants.CHARSET));
-        mediaTypeList.add(new MediaType("text", "plain", GlobalConstants.CHARSET));
-        mediaTypeList.add(new MediaType("*", "*", GlobalConstants.CHARSET));
+        mediaTypeList.add(new MediaType("text", "html", GlobalConfig.CHARSET));
+        mediaTypeList.add(new MediaType("text", "plain", GlobalConfig.CHARSET));
+        mediaTypeList.add(new MediaType("*", "*", GlobalConfig.CHARSET));
 
         stringHttpMessageConverter.setSupportedMediaTypes(mediaTypeList);
         stringHttpMessageConverter.setWriteAcceptCharset(false);
