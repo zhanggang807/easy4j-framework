@@ -3,6 +3,9 @@ package org.easy4j.framework.core.jdbc;
 
 import org.easy4j.framework.core.jdbc.sql.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author: liuyong
  * @since 1.0
@@ -33,9 +36,9 @@ public class SQLBuilder {
         return sql.build();
     }
 
-    public static String generateInsertSQL(String tableName,String conditions){
-        AbstractSQL sql = new InsertSQL(tableName);
-        sql.appendConditions(conditions);
+    public static String generateInsertSQL(String tableName,String ... columns){
+        InsertSQL sql = new InsertSQL(tableName);
+        sql.insertColumns(columns);
         return sql.build();
     }
 
@@ -53,5 +56,12 @@ public class SQLBuilder {
         System.out.println(generateSelectSQL("id,name,age", "user", null));
         System.out.println(generateDeleteSQL("user", null));
         System.out.println(generateDeleteSQL("user", "id=?"));
+        System.out.println(generateInsertSQL("user", "id", "name", "age"));
+        Map<String,String> fieldMapping = new LinkedHashMap<String, String>(10);
+        fieldMapping.put("id","id");
+        fieldMapping.put("name","name");
+        fieldMapping.put("age","age");
+
+        System.out.println(generateInsertSQL("user", (String[])fieldMapping.values().toArray()));
     }
 }

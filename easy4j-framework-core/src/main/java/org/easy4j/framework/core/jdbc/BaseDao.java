@@ -55,14 +55,8 @@ public class BaseDao<M> extends AbstractDao {
      */
     protected void _initSql(){
 
-        SQL insertSQL = new SQL().INSERT_INTO(tableName);
-        for(String column : fieldColumnMapping.keySet()){
-            if(column.equals("id"))
-                continue;
-            insertSQL.VALUES(column, "?");
-        }
-
-        cacheSql(INSERT , insertSQL.toString());
+        String sql = SQLBuilder.generateInsertSQL(tableName,(String[])fieldColumnMapping.values().toArray());
+        cacheSql(INSERT , sql);
 
     };
 
