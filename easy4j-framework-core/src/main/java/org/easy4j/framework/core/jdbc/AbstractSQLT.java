@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractSQL<T> {
+public abstract class AbstractSQLT<T> {
 
 
     private static final String AND = ") \nAND (";

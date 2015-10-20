@@ -6,9 +6,23 @@ package org.easy4j.framework.core.jdbc.sql;
  */
 public class SelectSQL extends AbstractSQL {
 
+    private static final String SELECT_ALL_COLUMNS = "SELECT * FROM " ;
 
     public SelectSQL(String tableName) {
         super(tableName);
-        sqlBuilder.append("SELECT ");
+    }
+
+    public  AbstractSQL appendColumns(String columns){
+
+        if(columns == null || columns.isEmpty()){
+            sqlBuilder.append(SELECT_ALL_COLUMNS);
+        } else {
+            sqlBuilder
+                    .append("SELECT ")
+                    .append(columns)
+                    .append(" FROM ")
+                    .append(tableName);
+        }
+        return this ;
     }
 }

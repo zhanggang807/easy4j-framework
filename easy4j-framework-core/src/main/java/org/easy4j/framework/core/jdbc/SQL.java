@@ -8,7 +8,7 @@ package org.easy4j.framework.core.jdbc;
  * Date: 15-3-27
  * Version: 1.0
  */
-public class SQL extends AbstractSQL<SQL> {
+public class SQL extends AbstractSQLT<SQL> {
 
     @Override
     public SQL getSelf() {
