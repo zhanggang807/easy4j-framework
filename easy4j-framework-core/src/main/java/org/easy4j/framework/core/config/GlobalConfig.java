@@ -15,7 +15,7 @@ import java.util.Properties;
  */
 public class GlobalConfig {
 
-    public static Properties easy4jProperties = new Properties();
+    private static Properties easy4jProperties = new Properties();
 
     private static final String DEFAULT_CHARSET_NAME = "UTF-8";
 
