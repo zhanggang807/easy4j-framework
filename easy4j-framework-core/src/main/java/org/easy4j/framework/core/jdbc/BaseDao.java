@@ -97,29 +97,18 @@ public class BaseDao<M> extends AbstractDao {
     public boolean save(M m) {
 
         Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
-
         String insertSql = sql(INSERT);
         return queryRunner.insert(insertSql,parameter) > 0;
     }
 
     public M queryObject(String condition ,Object ... params){
-        String sql = "select * from " + tableName + " where " + condition ;
-        return queryRunner.query(sql ,beanHandler ,params);
-    }
-
-    @Deprecated
-    public M findOne(String condition , Object... params) {
-        String sql = "select * from " + tableName + " where " + condition ;
-        return queryRunner.query(sql, beanHandler, params);
+        String sql = SQLBuilder.generateSelectSQL(null , tableName,condition);
+        return selectOne(sql ,params);
     }
 
     public List<M> queryList(String condition,Object... params) {
-
-        String sql = "select * from " + tableName ;
-        if(condition != null && !condition.isEmpty()){
-            sql = sql + " where " + condition ;
-        }
-        return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
+        String sql = SQLBuilder.generateSelectSQL(null , tableName,condition);
+        return selectList(sql,params);
     }
 
     public List<M> queryList(String condition ,int rows,Object ... params){
@@ -164,12 +153,4 @@ public class BaseDao<M> extends AbstractDao {
         return queryRunner.query(sql,new BeanListHandler<M>(beanClass) ,params);
     }
 
-
-    //===========================sql builder================================================
-
-    private String generateSelectSql(){
-        SQL sql = new SQL();
-        sql.SELECT("*");
-        return sql.toString() ;
-    }
 }

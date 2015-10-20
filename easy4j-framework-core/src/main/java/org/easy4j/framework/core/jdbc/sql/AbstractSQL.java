@@ -26,7 +26,6 @@ public abstract class AbstractSQL {
         return this ;
     }
 
-
     public AbstractSQL appendConditions(String conditions){
 
         if(conditions != null && !conditions.isEmpty()){
@@ -35,6 +34,7 @@ public abstract class AbstractSQL {
 
         return this;
     }
+
 
     public String build(){
         return sqlBuilder.toString();

@@ -25,4 +25,10 @@ public class SelectSQL extends AbstractSQL {
         }
         return this ;
     }
+
+    public AbstractSQL appendSqlForPager(int pageNumber, int pageSize ){
+        int pageStart = (pageNumber - 1) * pageSize;
+        sqlBuilder.append(" LIMIT ").append(pageStart).append(",").append(pageSize);
+        return this ;
+    }
 }

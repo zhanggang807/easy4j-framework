@@ -17,6 +17,14 @@ public class SQLBuilder {
         return sql.build();
     }
 
+    public static String generateSelectSqlForPager(String columns ,String tableName ,String conditions ,int pageNumber,int pageSize ){
+        SelectSQL sql = new SelectSQL(tableName);
+        sql.appendColumns(columns);
+        sql.appendConditions(conditions);
+        sql.appendSqlForPager(pageNumber,pageSize);
+        return sql.build();
+    }
+
 
 
     public static String generateUpdateSQL(String tableName,String conditions){
