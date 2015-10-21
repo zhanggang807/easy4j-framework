@@ -10,7 +10,7 @@ import java.util.Map;
  * @version 1.0
  * @created date 15-10-21
  */
-public class Handlers {
+public class Handlers{
 
     public static ResultSetHandler<Long> longHandler = new SingleValueHandler<Long>() {};
     public static ResultSetHandler<Integer> intHandler = new SingleValueHandler<Integer>() {};
@@ -26,5 +26,9 @@ public class Handlers {
 
     public static <T> ResultSetHandler<T> getInstance(Class<T> type){
         return handlerMap.get(type) ;
+    }
+
+    public static <T> void addHandler(ResultSetHandler<T> handler ){
+
     }
 }
