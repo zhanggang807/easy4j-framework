@@ -16,8 +16,14 @@ import java.util.Map;
  */
 public class BaseDao<M> extends AbstractDao<M> {
 
+
+    protected String tableName ;
+
+    protected String INSERT = "$insert_";
+
     public BaseDao(){
         super();
+        this.tableName = JdbcUtils.tableName(this.beanClass);
         _initSql();
         initSql();
     }
