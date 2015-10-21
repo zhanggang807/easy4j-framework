@@ -118,8 +118,8 @@ public class BaseDao<M> extends AbstractDao {
         return selectList(sql, params);
     }
 
-    public Object querySingleValue(String sql,Object... params) {
-        return queryRunner.query(sql, Handlers.getInstance(Object.class), params);
+    public <T> T querySingleValue(String sql,Class<T> returnClass ,Object... params) {
+        return queryRunner.query(sql, Handlers.getInstance(returnClass), params);
     }
 
     //============================ select 执行sql ===========================================================
