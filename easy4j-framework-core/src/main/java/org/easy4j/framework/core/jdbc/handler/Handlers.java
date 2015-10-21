@@ -12,12 +12,12 @@ import java.util.Map;
  */
 public class Handlers {
 
-    public static ResultSetHandler<Long> longHanlder = new SingleValueHandler<Long>() {};
+    public static ResultSetHandler<Long> longHandler = new SingleValueHandler<Long>() {};
 
     private static Map<Class , ResultSetHandler> handlerMap = new HashMap<Class ,ResultSetHandler>();
 
     static {
-        handlerMap.put(Long.class,longHanlder);
+        handlerMap.put(Long.class,longHandler);
     }
 
 
