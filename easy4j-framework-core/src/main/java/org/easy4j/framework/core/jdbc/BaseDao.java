@@ -1,15 +1,13 @@
 package org.easy4j.framework.core.jdbc;
 
-import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
 import org.easy4j.framework.core.jdbc.handler.BeanHandler;
 import org.easy4j.framework.core.jdbc.handler.BeanListHandler;
+import org.easy4j.framework.core.jdbc.handler.Handlers;
 import org.easy4j.framework.core.jdbc.handler.SingleValueHandler;
 import org.easy4j.framework.core.util.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
-import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,9 @@ public class BaseDao<M> extends AbstractDao {
 
     protected String INSERT = "$insert_";
 
-    protected ResultSetHandler<M> beanHandler ;
+    protected BeanHandler<M> beanHandler ;
+
+    protected BeanListHandler<M> beanListHander ;
 
     protected final Map<String ,String> sqlCache  ;
 
@@ -40,7 +40,11 @@ public class BaseDao<M> extends AbstractDao {
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
         this.tableName = JdbcUtils.tableName(this.beanClass);
         this.fieldColumnMapping = JdbcUtils.getFiledAndColumnMapping(this.beanClass);
-        this.beanHandler = new BeanHandler<M>(this.beanClass ) ;
+
+        RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
+
+        this.beanHandler = new BeanHandler<M>(this.beanClass ,rowProcessor) ;
+        this.beanListHander = new BeanListHandler<M>(this.beanClass ,rowProcessor);
 
         _initSql();
         initSql();
@@ -54,8 +58,9 @@ public class BaseDao<M> extends AbstractDao {
      * 初始化部分SQL
      */
     protected void _initSql(){
-
-        String sql = SQLBuilder.generateInsertSQL(tableName,(String[])fieldColumnMapping.values().toArray());
+        String[] columns = new String[fieldColumnMapping.size()];
+        fieldColumnMapping.values().toArray(columns);
+        String sql = SQLBuilder.generateInsertSQL(tableName,columns);
         cacheSql(INSERT , sql);
 
     };
@@ -87,9 +92,15 @@ public class BaseDao<M> extends AbstractDao {
      */
     public boolean save(M m) {
 
-        Object[] parameter = JdbcUtils.values(m, PropertyFilter.ID_FILTER);
+        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
         String insertSql = sql(INSERT);
-        return queryRunner.insert(insertSql,parameter) > 0;
+        return insert(insertSql, fieldMap.values().toArray()) > 0;
+    }
+
+    public <T> T save(M m ,Class<T> returnType){
+        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
+        String insertSql = sql(INSERT);
+        return insert(insertSql,returnType,fieldMap.values().toArray()) ;
     }
 
     public M queryObject(String condition ,Object ... params){
@@ -104,11 +115,11 @@ public class BaseDao<M> extends AbstractDao {
 
     public List<M> queryList(int pageNumber ,int pageSize ,String condition ,Object ... params){
         String sql = SQLBuilder.generateSelectSqlForPager( null , tableName, condition , pageNumber , pageSize  );
-        return queryRunner.query(sql,new BeanListHandler<M>(beanClass),params);
+        return selectList(sql, params);
     }
 
     public Object querySingleValue(String sql,Object... params) {
-        return queryRunner.query(sql, new SingleValueHandler(), params);
+        return queryRunner.query(sql, Handlers.getInstance(Object.class), params);
     }
 
     //============================ select 执行sql ===========================================================
@@ -130,7 +141,30 @@ public class BaseDao<M> extends AbstractDao {
      * @return
      */
     protected List<M> selectList(String sql, Object... params) {
-        return queryRunner.query(sql,new BeanListHandler<M>(beanClass) ,params);
+        return queryRunner.query(sql,beanListHander,params);
     }
+
+    /**
+     * 执行插入sql
+     * @param sql
+     * @param params
+     * @return 影响的行数
+     */
+    protected int insert(String sql ,Object ... params){
+        return  queryRunner.insert(sql ,params);
+    }
+
+    /**
+     * 执行插入sql ,返回主键
+     * @param sql
+     * @param returnType
+     * @param params
+     * @param <T>
+     * @return
+     */
+    protected <T> T insert(String sql ,Class<T> returnType, Object ... params){
+        return queryRunner.insert(sql, Handlers.getInstance(returnType) , params);
+    }
+
 
 }

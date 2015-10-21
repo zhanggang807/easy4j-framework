@@ -15,7 +15,7 @@ public class SelectSQL extends AbstractSQL {
     public  AbstractSQL appendColumns(String columns){
 
         if(columns == null || columns.isEmpty()){
-            sqlBuilder.append(SELECT_ALL_COLUMNS);
+            sqlBuilder.append(SELECT_ALL_COLUMNS).append(tableName);
         } else {
             sqlBuilder
                     .append("SELECT ")

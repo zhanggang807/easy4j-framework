@@ -35,9 +35,9 @@ public class IndexController {
         userGroup.setGid(120000);
         userGroup.setCreated(new Date());
         userGroup.setModified(new Date());
-        boolean f = indexDao.save(userGroup);
+        Long id = indexDao.save(userGroup,Long.class);
 
-        List<UserGroup> userGroupList = indexDao.queryList("select * from s_user_role");
+        List<UserGroup> userGroupList = indexDao.queryList(null);
         model.addAttribute("userGroupList" , userGroupList) ;
         return "index";
 
