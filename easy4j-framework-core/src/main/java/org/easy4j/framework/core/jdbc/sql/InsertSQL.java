@@ -1,7 +1,5 @@
 package org.easy4j.framework.core.jdbc.sql;
 
-import java.util.Map;
-
 /**
  * @author: liuyong
  * @since 1.0
