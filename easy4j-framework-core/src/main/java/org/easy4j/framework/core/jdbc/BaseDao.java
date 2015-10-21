@@ -3,7 +3,6 @@ package org.easy4j.framework.core.jdbc;
 import org.easy4j.framework.core.jdbc.handler.BeanHandler;
 import org.easy4j.framework.core.jdbc.handler.BeanListHandler;
 import org.easy4j.framework.core.jdbc.handler.Handlers;
-import org.easy4j.framework.core.jdbc.handler.SingleValueHandler;
 import org.easy4j.framework.core.util.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,39 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
+ * select 开头的函数为 直接执行sql ， sql需要自己组装 ， 其他函数不需要只需要传入条件
+ *
  * @author: liuyong
  * @since 1.0
  */
-public class BaseDao<M> extends AbstractDao {
+public class BaseDao<M> extends AbstractDao<M> {
 
-    protected final Class<M> beanClass;
 
-    protected String tableName ;
-
-    protected String INSERT = "$insert_";
-
-    protected BeanHandler<M> beanHandler ;
-
-    protected BeanListHandler<M> beanListHander ;
-
-    protected final Map<String ,String> sqlCache  ;
-
-    protected final Map<String,String> fieldColumnMapping ;
 
     protected static QueryRunner queryRunner ;
 
     public BaseDao(){
-
-        this.sqlCache  = new HashMap<String, String>();
-        this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
-        this.tableName = JdbcUtils.tableName(this.beanClass);
-        this.fieldColumnMapping = JdbcUtils.getFiledAndColumnMapping(this.beanClass);
-
-        RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
-
-        this.beanHandler = new BeanHandler<M>(this.beanClass ,rowProcessor) ;
-        this.beanListHander = new BeanListHandler<M>(this.beanClass ,rowProcessor);
-
+        super();
         _initSql();
         initSql();
     }
@@ -118,8 +98,27 @@ public class BaseDao<M> extends AbstractDao {
         return selectList(sql, params);
     }
 
-    public <T> T querySingleValue(String sql,Class<T> returnClass ,Object... params) {
+    /**
+     * 查询单一数据 支持原始类型， String ,Date TimeStamp
+     * @param sql
+     * @param returnClass
+     * @param params
+     * @param <T>
+     * @return
+     */
+    public <T> T querySingleValue(Class<T> returnClass , String sql,Object... params) {
         return queryRunner.query(sql, Handlers.getInstance(returnClass), params);
+    }
+
+    /**
+     * 查询多少条数据
+     * @param condition
+     * @param params
+     * @return Integer.MAX 足够
+     */
+    public int queryCount(String condition,Object ... params){
+        String sql = SQLBuilder.generateSelectSQL("COUNT(1)",tableName ,condition);
+        return queryRunner.query(sql,Handlers.getInstance(Integer.class),params);
     }
 
     //============================ select 执行sql ===========================================================
@@ -143,6 +142,7 @@ public class BaseDao<M> extends AbstractDao {
     protected List<M> selectList(String sql, Object... params) {
         return queryRunner.query(sql,beanListHander,params);
     }
+
 
     /**
      * 执行插入sql
