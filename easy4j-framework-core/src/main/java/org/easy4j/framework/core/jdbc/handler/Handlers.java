@@ -13,11 +13,13 @@ import java.util.Map;
 public class Handlers {
 
     public static ResultSetHandler<Long> longHandler = new SingleValueHandler<Long>() {};
+    public static ResultSetHandler<Integer> intHandler = new SingleValueHandler<Integer>() {};
 
     private static Map<Class , ResultSetHandler> handlerMap = new HashMap<Class ,ResultSetHandler>();
 
     static {
         handlerMap.put(Long.class,longHandler);
+        handlerMap.put(Integer.class,intHandler);
     }
 
 
