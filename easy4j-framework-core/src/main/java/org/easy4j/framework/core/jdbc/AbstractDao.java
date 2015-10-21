@@ -18,10 +18,6 @@ public abstract class AbstractDao<M> {
 
     protected final Class<M> beanClass;
 
-    protected String tableName ;
-
-    protected String INSERT = "$insert_";
-
     protected BeanHandler<M> beanHandler ;
 
     protected BeanListHandler<M> beanListHander ;
@@ -35,7 +31,7 @@ public abstract class AbstractDao<M> {
     public AbstractDao(){
         this.sqlCache  = new HashMap<String, String>();
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
-        this.tableName = JdbcUtils.tableName(this.beanClass);
+
         this.fieldColumnMapping = JdbcUtils.getFiledAndColumnMapping(this.beanClass);
 
         RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
