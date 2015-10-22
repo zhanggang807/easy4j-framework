@@ -1,4 +1,4 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
@@ -10,7 +10,7 @@ import java.sql.*;
  * @version 1.0
  * @created date 15-10-19
  */
-public class QueryRunner  extends AbstractQueryRunner{
+public class QueryRunner  extends AbstractQueryRunner {
 
     private DataSource dataSource ;
 

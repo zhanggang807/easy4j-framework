@@ -1,4 +1,4 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 
 /**
  * <p>
@@ -22,7 +21,7 @@ import java.util.Date;
  * This class is thread-safe.
  * </p>
  *
- * @see BasicRowProcessor
+ * @see org.easy4j.framework.core.orm.BasicRowProcessor
  *
  * @since DbUtils 1.1
  */

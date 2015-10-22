@@ -1,6 +1,6 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
-import org.easy4j.framework.core.jdbc.handler.Handlers;
+import org.easy4j.framework.core.orm.handler.Handlers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
@@ -38,7 +38,7 @@ public class BaseDao<M> extends AbstractDao<M> {
     protected void _initSql(){
         String[] columns = new String[fieldColumnMapping.size()];
         fieldColumnMapping.values().toArray(columns);
-        String sql = SQLBuilder.generateInsertSQL(tableName,columns);
+        String sql = SQLBuilder.generateInsertSQL(tableName, columns);
         cacheSql(INSERT , sql);
 
     };

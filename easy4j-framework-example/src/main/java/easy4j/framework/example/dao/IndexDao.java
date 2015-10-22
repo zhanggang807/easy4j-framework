@@ -1,7 +1,7 @@
 package easy4j.framework.example.dao;
 
 import easy4j.framework.example.entity.UserGroup;
-import org.easy4j.framework.core.jdbc.BaseDao;
+import org.easy4j.framework.core.orm.BaseDao;
 import org.springframework.stereotype.Repository;
 
 /**

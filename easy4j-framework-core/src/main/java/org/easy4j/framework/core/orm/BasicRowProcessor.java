@@ -1,4 +1,4 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -15,7 +15,7 @@ import java.util.Map;
  * This class is thread-safe.
  * </p>
  *
- * @see RowProcessor
+ * @see org.easy4j.framework.core.orm.RowProcessor
  */
 public class BasicRowProcessor implements RowProcessor {
 

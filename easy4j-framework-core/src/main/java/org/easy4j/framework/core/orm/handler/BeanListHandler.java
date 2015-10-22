@@ -1,7 +1,7 @@
-package org.easy4j.framework.core.jdbc.handler;
+package org.easy4j.framework.core.orm.handler;
 
-import org.easy4j.framework.core.jdbc.ResultSetHandler;
-import org.easy4j.framework.core.jdbc.RowProcessor;
+import org.easy4j.framework.core.orm.ResultSetHandler;
+import org.easy4j.framework.core.orm.RowProcessor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

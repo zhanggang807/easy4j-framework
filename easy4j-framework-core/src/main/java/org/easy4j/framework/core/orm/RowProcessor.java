@@ -1,4 +1,4 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 /**
  * @author: liuyong

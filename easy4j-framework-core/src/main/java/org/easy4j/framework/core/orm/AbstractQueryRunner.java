@@ -1,4 +1,4 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * The base class for QueryRunner & AsyncQueryRunner. This class is thread safe.
  *
- * @see ResultSetHandler
+ * @see org.easy4j.framework.core.orm.ResultSetHandler
  */
 public  abstract class AbstractQueryRunner {
 

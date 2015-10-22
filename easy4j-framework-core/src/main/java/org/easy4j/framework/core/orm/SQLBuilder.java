@@ -1,7 +1,7 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
 
-import org.easy4j.framework.core.jdbc.sql.*;
+import org.easy4j.framework.core.orm.sql.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

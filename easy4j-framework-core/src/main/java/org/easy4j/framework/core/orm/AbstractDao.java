@@ -1,8 +1,8 @@
-package org.easy4j.framework.core.jdbc;
+package org.easy4j.framework.core.orm;
 
-import org.easy4j.framework.core.jdbc.handler.BeanHandler;
-import org.easy4j.framework.core.jdbc.handler.BeanListHandler;
-import org.easy4j.framework.core.jdbc.handler.Handlers;
+import org.easy4j.framework.core.orm.handler.BeanHandler;
+import org.easy4j.framework.core.orm.handler.BeanListHandler;
+import org.easy4j.framework.core.orm.handler.Handlers;
 import org.easy4j.framework.core.util.ReflectUtils;
 
 import java.util.HashMap;

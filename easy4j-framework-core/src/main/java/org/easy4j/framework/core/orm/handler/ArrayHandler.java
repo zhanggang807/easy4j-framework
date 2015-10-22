@@ -1,13 +1,13 @@
-package org.easy4j.framework.core.jdbc.handler;
+package org.easy4j.framework.core.orm.handler;
 
 /**
  * @author: liuyong
  * @since 1.0
  */
 
-import org.easy4j.framework.core.jdbc.BasicRowProcessor;
-import org.easy4j.framework.core.jdbc.ResultSetHandler;
-import org.easy4j.framework.core.jdbc.RowProcessor;
+import org.easy4j.framework.core.orm.BasicRowProcessor;
+import org.easy4j.framework.core.orm.ResultSetHandler;
+import org.easy4j.framework.core.orm.RowProcessor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * <code>ResultSet</code> into an <code>Object[]</code>. This class is
  * thread safe.
  *
- * @see org.easy4j.framework.core.jdbc.ResultSetHandler
+ * @see org.easy4j.framework.core.orm.ResultSetHandler
  */
 public class ArrayHandler implements ResultSetHandler<Object[]> {
 
@@ -60,7 +60,7 @@ public class ArrayHandler implements ResultSetHandler<Object[]> {
      * <code>ResultSet</code>.
      *
      * @throws java.sql.SQLException if a database access error occurs
-     * @see org.easy4j.framework.core.jdbc.ResultSetHandler#handle(java.sql.ResultSet)
+     * @see org.easy4j.framework.core.orm.ResultSetHandler#handle(java.sql.ResultSet)
      */
     public Object[] handle(ResultSet rs) throws SQLException {
         return rs.next() ? this.convert.toArray(rs) : null;
