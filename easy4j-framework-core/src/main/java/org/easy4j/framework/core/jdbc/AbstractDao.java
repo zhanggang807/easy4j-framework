@@ -86,4 +86,14 @@ public abstract class AbstractDao<M> {
         return queryRunner.insert(sql, Handlers.getInstance(returnType) , params);
     }
 
+    /**
+     * 执行update Sql
+     * @param sql
+     * @param params
+     * @return
+     */
+    protected int update(String sql ,Object ... params){
+        return queryRunner.update(sql ,params);
+    }
+
 }

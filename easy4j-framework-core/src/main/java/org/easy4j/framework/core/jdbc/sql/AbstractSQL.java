@@ -19,7 +19,10 @@ public abstract class AbstractSQL {
         sqlBuilder = new StringBuilder();
     }
 
-
+    public AbstractSQL append(String sqlStr){
+        sqlBuilder.append(sqlStr);
+        return this ;
+    }
 
     public  AbstractSQL appendColumns(String columns){
         //do-nothing

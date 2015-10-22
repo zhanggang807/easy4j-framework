@@ -30,8 +30,9 @@ public class SQLBuilder {
 
 
 
-    public static String generateUpdateSQL(String tableName,String conditions){
+    public static String generateUpdateSQL(String tableName,String sets ,String conditions){
         AbstractSQL sql = new UpdateSQL(tableName);
+        sql.append(sets);
         sql.appendConditions(conditions);
         return sql.build();
     }

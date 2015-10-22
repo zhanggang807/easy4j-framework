@@ -71,6 +71,14 @@ public class BaseDao<M> extends AbstractDao<M> {
         return insert(insertSql, fieldMap.values().toArray()) > 0;
     }
 
+    /**
+     * 更新相关数据
+     */
+    public int update(String sets, String condition, Object... params) {
+        String sql = SQLBuilder.generateUpdateSQL(tableName, sets, condition);
+        return update(sql,params);
+    }
+
     public <T> T save(M m ,Class<T> returnType){
         Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
         String insertSql = sql(INSERT);
@@ -91,6 +99,8 @@ public class BaseDao<M> extends AbstractDao<M> {
         String sql = SQLBuilder.generateSelectSqlForPager( null , tableName, condition , pageNumber , pageSize  );
         return selectList(sql, params);
     }
+
+
 
 
     /**
