@@ -1,5 +1,6 @@
 package org.easy4j.framework.core.jdbc;
 
+import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
 import org.easy4j.framework.core.jdbc.handler.Handlers;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,9 +67,9 @@ public class BaseDao<M> extends AbstractDao<M> {
      */
     public boolean save(M m) {
 
-        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
+        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
         String insertSql = sql(INSERT);
-        return insert(insertSql, fieldMap.values().toArray()) > 0;
+        return insert(insertSql, columnValueMap.values().toArray()) > 0;
     }
 
     /**
@@ -79,9 +80,20 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public <T> T save(M m ,Class<T> returnType){
-        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
+        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
         String insertSql = sql(INSERT);
-        return insert(insertSql,returnType,fieldMap.values().toArray()) ;
+        return insert(insertSql,returnType,columnValueMap.values().toArray()) ;
+    }
+
+    public int update(M m ){
+        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, PropertyFilter.ID_FILTER);
+       /* String sql = SQLBuilder.generateUpdateSQL(tableName,columnValueMap,condition);
+        int size = columnValueMap.size() ;
+        Object[] values = new Object[ size + params.length];
+        System.arraycopy(columnValueMap.values().toArray(),0 ,values,0 ,size);
+        System.arraycopy(params,0 ,values,size ,params.length);*/
+
+        return 1 ;//update(sql,params);
     }
 
     public int update(String sets, String condition, Object... params) {

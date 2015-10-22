@@ -42,4 +42,9 @@ public abstract class AbstractSQL {
     public String build(){
         return sqlBuilder.toString();
     }
+
+    public AbstractSQL deleteLastChar(){
+        sqlBuilder.deleteCharAt(sqlBuilder.length() - 1);
+        return  this ;
+    }
 }

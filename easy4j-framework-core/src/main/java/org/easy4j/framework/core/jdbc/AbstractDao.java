@@ -32,7 +32,7 @@ public abstract class AbstractDao<M> {
         this.sqlCache  = new HashMap<String, String>();
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
 
-        this.fieldColumnMapping = JdbcUtils.getFiledAndColumnMapping(this.beanClass);
+        this.fieldColumnMapping = JdbcUtils.getFieldAndColumnMapping(this.beanClass);
 
         RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
 

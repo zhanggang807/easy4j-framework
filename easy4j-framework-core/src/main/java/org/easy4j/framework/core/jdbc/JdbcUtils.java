@@ -113,12 +113,12 @@ public class JdbcUtils {
     }
 
     /**
-     * 获取对象字段的值 ，以Map返回
+     * 获取 数据库字段===>值 ，以Map返回
      * @param target
      * @param filter
      * @return
      */
-    public static Map<String ,Object> getFieldMap(Object target ,Map<String,String> fieldColumnMapping,PropertyFilter filter) {
+    public static Map<String ,Object> getColumnValueMap(Object target ,Map<String,String> fieldColumnMapping,PropertyFilter filter) {
 
         Set<Map.Entry<String,String>> entries = fieldColumnMapping.entrySet();
         Class targetClass = target.getClass() ;
@@ -143,7 +143,7 @@ public class JdbcUtils {
      * @param entityClass
      * @return
      */
-    public static Map<String,String> getFiledAndColumnMapping(Class entityClass){
+    public static Map<String,String> getFieldAndColumnMapping(Class entityClass){
 
         List<Field> fields = ReflectUtils.findAllField(entityClass);
         Map<String,String> filedMapColumnMap = new LinkedHashMap<String, String>() ;
