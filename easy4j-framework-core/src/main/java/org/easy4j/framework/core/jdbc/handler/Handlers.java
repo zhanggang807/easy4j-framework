@@ -14,12 +14,14 @@ public class Handlers{
 
     public static ResultSetHandler<Long> longHandler = new SingleValueHandler<Long>() {};
     public static ResultSetHandler<Integer> intHandler = new SingleValueHandler<Integer>() {};
+   // public static ResultSetHandler<String> stringHandler = new SingleValueHandler<String>() {};
 
     private static Map<Class , ResultSetHandler> handlerMap = new HashMap<Class ,ResultSetHandler>();
 
     static {
         handlerMap.put(Long.class,longHandler);
         handlerMap.put(Integer.class,intHandler);
+        //handlerMap.put(String.class ,stringHandler) ;
     }
 
 
