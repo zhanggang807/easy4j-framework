@@ -86,14 +86,25 @@ public class BaseDao<M> extends AbstractDao<M> {
     }
 
     public int update(M m ){
-        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, PropertyFilter.ID_FILTER);
-       /* String sql = SQLBuilder.generateUpdateSQL(tableName,columnValueMap,condition);
-        int size = columnValueMap.size() ;
-        Object[] values = new Object[ size + params.length];
-        System.arraycopy(columnValueMap.values().toArray(),0 ,values,0 ,size);
-        System.arraycopy(params,0 ,values,size ,params.length);*/
+        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
+        StringBuilder sets = new StringBuilder();
+        String Id  = "id" ;
+        Object IdVal = null ;
+        Object[] params = new Object[columnValueMap.size()];
+        int index = 0 ;
+        for(Map.Entry<String, Object> entry : columnValueMap.entrySet()){
 
-        return 1 ;//update(sql,params);
+            String key = entry.getKey() ;
+            if(Id.equals(key)){
+                IdVal = entry.getValue();
+                continue;
+            }
+            sets.append(key).append(" =?,");
+            params[index++] = entry.getValue();
+        }
+        sets.deleteCharAt(sets.length() - 1);
+        params[index] = IdVal ;
+        return update(sets.toString(),Id + "=?" ,params);
     }
 
     public int update(String sets, String condition, Object... params) {

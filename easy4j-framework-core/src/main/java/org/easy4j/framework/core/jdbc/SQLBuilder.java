@@ -37,15 +37,6 @@ public class SQLBuilder {
         return sql.build();
     }
 
-    public static String generateUpdateSQL(String tableName,Map<String,Object> columnValueMap,String conditions){
-        AbstractSQL sql = new UpdateSQL(tableName);
-        for(Map.Entry<String, Object> entry : columnValueMap.entrySet()){
-            sql.append(entry.getKey()).append(" =?,");
-        }
-        sql.deleteLastChar();
-        sql.appendConditions(conditions);
-        return sql.build();
-    }
 
     public static String generateInsertSQL(String tableName,String ... columns){
         InsertSQL sql = new InsertSQL(tableName);
