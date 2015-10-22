@@ -1,6 +1,5 @@
 package org.easy4j.framework.core.jdbc;
 
-import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
 import org.easy4j.framework.core.jdbc.handler.Handlers;
 import org.springframework.beans.factory.annotation.Autowired;
 
