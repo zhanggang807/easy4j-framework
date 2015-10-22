@@ -72,17 +72,26 @@ public class BaseDao<M> extends AbstractDao<M> {
     }
 
     /**
-     * 更新相关数据
+     * 插入数据 ，并返回自动生成的键
+     * @param m
+     * @param returnType  返回数据的类型 ，支持 int long string
+     * @param <T>
+     * @return
      */
+    public <T> T save(M m ,Class<T> returnType){
+        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
+        String insertSql = sql(INSERT);
+        return insert(insertSql,returnType,fieldMap.values().toArray()) ;
+    }
+
     public int update(String sets, String condition, Object... params) {
         String sql = SQLBuilder.generateUpdateSQL(tableName, sets, condition);
         return update(sql,params);
     }
 
-    public <T> T save(M m ,Class<T> returnType){
-        Map<String,Object> fieldMap = JdbcUtils.getFieldMap(m, fieldColumnMapping,null);
-        String insertSql = sql(INSERT);
-        return insert(insertSql,returnType,fieldMap.values().toArray()) ;
+    public int delete(String condition ,Object... params){
+        String sql = SQLBuilder.generateDeleteSQL(tableName,condition );
+        return update(sql ,params);
     }
 
     public M queryObject(String condition ,Object ... params){
