@@ -92,6 +92,7 @@ public class BaseDao<M> extends AbstractDao<M> {
         return selectList(sql, params);
     }
 
+
     /**
      * 查询单一数据 支持原始类型， String ,Date TimeStamp
      * @param sql
@@ -112,7 +113,7 @@ public class BaseDao<M> extends AbstractDao<M> {
      */
     public int queryCount(String condition,Object ... params){
         String sql = SQLBuilder.generateSelectSQL("COUNT(1)",tableName ,condition);
-        return queryRunner.query(sql,Handlers.getInstance(Integer.class),params);
+        return queryRunner.query(sql,Handlers.intHandler,params);
     }
 
 
