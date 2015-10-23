@@ -56,7 +56,9 @@ public class BaseDao<M> extends AbstractDao<M> {
     }
 
     public int update(M m ){
+        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
         Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
+        //EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
         StringBuilder sets = new StringBuilder();
         String Id  = "id" ;
         Object IdVal = null ;
