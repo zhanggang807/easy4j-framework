@@ -3,6 +3,8 @@ package easy4j.framework.example.controller;
 import com.google.common.collect.Maps;
 import easy4j.framework.example.dao.IndexDao;
 import easy4j.framework.example.entity.UserGroup;
+import org.easy4j.framework.core.orm.EntityMapping;
+import org.easy4j.framework.core.orm.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,9 @@ public class IndexController {
         userGroup.setCreated(new Date());
         userGroup.setModified(new Date());
         Long id = indexDao.save(userGroup,Long.class);
+        Mapping mapping = EntityMapping.getMapping(UserGroup.class);
+
+        Map<String,Object> columnValMap = null ;
 
         List<UserGroup> userGroupList = indexDao.queryList(null);
         model.addAttribute("userGroupList" , userGroupList) ;

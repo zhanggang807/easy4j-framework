@@ -138,7 +138,7 @@ public class JdbcUtils {
         return ret ;
     }
 
-    public static Object[] getValues(Object target ,EntityMapping.Mapping mapping){
+    public static Object[] getValues(Object target ,Mapping mapping){
         String[] fields = mapping.getFields();
         int len = fields.length ;
         Class targetClass = target.getClass() ;

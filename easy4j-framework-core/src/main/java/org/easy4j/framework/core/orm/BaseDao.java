@@ -37,7 +37,7 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public boolean save(M m) {
-        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
+        Mapping mapping = EntityMapping.getMapping(tableName);
         String sql = SQLBuilder.generateInsertSQL(tableName,mapping.getColumns());
         return insert(sql, JdbcUtils.getValues(m, mapping)) > 0;
     }
@@ -50,29 +50,28 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public <T> T save(M m ,Class<T> returnType){
-        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
+        Mapping mapping = EntityMapping.getMapping(tableName);
         String sql = SQLBuilder.generateInsertSQL(tableName,mapping.getColumns());
         return insert(sql,returnType,JdbcUtils.getValues(m, mapping)) ;
     }
 
     public int update(M m ){
-        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
-        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
-        //EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
+        Mapping mapping = EntityMapping.getMapping(tableName);
+        Object[] values = JdbcUtils.getValues(m,mapping);
+
         StringBuilder sets = new StringBuilder();
         String Id  = "id" ;
         Object IdVal = null ;
-        Object[] params = new Object[columnValueMap.size()];
+        Object[] params = new Object[values.length];
         int index = 0 ;
-        for(Map.Entry<String, Object> entry : columnValueMap.entrySet()){
+        for(String field : mapping.getFields()){
 
-            String key = entry.getKey() ;
-            if(Id.equals(key)){
-                IdVal = entry.getValue();
+            if(Id.equals(field)){
+                IdVal = values[index];
                 continue;
             }
-            sets.append(key).append(" =?,");
-            params[index++] = entry.getValue();
+            sets.append(field).append(" =?,");
+            params[index++] = values[index];
         }
         sets.deleteCharAt(sets.length() - 1);
         params[index] = IdVal ;
