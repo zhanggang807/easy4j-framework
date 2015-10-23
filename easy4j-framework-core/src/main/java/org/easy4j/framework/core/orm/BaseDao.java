@@ -2,10 +2,12 @@ package org.easy4j.framework.core.orm;
 
 import org.easy4j.framework.core.orm.handler.Handlers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.Mapping;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -18,8 +20,6 @@ public class BaseDao<M> extends AbstractDao<M> {
 
 
     protected String tableName ;
-
-    protected String INSERT = "$insert_";
 
     public BaseDao(){
         super();
@@ -39,17 +39,11 @@ public class BaseDao<M> extends AbstractDao<M> {
         String[] columns = new String[fieldColumnMapping.size()];
         fieldColumnMapping.values().toArray(columns);
         String sql = SQLBuilder.generateInsertSQL(tableName, columns);
-        cacheSql(INSERT , sql);
+
 
     };
 
-    protected String sql(String key ){
-        return sqlCache.get(key);
-    }
 
-    protected String cacheSql(String key ,String value){
-        return sqlCache.put(key,value);
-    }
 
 
     @Autowired
@@ -65,10 +59,9 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public boolean save(M m) {
-
-        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
-        String insertSql = sql(INSERT);
-        return insert(insertSql, columnValueMap.values().toArray()) > 0;
+        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
+        String sql = SQLBuilder.generateInsertSQL(tableName,mapping.getColumns());
+        return insert(sql, JdbcUtils.getValues(m, mapping)) > 0;
     }
 
     /**
@@ -79,9 +72,9 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public <T> T save(M m ,Class<T> returnType){
-        Map<String,Object> columnValueMap = JdbcUtils.getColumnValueMap(m, fieldColumnMapping, null);
-        String insertSql = sql(INSERT);
-        return insert(insertSql,returnType,columnValueMap.values().toArray()) ;
+        EntityMapping.Mapping mapping = EntityMapping.getMapping(tableName);
+        String sql = SQLBuilder.generateInsertSQL(tableName,mapping.getColumns());
+        return insert(sql,returnType,JdbcUtils.getValues(m, mapping)) ;
     }
 
     public int update(M m ){

@@ -22,24 +22,22 @@ public abstract class AbstractDao<M> {
 
     protected BeanListHandler<M> beanListHander ;
 
-    protected final Map<String ,String> sqlCache  ;
-
     protected final Map<String,String> fieldColumnMapping ;
 
     protected static QueryRunner queryRunner ;
 
     public AbstractDao(){
-        this.sqlCache  = new HashMap<String, String>();
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
 
         this.fieldColumnMapping = JdbcUtils.getFieldAndColumnMapping(this.beanClass);
+
+        EntityMapping.initMapping(this.beanClass);
 
         RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
 
         this.beanHandler = new BeanHandler<M>(this.beanClass ,rowProcessor) ;
         this.beanListHander = new BeanListHandler<M>(this.beanClass ,rowProcessor);
     }
-
 
     //============================ select 执行sql ===========================================================
     // web 需要性能好些 用select 进行查询

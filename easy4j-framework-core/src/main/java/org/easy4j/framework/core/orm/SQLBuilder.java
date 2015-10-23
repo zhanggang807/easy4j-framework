@@ -37,11 +37,24 @@ public class SQLBuilder {
         return sql.build();
     }
 
+    public static String generateInsertSQL(String tableName,Object ... columns){
+        StringBuilder sql = new StringBuilder("INSERT INTO ");
+        sql.append(tableName).append('(');
+        StringBuilder placeHolder = new StringBuilder();
+        for(Object column : columns){
+            sql.append(column).append(',');
+            placeHolder.append('?').append(',') ;
+        }
 
-    public static String generateInsertSQL(String tableName,String ... columns){
-        InsertSQL sql = new InsertSQL(tableName);
-        sql.insertColumns(columns);
-        return sql.build();
+        sql.deleteCharAt(sql.length() - 1);
+        placeHolder.deleteCharAt(placeHolder.length() - 1);
+
+        sql.append(") VALUES(");
+        placeHolder.append(')');
+
+        sql.append(placeHolder);
+
+        return sql.toString() ;
     }
 
     public static String generateDeleteSQL(String tableName,String conditions){

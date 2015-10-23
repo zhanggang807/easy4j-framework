@@ -138,6 +138,19 @@ public class JdbcUtils {
         return ret ;
     }
 
+    public static Object[] getValues(Object target ,EntityMapping.Mapping mapping){
+        String[] fields = mapping.getFields();
+        int len = fields.length ;
+        Class targetClass = target.getClass() ;
+        Object[] values = new Object[len];
+        for(int i = 0 ; i < len ; i++ ){
+            Field  field = ReflectionUtils.findField(targetClass,fields[i]);
+            ReflectionUtils.makeAccessible(field);
+            values[i] =  ReflectionUtils.getField(field,target) ;
+        }
+        return values ;
+    }
+
     /***
      * 获取entityClass 字段与数据库字段映射
      * @param entityClass
@@ -168,7 +181,7 @@ public class JdbcUtils {
         return filedMapColumnMap;
     }
 
-    private static String translate2TableCol(String columnName){
+    public static String translate2TableCol(String columnName){
         columnName.toLowerCase();
         StringBuilder sb = new StringBuilder(columnName.length());
         char[] chars = columnName.toCharArray() ;
