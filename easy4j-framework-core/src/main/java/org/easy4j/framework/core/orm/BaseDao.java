@@ -71,7 +71,8 @@ public class BaseDao<M> extends AbstractDao<M> {
                 continue;
             }
             sets.append(field).append(" =?,");
-            params[index++] = values[index];
+            params[index] = values[index];
+            index++ ;
         }
         sets.deleteCharAt(sets.length() - 1);
         params[index] = IdVal ;

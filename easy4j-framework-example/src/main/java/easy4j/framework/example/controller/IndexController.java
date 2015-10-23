@@ -43,6 +43,9 @@ public class IndexController {
         Map<String,Object> columnValMap = null ;
 
         List<UserGroup> userGroupList = indexDao.queryList(null);
+        userGroup.setId(32);
+        userGroup.setUid(110);
+        int i = indexDao.update(userGroup);
         model.addAttribute("userGroupList" , userGroupList) ;
         return "index";
 
