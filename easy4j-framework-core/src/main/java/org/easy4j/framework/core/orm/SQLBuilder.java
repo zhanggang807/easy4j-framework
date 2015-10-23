@@ -31,10 +31,13 @@ public class SQLBuilder {
 
 
     public static String generateUpdateSQL(String tableName,String sets ,String conditions){
-        AbstractSQL sql = new UpdateSQL(tableName);
-        sql.append(sets);
-        sql.appendConditions(conditions);
-        return sql.build();
+        StringBuilder sql = new StringBuilder();
+             sql.append("UPDATE ")
+                .append(tableName)
+                .append(" SET ")
+                .append(sets);
+        appendConditions(sql,conditions);
+        return sql.toString();
     }
 
     public static String generateInsertSQL(String tableName,Object ... columns){
@@ -58,9 +61,16 @@ public class SQLBuilder {
     }
 
     public static String generateDeleteSQL(String tableName,String conditions){
-        AbstractSQL sql = new DeleteSQL(tableName);
-        sql.appendConditions(conditions);
-        return sql.build();
+        StringBuilder sqlBuilder = new StringBuilder("DELETE FROM");
+        sqlBuilder.append(tableName);
+        appendConditions(sqlBuilder,conditions);
+        return sqlBuilder.toString();
+    }
+
+    public static void appendConditions(StringBuilder sqlBuilder,String conditions){
+        if(conditions != null && !conditions.isEmpty()){
+            sqlBuilder.append(" WHERE ").append(conditions);
+        }
     }
 
 

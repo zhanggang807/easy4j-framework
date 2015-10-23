@@ -10,19 +10,14 @@ public abstract class AbstractSQL {
 
     protected String tableName ;
 
-    public AbstractSQL getSelf() {
-        return this;
-    }
+
 
     public AbstractSQL(String tableName){
         this.tableName  = tableName;
         sqlBuilder = new StringBuilder();
     }
 
-    public AbstractSQL append(String sqlStr){
-        sqlBuilder.append(sqlStr);
-        return this ;
-    }
+
 
     public  AbstractSQL appendColumns(String columns){
         //do-nothing
@@ -43,8 +38,5 @@ public abstract class AbstractSQL {
         return sqlBuilder.toString();
     }
 
-    public AbstractSQL deleteLastChar(){
-        sqlBuilder.deleteCharAt(sqlBuilder.length() - 1);
-        return  this ;
-    }
+
 }
