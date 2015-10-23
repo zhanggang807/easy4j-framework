@@ -5,7 +5,6 @@ import org.easy4j.framework.core.orm.handler.BeanListHandler;
 import org.easy4j.framework.core.orm.handler.Handlers;
 import org.easy4j.framework.core.util.ReflectUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

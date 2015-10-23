@@ -2,12 +2,10 @@ package org.easy4j.framework.core.orm;
 
 import org.easy4j.framework.core.orm.handler.Handlers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.Mapping;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -23,28 +21,8 @@ public class BaseDao<M> extends AbstractDao<M> {
 
     public BaseDao(){
         super();
-        this.tableName = JdbcUtils.tableName(this.beanClass);
-        _initSql();
-        initSql();
+        this.tableName = EntityMapping.getTableName(this.beanClass);
     }
-
-    protected void initSql(){
-
-    }
-
-    /**
-     * 初始化部分SQL
-     */
-    protected void _initSql(){
-        String[] columns = new String[fieldColumnMapping.size()];
-        fieldColumnMapping.values().toArray(columns);
-        String sql = SQLBuilder.generateInsertSQL(tableName, columns);
-
-
-    };
-
-
-
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
