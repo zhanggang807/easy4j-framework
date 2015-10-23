@@ -14,7 +14,6 @@
         <module>easy4j-framework-web</module>
         <module>easy4j-framework-example</module>
         <module>easy4j-framework-spring</module>
-        <module>easy4j-framework-dao</module>
 
     </modules>
 
