@@ -1,8 +1,6 @@
 package org.easy4j.framework.core.orm;
 
-import org.easy4j.framework.core.orm.handler.BeanHandler;
-import org.easy4j.framework.core.orm.handler.BeanListHandler;
-import org.easy4j.framework.core.orm.handler.Handlers;
+import org.easy4j.framework.core.orm.handler.*;
 import org.easy4j.framework.core.util.ReflectUtils;
 
 import java.util.List;
@@ -60,6 +58,26 @@ public abstract class AbstractDao<M> {
         return queryRunner.query(sql,beanListHander,params);
     }
 
+    /**
+     * 执行查询 ，得到单条记录 ，以Map返回 ， columnName===>value
+     * @param sql
+     * @param params
+     * @return
+     */
+    protected Map<String,Object> selectMap(String sql ,Object ... params){
+        return queryRunner.query(sql, new MapHandler(), params);
+    }
+
+    /**
+     * 执行查询 ，得到多条记录 ，以List<Map>返回
+     * @param sql
+     * @param params
+     * @return
+     */
+    protected List<Map<String,Object>> selectMapList(String sql ,Object ... params){
+        return queryRunner.query(sql, new MapListHandler(), params);
+    }
+
 
     /**
      * 执行插入sql
@@ -92,5 +110,7 @@ public abstract class AbstractDao<M> {
     protected int update(String sql ,Object ... params){
         return queryRunner.update(sql ,params);
     }
+
+
 
 }
