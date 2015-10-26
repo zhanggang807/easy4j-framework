@@ -1,5 +1,8 @@
 package org.easy4j.framework.core.orm;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author bjliuyong
  * @version 1.0
@@ -26,6 +29,20 @@ public class Mapping {
     void put(int position ,String key ,String value){
         fields[position]     = key ;
         columns[position]    = value ;
+    }
+
+    public Map<String,String> getColumnFieldMapping(){
+
+        Map<String,String> mapping = new HashMap<String,String>(fields.length);
+        int i = 0 ;
+        for(String column : columns) {
+
+            mapping.put(column ,fields[i++]);
+
+        }
+
+        return mapping ;
+
     }
 
 }

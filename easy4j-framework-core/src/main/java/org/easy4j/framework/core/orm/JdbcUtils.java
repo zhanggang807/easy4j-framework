@@ -26,35 +26,6 @@ import java.util.*;
 public class JdbcUtils {
 
 
-    public static String tableName(Class beanClass){
-
-        Table table = AnnotationUtils.findAnnotation(beanClass, Table.class);
-        if(table != null){
-            return table.value();
-        } else {
-            return translate2TableCol(beanClass.getSimpleName());
-        }
-    }
-
-    public static String pk(Class beanClass){
-
-        return "id" ;
-        /*Field pk = null ;
-
-        Field[] fields = beanClass.getDeclaredFields();
-        for(Field field : fields ){
-            Annotation[] annotations = field.getAnnotations();
-            for (Annotation ann : annotations){
-                if (ann.annotationType().equals(Id.class)){
-                    pk = field ;
-                    break;
-                }
-            }
-        }
-        if (pk == null)
-            return "id" ;
-        return translate2TableCol(pk.getName());*/
-    }
 
     /**
      * 获取对象字段的值 ，以Object返回
@@ -173,7 +144,7 @@ public class JdbcUtils {
             }
             if(!isAdded){
                 String columnName = field.getName();
-                filedMapColumnMap.put(columnName,translate2TableCol(columnName)) ;
+                filedMapColumnMap.put(translate2TableCol(columnName),columnName) ;
             }
 
         }

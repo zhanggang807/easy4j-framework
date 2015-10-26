@@ -19,18 +19,16 @@ public abstract class AbstractDao<M> {
 
     protected BeanListHandler<M> beanListHander ;
 
-    protected final Map<String,String> fieldColumnMapping ;
-
     protected static QueryRunner queryRunner ;
 
     public AbstractDao(){
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
 
-        this.fieldColumnMapping = JdbcUtils.getFieldAndColumnMapping(this.beanClass);
+       //this.fieldColumnMapping = JdbcUtils.getFieldAndColumnMapping(this.beanClass);
 
         EntityMapping.initMapping(this.beanClass);
-
-        RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(fieldColumnMapping)) ;
+        Map<String,String> columnFieldMapping = EntityMapping.getMapping(this.beanClass).getColumnFieldMapping();
+        RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(columnFieldMapping)) ;
 
         this.beanHandler = new BeanHandler<M>(this.beanClass ,rowProcessor) ;
         this.beanListHander = new BeanListHandler<M>(this.beanClass ,rowProcessor);
