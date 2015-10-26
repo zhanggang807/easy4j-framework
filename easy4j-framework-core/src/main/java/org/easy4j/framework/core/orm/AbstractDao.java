@@ -24,8 +24,6 @@ public abstract class AbstractDao<M> {
     public AbstractDao(){
         this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
 
-       //this.fieldColumnMapping = JdbcUtils.getFieldAndColumnMapping(this.beanClass);
-
         EntityMapping.initMapping(this.beanClass);
         Map<String,String> columnFieldMapping = EntityMapping.getMapping(this.beanClass).getColumnFieldMapping();
         RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(columnFieldMapping)) ;
