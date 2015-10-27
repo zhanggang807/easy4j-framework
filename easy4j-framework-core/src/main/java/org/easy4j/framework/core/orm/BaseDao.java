@@ -122,7 +122,7 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return Integer.MAX 足够
      */
     public int queryCount(String condition,Object ... params){
-        String sql = SQLBuilder.generateSelectSQL("COUNT(1)",tableName ,condition);
+        String sql = SQLBuilder.generateSelectCountSQL(tableName ,condition);
         return queryRunner.query(sql,Handlers.intHandler,params);
     }
 

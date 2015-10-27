@@ -22,6 +22,13 @@ public class SQLBuilder {
         return sql.build();
     }
 
+    public static String generateSelectCountSQL(String tableName ,String conditions){
+        StringBuilder sql = new StringBuilder("SELECT COUNT(1)");
+        sql.append(tableName);
+        appendConditions(sql,conditions);
+        return sql.toString();
+    }
+
     public static String generateSelectSqlForPager(String columns ,String tableName ,String conditions ,int pageNumber,int pageSize ){
         SelectSQL sql = new SelectSQL(tableName);
         sql.appendColumns(columns);
