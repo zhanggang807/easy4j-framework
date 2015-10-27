@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public class SQLBuilder {
 
-    public static final String NO_WHERE = null ;
     public static final String ALL_COLUMNS = null ;
 
     public static String generateSelectSQL(String columns ,String tableName ,String conditions){
@@ -23,7 +22,7 @@ public class SQLBuilder {
     }
 
     public static String generateSelectCountSQL(String tableName ,String conditions){
-        StringBuilder sql = new StringBuilder("SELECT COUNT(1)");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(1) FROM ");
         sql.append(tableName);
         appendConditions(sql,conditions);
         return sql.toString();
@@ -36,8 +35,6 @@ public class SQLBuilder {
         sql.appendSqlForPager(pageNumber,pageSize);
         return sql.build();
     }
-
-
 
     public static String generateUpdateSQL(String tableName,String sets ,String conditions){
         StringBuilder sql = new StringBuilder();
@@ -98,4 +95,5 @@ public class SQLBuilder {
 
         System.out.println(generateInsertSQL("user", (String[])fieldMapping.values().toArray()));
     }
+
 }
