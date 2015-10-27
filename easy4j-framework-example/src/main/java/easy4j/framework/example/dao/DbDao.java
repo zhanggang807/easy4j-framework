@@ -11,11 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DbDao extends BaseDao {
 
-
-    public DbDao(){
-       super();
-    }
-
     protected void init(){
        System.out.println("======DbDao======= init()");
     }
