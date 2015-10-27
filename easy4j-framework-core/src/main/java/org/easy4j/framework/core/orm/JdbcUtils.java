@@ -83,32 +83,6 @@ public class JdbcUtils {
         return ret ;
     }
 
-    /**
-     * 获取 数据库字段===>值 ，以Map返回
-     * @param target
-     * @param filter
-     * @return
-     */
-    public static Map<String ,Object> getColumnValueMap(Object target ,Map<String,String> fieldColumnMapping,PropertyFilter filter) {
-
-        Set<Map.Entry<String,String>> entries = fieldColumnMapping.entrySet();
-        Class targetClass = target.getClass() ;
-        Map<String ,Object> ret  =  new LinkedHashMap<String, Object>();
-
-        for(Map.Entry<String,String> entry : entries){
-            String key = entry.getKey();
-
-            if(filter != null && filter.filter(key))
-                continue;
-            Field  field = ReflectionUtils.findField(targetClass,key);
-
-            ReflectionUtils.makeAccessible(field);
-            ret.put(entry.getValue() , ReflectionUtils.getField(field,target)) ;
-        }
-
-        return ret ;
-    }
-
     public static Object[] getValues(Object target ,Mapping mapping){
         String[] fields = mapping.getFields();
         int len = fields.length ;
@@ -120,36 +94,6 @@ public class JdbcUtils {
             values[i] =  ReflectionUtils.getField(field,target) ;
         }
         return values ;
-    }
-
-    /***
-     * 获取entityClass 字段与数据库字段映射
-     * @param entityClass
-     * @return
-     */
-    public static Map<String,String> getFieldAndColumnMapping(Class entityClass){
-
-        List<Field> fields = ReflectUtils.findAllField(entityClass);
-        Map<String,String> filedMapColumnMap = new LinkedHashMap<String, String>() ;
-
-        for(Field field : fields ){
-            Annotation[] annotations = field.getAnnotations();
-            boolean isAdded = false ;
-            for (Annotation ann : annotations){
-                if (ann.annotationType().equals(Column.class)){
-                    filedMapColumnMap.put(field.getName(),((Column)ann).value()) ;
-                    isAdded = true ;
-                    break;
-                }
-            }
-            if(!isAdded){
-                String columnName = field.getName();
-                filedMapColumnMap.put(translate2TableCol(columnName),columnName) ;
-            }
-
-        }
-
-        return filedMapColumnMap;
     }
 
     public static String translate2TableCol(String columnName){

@@ -15,8 +15,9 @@ import java.util.Map;
  */
 public abstract class AbstractDao<M> {
 
+    protected String tableName ;
 
-    protected final Class<M> beanClass;
+    protected Class<M> entityClass ;
 
     protected BeanHandler<M> beanHandler ;
 
@@ -25,14 +26,19 @@ public abstract class AbstractDao<M> {
     protected static QueryRunner queryRunner ;
 
     public AbstractDao(){
-        this.beanClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        init();
+    }
 
-        EntityMapping.initMapping(this.beanClass);
-        Map<String,String> columnFieldMapping = EntityMapping.getMapping(this.beanClass).getColumnFieldMapping();
+    protected void init(){
+
+        this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        this.tableName   = EntityMapping.getTableName(this.entityClass);
+        EntityMapping.initMapping(this.entityClass);
+        Map<String,String> columnFieldMapping = EntityMapping.getMapping(this.entityClass).getColumnFieldMapping();
         RowProcessor rowProcessor = new BasicRowProcessor(new BeanProcessor(columnFieldMapping)) ;
 
-        this.beanHandler = new BeanHandler<M>(this.beanClass ,rowProcessor) ;
-        this.beanListHander = new BeanListHandler<M>(this.beanClass ,rowProcessor);
+        this.beanHandler = new BeanHandler<M>(this.entityClass ,rowProcessor) ;
+        this.beanListHander = new BeanListHandler<M>(this.entityClass ,rowProcessor);
     }
 
     //============================ select 执行sql ===========================================================

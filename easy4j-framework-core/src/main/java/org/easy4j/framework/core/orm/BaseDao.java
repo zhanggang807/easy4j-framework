@@ -15,12 +15,8 @@ import java.util.List;
  */
 public class BaseDao<M> extends AbstractDao<M> {
 
-
-    protected String tableName ;
-
     public BaseDao(){
         super();
-        this.tableName = EntityMapping.getTableName(this.beanClass);
     }
 
     @Autowired
