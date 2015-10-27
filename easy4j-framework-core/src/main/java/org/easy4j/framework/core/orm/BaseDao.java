@@ -89,22 +89,19 @@ public class BaseDao<M> extends AbstractDao<M> {
     }
 
     public M queryObject(String condition ,Object ... params){
-        String sql = SQLBuilder.generateSelectSQL( null , tableName , condition );
+        String sql = SQLBuilder.generateSelectSQL( SQLBuilder.ALL_COLUMNS , tableName , condition );
         return selectOne(sql ,params);
     }
 
     public List<M> queryList(String condition,Object... params) {
-        String sql = SQLBuilder.generateSelectSQL( null , tableName, condition );
+        String sql = SQLBuilder.generateSelectSQL( SQLBuilder.ALL_COLUMNS , tableName, condition );
         return selectList(sql,params);
     }
 
     public List<M> queryList(int pageNumber ,int pageSize ,String condition ,Object ... params){
-        String sql = SQLBuilder.generateSelectSqlForPager( null , tableName, condition , pageNumber , pageSize  );
+        String sql = SQLBuilder.generateSelectSqlForPager( SQLBuilder.ALL_COLUMNS , tableName, condition , pageNumber , pageSize  );
         return selectList(sql, params);
     }
-
-
-
 
     /**
      * 查询单一数据 支持原始类型， String ,Date TimeStamp

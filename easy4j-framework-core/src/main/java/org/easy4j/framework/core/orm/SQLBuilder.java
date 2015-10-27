@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class SQLBuilder {
 
+    public static final String NO_WHERE = null ;
+    public static final String ALL_COLUMNS = null ;
 
     public static String generateSelectSQL(String columns ,String tableName ,String conditions){
         AbstractSQL sql = new SelectSQL(tableName);
