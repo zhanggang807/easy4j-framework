@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
+ * web 需要性能好些 用select 进行查询
+ *
  * @author: liuyong
  * @since 1.0
  */
