@@ -137,6 +137,37 @@ public class Strings {
 
 
     public static String concat(String ... params){
-        return "" ;
+
+        int len =  0 ;
+
+        for (String str : params){
+
+            if(str == null || str.length() == 0)
+                continue;
+
+            len += str.length() ;
+        }
+        char[] chars = new char[len];
+
+        int pos = 0 ;
+        for(String str : params){
+
+            if(str == null || str.length() == 0)
+                continue;
+            int l = str.length();
+            str.getChars(0, l, chars, pos);
+            pos += l ;
+        }
+
+        return new String(chars);
+    }
+
+    public static void main(String args[]){
+
+        for(int loop = 10000 ; loop > 0 ; loop--){
+            System.out.println(Strings.concat("","abcdefg","bacde"));
+        }
+
+
     }
 }
