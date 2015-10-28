@@ -135,7 +135,11 @@ public class Strings {
         return sb.toString() ;
     }
 
-
+    /***
+     *  链接多个字符串 忽略"" null 字符串
+     * @param params
+     * @return
+     */
     public static String concat(String ... params){
 
         int len =  0 ;

@@ -2,6 +2,7 @@ package org.easy4j.framework.core.orm;
 
 
 import org.easy4j.framework.core.orm.sql.*;
+import org.easy4j.framework.core.util.base.Strings;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -37,13 +38,12 @@ public class SQLBuilder {
     }
 
     public static String generateUpdateSQL(String tableName,String sets ,String conditions){
-        StringBuilder sql = new StringBuilder();
-             sql.append("UPDATE ")
-                .append(tableName)
-                .append(" SET ")
-                .append(sets);
-        appendConditions(sql,conditions);
-        return sql.toString();
+
+        if(conditions == null || conditions.length() == 0)
+            return  Strings.concat("UPDATE ",tableName," SET ",sets ) ;
+        else
+            return  Strings.concat("UPDATE ",tableName," SET ",sets ," WHERE ",conditions) ;
+
     }
 
     public static String generateInsertSQL(String tableName,Object ... columns){
@@ -67,11 +67,14 @@ public class SQLBuilder {
     }
 
     public static String generateDeleteSQL(String tableName,String conditions){
-        StringBuilder sqlBuilder = new StringBuilder("DELETE FROM");
-        sqlBuilder.append(tableName);
-        appendConditions(sqlBuilder,conditions);
-        return sqlBuilder.toString();
+
+        if(conditions == null || conditions.length() == 0)
+            return Strings.concat("delete from ",tableName );
+        else
+            return Strings.concat("delete from ",tableName ," where ",conditions);
     }
+
+
 
     public static void appendConditions(StringBuilder sqlBuilder,String conditions){
         if(conditions != null && !conditions.isEmpty()){
