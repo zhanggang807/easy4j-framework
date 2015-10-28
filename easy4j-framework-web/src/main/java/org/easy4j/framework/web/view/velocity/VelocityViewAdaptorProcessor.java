@@ -1,7 +1,7 @@
 package org.easy4j.framework.web.view.velocity;
 
-import com.google.common.base.Strings;
 import org.easy4j.framework.core.config.GlobalConfig;
+import org.easy4j.framework.core.util.base.Strings;
 import org.easy4j.framework.web.bean.processor.VelocityConstants;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.view.ViewAdaptorProcessor;
@@ -29,7 +29,7 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
     @Override
     public boolean support(String viewType) {
 
-        if(viewType == null || viewType.isEmpty())
+        if(Strings.isBlank(viewType))
             return true ;
 
         return ViewType.VELOCITY.equalsIgnoreCase(viewType);
@@ -97,7 +97,7 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
 
         String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
 
-        if(!Strings.isNullOrEmpty(layoutUrl)){
+        if(!Strings.isBlank(layoutUrl)){
             velocityProperties.put(VelocityConstants.VELOCITY_LAYOUT_URL,layoutUrl);
         }
 
