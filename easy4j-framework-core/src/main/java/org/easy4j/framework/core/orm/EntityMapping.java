@@ -3,6 +3,7 @@ package org.easy4j.framework.core.orm;
 import org.easy4j.framework.core.orm.annotation.Column;
 import org.easy4j.framework.core.orm.annotation.Table;
 import org.easy4j.framework.core.util.ReflectUtils;
+import org.easy4j.framework.core.util.base.Strings;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
@@ -40,7 +41,7 @@ public class EntityMapping {
             }
             if(!isAdded){
                 String columnName = field.getName();
-                mapping.put(count ,columnName,JdbcUtils.translate2TableCol(columnName)) ;
+                mapping.put(count ,columnName, Strings.humpToUnderLine(columnName)) ;
             }
             count ++ ;
         }
@@ -63,7 +64,7 @@ public class EntityMapping {
         if(table != null){
             return table.value();
         } else {
-            return JdbcUtils.translate2TableCol(beanClass.getSimpleName());
+            return Strings.humpToUnderLine(beanClass.getSimpleName());
         }
     }
 

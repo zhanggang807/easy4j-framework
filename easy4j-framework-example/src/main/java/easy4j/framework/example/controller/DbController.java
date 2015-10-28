@@ -32,7 +32,6 @@ public class DbController {
             ,HttpServletRequest request){
 
 
-
     }
 
     public IndexDao getIndexDao() {

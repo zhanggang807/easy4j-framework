@@ -4,6 +4,7 @@ import org.easy4j.framework.core.jdbc.filter.PropertyFilter;
 import org.easy4j.framework.core.orm.annotation.Column;
 import org.easy4j.framework.core.orm.annotation.Table;
 import org.easy4j.framework.core.util.ReflectUtils;
+import org.easy4j.framework.core.util.base.Strings;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
@@ -51,38 +52,6 @@ public class JdbcUtils {
         return ret ;
     }
 
-    /**
-     * 获取对象字段的值 ，以Map返回
-     * @param target
-     * @return
-     */
-    public static Map<String ,Object> getFieldMap(Object target){
-        return getFieldMap(target , null);
-    }
-
-    /**
-     * 获取对象字段的值 ，以Map返回
-     * @param target
-     * @param filter
-     * @return
-     */
-    public static Map<String ,Object> getFieldMap(Object target,PropertyFilter filter) {
-
-        List<Field> fields = ReflectUtils.findAllField(target.getClass());
-        int size = fields.size() ;
-
-        Map<String ,Object> ret  =  new LinkedHashMap<String, Object>();
-        for(int i = 0 ; i < size ; i++  ){
-            Field field = fields.get(i);
-            String fieldName = field.getName() ;
-            if(filter != null && filter.filter(field.getName()))
-                continue;
-            ReflectionUtils.makeAccessible(field);
-            ret.put(translate2TableCol(fieldName) , ReflectionUtils.getField(field,target));
-        }
-        return ret ;
-    }
-
     public static Object[] getValues(Object target ,Mapping mapping){
         String[] fields = mapping.getFields();
         int len = fields.length ;
@@ -96,32 +65,6 @@ public class JdbcUtils {
         return values ;
     }
 
-    public static String translate2TableCol(String columnName){
-        columnName.toLowerCase();
-        StringBuilder sb = new StringBuilder(columnName.length());
-        char[] chars = columnName.toCharArray() ;
-
-        char c = chars[0];
-        if(c >= 'A' && c <= 'Z'){
-            sb.append((char)(c| 0x20));
-        } else {
-            sb.append(c);
-        }
-
-        int len = chars.length ;
-
-        for(int i = 1 ; i < len ; i++) {
-            c = chars[i];
-            if(  c >= 'A' && c <= 'Z'){
-                sb.append("_");
-                sb.append((char)(c| 0x20));
-            } else {
-                sb.append(c);
-            }
-        }
-
-        return sb.toString() ;
-    }
 
     public static Connection getConnection(String driver, String url , String username ,String password){
 

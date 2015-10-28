@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 public class DbDao extends BaseDao {
 
     protected void init(){
+
+        //queryRunner.
+
        System.out.println("======DbDao======= init()");
     }
+
 
 }
