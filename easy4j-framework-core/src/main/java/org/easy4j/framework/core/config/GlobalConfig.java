@@ -63,4 +63,5 @@ public class GlobalConfig {
     public static void remove(String key){
         easy4jProperties.remove(key);
     }
+
 }
