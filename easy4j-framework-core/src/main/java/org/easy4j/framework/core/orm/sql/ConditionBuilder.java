@@ -1,5 +1,7 @@
 package org.easy4j.framework.core.orm.sql;
 
+import java.util.List;
+
 /**
  * @author bjliuyong
  * @version 1.0
@@ -29,17 +31,28 @@ public class ConditionBuilder {
     }
 
     public ConditionBuilder andContions(boolean state ,String condition ){
-        if(builder.length() > 0)
+
+        if(builder.length() > 0) {
             return state ? append(" and ").append(condition) : this ;
-        else
-            return state ? append(condition) : this ;
+        }
+
+        return state ? append(condition) : this ;
+    }
+
+    public ConditionBuilder andContions(boolean state ,String condition ,List<Object> params ,Object param){
+
+        if(state)
+            params.add(param);
+        return andContions(state , condition);
     }
 
     public ConditionBuilder orContions(boolean state ,String condition ){
-        if(builder.length() > 0)
+
+        if(builder.length() > 0) {
             return state ? append(" or ").append(condition) : this ;
-        else
-            return state ? append(condition) : this ;
+        }
+
+        return state ? append(condition) : this ;
     }
 
     public String toString(){
