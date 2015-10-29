@@ -1,6 +1,6 @@
 package org.easy4j.framework.core.util;
 
-import com.google.common.base.Strings;
+import org.easy4j.framework.core.util.base.Strings;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -112,7 +112,7 @@ public class ClassScanner {
 
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
 
-                if(!Strings.isNullOrEmpty(packageName)){
+                if(Strings.isNotEmpty(packageName)){
                     className = packageName + "." + className;
                 }
 
@@ -121,12 +121,12 @@ public class ClassScanner {
             } else {
                 // 获取子包
                 String subPackagePath = fileName;
-                if (!Strings.isNullOrEmpty(packagePath)) {
+                if (Strings.isNotEmpty(packagePath)) {
                     subPackagePath = packagePath + "/" + subPackagePath;
                 }
                 // 子包名
                 String subPackageName = fileName;
-                if (!Strings.isNullOrEmpty(packageName)) {
+                if (Strings.isNotEmpty(packageName)) {
                     subPackageName = packageName + "." + subPackageName;
                 }
                 // 递归调用
