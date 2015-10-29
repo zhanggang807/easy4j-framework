@@ -51,8 +51,8 @@ public class ConditionBuilder {
         ConditionBuilder conditionBuilder = new ConditionBuilder();
         conditionBuilder.andContions(true,"sex=?")
                 .andContions(false,"age=?")
-                .andContions(true,"name=?");
-
+                .andContions(true,"name=?")
+                .orContions(true,"old=?");
         System.out.println(conditionBuilder);
     }
 
