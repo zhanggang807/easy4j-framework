@@ -40,9 +40,9 @@ public class SQLBuilder {
     public static String generateUpdateSQL(String tableName,String sets ,String conditions){
 
         if(conditions == null || conditions.length() == 0)
-            return  Strings.concat("UPDATE ",tableName," SET ",sets ) ;
+            return  Strings.join("UPDATE ",tableName," SET ",sets ) ;
         else
-            return  Strings.concat("UPDATE ",tableName," SET ",sets ," WHERE ",conditions) ;
+            return  Strings.join("UPDATE ",tableName," SET ",sets ," WHERE ",conditions) ;
 
     }
 
@@ -69,9 +69,9 @@ public class SQLBuilder {
     public static String generateDeleteSQL(String tableName,String conditions){
 
         if(conditions == null || conditions.length() == 0)
-            return Strings.concat("delete from ",tableName );
+            return Strings.join("delete from ",tableName );
         else
-            return Strings.concat("delete from ",tableName ," where ",conditions);
+            return Strings.join("delete from ",tableName ," where ",conditions);
     }
 
 

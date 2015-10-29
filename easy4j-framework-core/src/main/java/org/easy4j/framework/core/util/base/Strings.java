@@ -140,7 +140,7 @@ public class Strings {
      * @param params
      * @return
      */
-    public static String concat(String ... params){
+    public static String join(String ... params){
 
         int len =  0 ;
 
@@ -166,10 +166,12 @@ public class Strings {
         return new String(chars);
     }
 
+
+
     public static void main(String args[]){
 
         for(int loop = 10000 ; loop > 0 ; loop--){
-            System.out.println(Strings.concat("","abcdefg","bacde"));
+            System.out.println(Strings.join("","abcdefg","bacde"));
         }
 
 
