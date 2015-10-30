@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ConditionBuilder {
 
-    private static final int defaultInitCapacity = 256 ;
+    private static final int defaultInitCapacity = 32 ;
 
     private StringBuilder builder ;
 
@@ -38,7 +38,7 @@ public class ConditionBuilder {
         return state ? append(condition) : this ;
     }
 
-    public ConditionBuilder andContions(boolean state ,String condition ){
+    public ConditionBuilder and(boolean state ,String condition ){
 
         if(builder.length() > 0) {
             return state ? append(" and ").append(condition) : this ;
@@ -47,14 +47,14 @@ public class ConditionBuilder {
         return state ? append(condition) : this ;
     }
 
-    public ConditionBuilder andContions(boolean state ,String condition ,List<Object> params ,Object param){
+    public ConditionBuilder and(boolean state ,String condition ,List<Object> params ,Object param){
 
         if(state)
             params.add(param);
-        return andContions(state , condition);
+        return and(state , condition);
     }
 
-    public ConditionBuilder orContions(boolean state ,String condition ){
+    public ConditionBuilder or(boolean state ,String condition ){
 
         if(builder.length() > 0) {
             return state ? append(" or ").append(condition) : this ;
@@ -70,10 +70,10 @@ public class ConditionBuilder {
     public static void main(String args[]){
 
         ConditionBuilder conditionBuilder = new ConditionBuilder();
-        conditionBuilder.andContions(true,"sex=?")
-                .andContions(false,"age=?")
-                .andContions(true,"name=?")
-                .orContions(true,"old=?");
+        conditionBuilder.and(true,"sex=?")
+                .and(false,"age=?")
+                .and(true,"name=?")
+                .or(true,"old=?");
         System.out.println(conditionBuilder);
     }
 
