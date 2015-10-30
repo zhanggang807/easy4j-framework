@@ -26,7 +26,15 @@ public class ConditionBuilder {
         return this ;
     }
 
+
+
     public ConditionBuilder append(boolean state ,String condition){
+        return state ? append(condition) : this ;
+    }
+
+    public ConditionBuilder append(boolean state ,String condition,List<Object> params ,Object param){
+        if(state)
+            params.add(param);
         return state ? append(condition) : this ;
     }
 
