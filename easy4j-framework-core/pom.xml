@@ -25,13 +25,6 @@
             <artifactId>easy4j-framework-spring</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>14.0</version>
-        </dependency>
-
     </dependencies>
 
 

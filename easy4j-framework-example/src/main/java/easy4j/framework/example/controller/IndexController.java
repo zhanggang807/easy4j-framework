@@ -1,6 +1,5 @@
 package easy4j.framework.example.controller;
 
-import com.google.common.collect.Maps;
 import easy4j.framework.example.dao.IndexDao;
 import easy4j.framework.example.entity.UserGroup;
 import org.easy4j.framework.core.orm.EntityMapping;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +66,7 @@ public class IndexController {
 
     @RequestMapping(value = "/json")
     public @ResponseBody Map json(HttpServletRequest request ,HttpServletResponse response) throws Exception{
-        Map map = Maps.newHashMap();
+        Map map = new HashMap();
         map.put("code",1);
         return map;
 
