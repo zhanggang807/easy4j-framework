@@ -9,12 +9,11 @@ import java.util.List;
  */
 public class ConditionBuilder {
 
-    private static final int defaultInitCapacity = 32 ;
 
     private StringBuilder builder ;
 
     public ConditionBuilder(){
-        this(defaultInitCapacity);
+        builder = new StringBuilder();
     }
 
     public ConditionBuilder(int initCapacity){
@@ -51,7 +50,7 @@ public class ConditionBuilder {
 
         if(state)
             params.add(param);
-        return and(state , condition);
+        return and(state, condition);
     }
 
     public ConditionBuilder or(boolean state ,String condition ){
@@ -70,10 +69,10 @@ public class ConditionBuilder {
     public static void main(String args[]){
 
         ConditionBuilder conditionBuilder = new ConditionBuilder();
-        conditionBuilder.and(true,"sex=?")
-                .and(false,"age=?")
-                .and(true,"name=?")
-                .or(true,"old=?");
+        conditionBuilder.and(true, "sex=?")
+                .and(false, "age=?")
+                .and(true, "name=?")
+                .or(true, "old=?");
         System.out.println(conditionBuilder);
     }
 
