@@ -88,6 +88,10 @@ public class ConditionBuilder {
         return state ? append(condition) : this ;
     }
 
+    public String build(){
+        return builder.toString();
+    }
+
     public String toString(){
         return builder.toString();
     }
