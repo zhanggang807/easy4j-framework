@@ -1,4 +1,4 @@
-package org.easy4j.framework.web.startup;
+package org.easy4j.framework.web.support.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
