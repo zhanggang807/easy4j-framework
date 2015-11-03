@@ -23,7 +23,12 @@ public class ConditionBuilder {
     }
 
     public ConditionBuilder append(String condition){
-        builder.append(condition);
+
+        if(builder.length() > 0){
+            builder.append(condition);
+        } else {
+            builder.append(" where ").append(condition);
+        }
         return this ;
     }
 
@@ -34,7 +39,7 @@ public class ConditionBuilder {
     public ConditionBuilder append(boolean state ,String condition,List<Object> params ,Object param){
         if(state)
             params.add(param);
-        return state ? append(condition) : this ;
+        return append(state,condition) ;
     }
 
     public ConditionBuilder and(String codition){
