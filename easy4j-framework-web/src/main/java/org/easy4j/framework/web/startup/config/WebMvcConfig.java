@@ -1,7 +1,6 @@
 package org.easy4j.framework.web.startup.config;
 
 import org.easy4j.framework.core.config.GlobalConfig;
-import org.easy4j.framework.web.support.json.FastJsonHttpMessageConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -27,7 +26,7 @@ import java.util.List;
 @EnableWebMvc
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-    private static final String FAST_JSON = "com.alibaba.fastjson.JSON" ;
+    private static final String FAST_JSON_CONVERTER = "org.easy4j.framework.web.support.json.FastJsonHttpMessageConverter" ;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -44,11 +43,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-        if(ClassUtils.isPresent(FAST_JSON,this.getClass().getClassLoader())){
+        if(ClassUtils.isPresent("com.alibaba.fastjson.JSON",this.getClass().getClassLoader())){
             try {
-                FastJsonHttpMessageConverter jsonHttpMessageConverter =  (FastJsonHttpMessageConverter)BeanUtils.instantiateClass(Class.forName("org.easy4j.framework.web.support.json.FastJsonHttpMessageConverter"));
-                converters.add(jsonHttpMessageConverter) ;
-
+                converters.add((HttpMessageConverter)BeanUtils.instantiateClass(Class.forName(FAST_JSON_CONVERTER))) ;
             } catch (ClassNotFoundException e) {
                 //no-op
             }
