@@ -14,11 +14,22 @@ public class ConditionBuilder {
 
     private StringBuilder builder ;
 
-    public ConditionBuilder(){
+
+    public static ConditionBuilder newInstance(){
+        return new ConditionBuilder();
+    }
+
+    public static ConditionBuilder newInstance(int initCapacity){
+        return new ConditionBuilder(initCapacity);
+    }
+
+
+
+    private ConditionBuilder(){
         builder = new StringBuilder();
     }
 
-    public ConditionBuilder(int initCapacity){
+    private ConditionBuilder(int initCapacity){
         builder = new StringBuilder(initCapacity);
     }
 
