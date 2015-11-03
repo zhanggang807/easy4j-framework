@@ -32,7 +32,7 @@ public class SQLBuilder {
             start = (pageNumber - 1) * pageSize ;
 
         StringBuilder limitBuilder = new StringBuilder(5);
-        limitBuilder.append("limit ").append(start).append(',').append(pageNumber);
+        limitBuilder.append("limit ").append(start).append(',').append(pageSize);
 
         if(columns == null || columns.length() == 0) {
             return join("select * from",tableName,conditions,limitBuilder.toString());
