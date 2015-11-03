@@ -63,7 +63,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
 
-    //设置StringHttpMessageConverter编码，防止乱码
+    /**
+     * 替换掉默认的 ， converters.remove(position); 加入新创建的
+     * 设置StringHttpMessageConverter编码，防止乱码
+     *
+     * @param converters
+     * @param position
+     */
     private void extendStringHttpMessageConverter(List<HttpMessageConverter<?>> converters , int position ){
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
 
