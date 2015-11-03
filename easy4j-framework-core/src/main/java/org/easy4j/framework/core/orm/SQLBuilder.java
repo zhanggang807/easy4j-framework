@@ -69,7 +69,7 @@ public class SQLBuilder {
         return join("delete from",tableName ,conditions);
     }
 
-    public static String join(String ... params){
+    private static String join(String ... params){
         int len =  0 ;
 
         for (String str : params){
