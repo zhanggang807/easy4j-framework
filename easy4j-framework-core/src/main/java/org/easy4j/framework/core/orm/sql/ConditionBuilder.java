@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class ConditionBuilder {
 
+    private static final String AND = " and ";
+    private static final String OR = " or ";
 
     private StringBuilder builder ;
 
@@ -25,8 +27,6 @@ public class ConditionBuilder {
         return this ;
     }
 
-
-
     public ConditionBuilder append(boolean state ,String condition){
         return state ? append(condition) : this ;
     }
@@ -37,10 +37,20 @@ public class ConditionBuilder {
         return state ? append(condition) : this ;
     }
 
+    public ConditionBuilder and(String codition){
+
+        if(builder.length() > 0){
+            return append(AND).append(codition);
+        } else {
+            return append(codition);
+        }
+
+    }
+
     public ConditionBuilder and(boolean state ,String condition ){
 
         if(builder.length() > 0) {
-            return state ? append(" and ").append(condition) : this ;
+            return state ? append(AND).append(condition) : this ;
         }
 
         return state ? append(condition) : this ;
@@ -56,7 +66,7 @@ public class ConditionBuilder {
     public ConditionBuilder or(boolean state ,String condition ){
 
         if(builder.length() > 0) {
-            return state ? append(" or ").append(condition) : this ;
+            return state ? append(OR).append(condition) : this ;
         }
 
         return state ? append(condition) : this ;
