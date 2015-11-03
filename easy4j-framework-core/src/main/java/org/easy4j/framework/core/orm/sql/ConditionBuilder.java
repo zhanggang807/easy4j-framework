@@ -27,7 +27,7 @@ public class ConditionBuilder {
         if(builder.length() > 0){
             builder.append(condition);
         } else {
-            builder.append(" where ").append(condition);
+            builder.append("where ").append(condition);
         }
         return this ;
     }
