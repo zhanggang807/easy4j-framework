@@ -43,6 +43,15 @@ public class GlobalConfig {
     }
 
     /**
+     * get the value of key  from the file of easy4j.properties
+     * @param key
+     * @return   if key has value , so return it's value ,else return null
+     */
+    public static String getString(String key){
+        return getString(key,null);
+    }
+
+    /**
      * 获取全局配置 key 所对应的值
      * @param key
      * @param defaultVal
