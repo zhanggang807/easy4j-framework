@@ -1,5 +1,6 @@
 package org.easy4j.framework.web.startup;
 
+import org.easy4j.framework.core.config.GlobalConfig;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.startup.config.WebMvcConfig;
 import org.springframework.core.io.ClassPathResource;
@@ -40,9 +41,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 
     static {
-        scanBasePackage    = AppConfig.get(AppConfig.BASE_PACKAGE);
-        String appPackages = AppConfig.get(AppConfig.BASE_APP_PACKAGE);
-        String mvcPackages = AppConfig.get(AppConfig.BASE_MVC_PACKAGE);
+        scanBasePackage    = GlobalConfig.getString(AppConfig.BASE_PACKAGE);
+        String appPackages = GlobalConfig.getString(AppConfig.BASE_APP_PACKAGE);
+        String mvcPackages = GlobalConfig.getString(AppConfig.BASE_MVC_PACKAGE);
 
         if(mvcPackages != null && mvcPackages.length() > 0){
             scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
