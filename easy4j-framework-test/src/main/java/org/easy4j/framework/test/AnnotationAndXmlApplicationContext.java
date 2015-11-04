@@ -25,7 +25,7 @@ import java.util.Set;
  * @version 1.0
  * @created date 15-11-4
  */
-public class AnnotationApplicationContext extends AbstractRefreshableConfigApplicationContext {
+public class AnnotationAndXmlApplicationContext extends AbstractRefreshableConfigApplicationContext {
 
     private BeanNameGenerator beanNameGenerator;
 

@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class TestSupport extends BlockJUnit4ClassRunner {
 
-    private static  AnnotationApplicationContext  applicationContext ;
+    private static  AnnotationAndXmlApplicationContext  applicationContext ;
 
     public TestSupport(Class<?> klass) throws InitializationError {
         super(klass);
@@ -22,7 +22,7 @@ public class TestSupport extends BlockJUnit4ClassRunner {
     public synchronized ApplicationContext initApplicationContext(){
         if(applicationContext != null )
             return applicationContext ;
-        applicationContext = new AnnotationApplicationContext();
+        applicationContext = new AnnotationAndXmlApplicationContext();
         applicationContext.scan(this.getClass().getPackage().getName());
         applicationContext.refresh();
 
