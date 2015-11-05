@@ -19,13 +19,6 @@ public class BaseDao<M> extends AbstractDao<M> {
         super();
     }
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        if(queryRunner == null){
-            queryRunner = new QueryRunner(dataSource);
-        }
-    }
-
     /**
      * 增加一条记录
      * @param m
@@ -119,7 +112,7 @@ public class BaseDao<M> extends AbstractDao<M> {
      * @return
      */
     public <T> T querySingleValue(Class<T> returnClass , String sql,Object... params) {
-        return queryRunner.query(sql, Handlers.getInstance(returnClass), params);
+        return query(sql, Handlers.getInstance(returnClass), params);
     }
 
     /**
@@ -130,7 +123,7 @@ public class BaseDao<M> extends AbstractDao<M> {
      */
     public int queryCount(String condition,Object ... params){
         String sql = SQLBuilder.generateSelectCountSQL(tableName ,condition);
-        return queryRunner.query(sql,Handlers.intHandler,params);
+        return query(sql,Handlers.intHandler,params);
     }
 
 

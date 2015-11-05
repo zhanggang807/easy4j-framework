@@ -1,5 +1,6 @@
 package org.easy4j.framework.core.orm;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
@@ -46,19 +47,11 @@ public class QueryRunner  extends AbstractQueryRunner {
         return dataSource;
     }
 
-
-    /**
-     * Execute an SQL SELECT query without any replacement parameters.  The
-     * caller is responsible for closing the connection.
-     * @param <T> The type of object that the handler returns
-     * @param sql The query to execute.
-     * @param rsh The handler that converts the results into an object.
-     * @return The object returned by the handler.
-     * @throws DbAccessException if a database access error occurs
-     */
-    public <T> T query(String sql, ResultSetHandler<T> rsh) throws DbAccessException {
-        return this.<T>query(sql, rsh , null);
+    @Autowired
+    public void setDataSource(DataSource dataSource){
+        this.dataSource = dataSource ;
     }
+
 
     /**
      * Execute an SQL SELECT query with replacement parameters.  The
@@ -74,36 +67,7 @@ public class QueryRunner  extends AbstractQueryRunner {
         return this.<T>query(this.prepareConnection(), true, sql, rsh, params);
     }
 
-    /**
-     * Execute an SQL SELECT query with replacement parameters.  The
-     * caller is responsible for closing the connection.
-     * @param <T> The type of object that the handler returns
-     * @param conn The connection to execute the query in.
-     * @param sql The query to execute.
-     * @param rsh The handler that converts the results into an object.
-     * @param params The replacement parameters.
-     * @return The object returned by the handler.
-     * @throws java.sql.SQLException if a database access error occurs
-     */
-    public <T> T query(Connection conn, String sql, ResultSetHandler<T> rsh, Object... params) throws DbAccessException {
-        return this.<T>query(conn, false, sql, rsh, params);
-    }
 
-
-    /**
-     * Executes the given INSERT, UPDATE, or DELETE SQL statement without
-     * any replacement parameters. The <code>Connection</code> is retrieved
-     * from the <code>DataSource</code> set in the constructor.  This
-     * <code>Connection</code> must be in auto-commit mode or the update will
-     * not be saved.
-     *
-     * @param sql The SQL statement to execute.
-     * @throws DbAccessException if a database access error occurs
-     * @return The number of rows updated.
-     */
-    public int update(String sql) throws DbAccessException {
-        return this.update(sql, (Object[]) null);
-    }
 
     /**
      * Executes the given INSERT, UPDATE, or DELETE SQL statement.  The
@@ -117,77 +81,11 @@ public class QueryRunner  extends AbstractQueryRunner {
      * @throws DbAccessException if a database access error occurs
      * @return The number of rows updated.
      */
-    public int update(String sql, Object... params) throws DbAccessException {
+    protected int update(String sql, Object... params) throws DbAccessException {
         return this.update(prepareConnection(), true, sql, params);
     }
 
 
-    /**
-     * Executes the given INSERT, UPDATE, or DELETE SQL statement without
-     * any replacement parameters. The <code>Connection</code> is retrieved
-     * from the <code>DataSource</code> set in the constructor.  This
-     * <code>Connection</code> must be in auto-commit mode or the update will
-     * not be saved.
-     *
-     * @param sql The SQL statement to execute.
-     * @throws DbAccessException if a database access error occurs
-     * @return The number of rows updated.
-     */
-    public int update(Connection conn ,String sql) throws DbAccessException {
-        return this.update(conn, false, sql, (Object[]) null);
-    }
-
-    /**
-     * Executes the given INSERT, UPDATE, or DELETE SQL statement.  The
-     * <code>Connection</code> is retrieved from the <code>DataSource</code>
-     * set in the constructor.  This <code>Connection</code> must be in
-     * auto-commit mode or the update will not be saved.
-     *
-     * @param sql The SQL statement to execute.
-     * @param params Initializes the PreparedStatement's IN (i.e. '?')
-     * parameters.
-     * @throws DbAccessException if a database access error occurs
-     * @return The number of rows updated.
-     */
-    public int update(Connection conn ,String sql, Object... params) throws DbAccessException {
-        return this.update(conn, false, sql, params);
-    }
-
-
-    /**
-     * Executes the given INSERT SQL statement. The
-     * <code>Connection</code> is retrieved from the <code>DataSource</code>
-     * set in the constructor.  This <code>Connection</code> must be in
-     * auto-commit mode or the insert will not be saved.
-     * @param <T> The type of object that the handler returns
-     * @param sql The SQL statement to execute.
-     * @param rsh The handler used to create the result object from
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public <T> T insert(Connection conn ,String sql, ResultSetHandler<T> rsh) throws DbAccessException {
-        return insert(conn, sql, rsh, (Object[]) null);
-    }
-
-
-    /**
-     * Executes the given INSERT SQL statement. The
-     * <code>Connection</code> is retrieved from the <code>DataSource</code>
-     * set in the constructor.  This <code>Connection</code> must be in
-     * auto-commit mode or the insert will not be saved.
-     * @param <T> The type of object that the handler returns
-     * @param sql The SQL statement to execute.
-     * @param rsh The handler used to create the result object from
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public <T> T insert(String sql, ResultSetHandler<T> rsh) throws DbAccessException {
-        return insert(sql, rsh, (Object[]) null);
-    }
 
     /**
      * Executes the given INSERT SQL statement. The
@@ -204,55 +102,7 @@ public class QueryRunner  extends AbstractQueryRunner {
      * @since 1.6
      */
     public <T> T insert(String sql, ResultSetHandler<T> rsh, Object... params) throws DbAccessException {
-        return insert(prepareConnection(), true, sql, rsh, params);
-    }
-
-
-
-    /**
-     * Executes the given INSERT SQL statement. The
-     * <code>Connection</code> is retrieved from the <code>DataSource</code>
-     * set in the constructor.  This <code>Connection</code> must be in
-     * auto-commit mode or the insert will not be saved.
-     * @param <T> The type of object that the handler returns
-     * @param sql The SQL statement to execute.
-     * @param rsh The handler used to create the result object from
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @param params Initializes the PreparedStatement's IN (i.e. '?')
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public <T> T insert(Connection conn ,String sql, ResultSetHandler<T> rsh, Object... params) throws DbAccessException {
-        return insert(conn, false, sql, rsh, params);
-    }
-
-
-    /**
-     * Execute an SQL INSERT query without replacement parameters.
-     * @param conn The connection to use to run the query.
-     * @param sql The SQL to execute.
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public int insert(Connection conn, String sql) throws DbAccessException {
-        return insert(conn, sql, (Object[]) null);
-    }
-
-
-    /**
-     * Execute an SQL INSERT query without replacement parameters.
-     * @param conn The connection to use to run the query.
-     * @param sql The SQL to execute.
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public int insert(Connection conn, String sql ,Object... params) throws DbAccessException {
-        return insert(conn, false, sql, params);
+        return insert(prepareConnection(), sql, rsh, params);
     }
 
     /**
@@ -266,19 +116,6 @@ public class QueryRunner  extends AbstractQueryRunner {
     public int insert(String sql ) throws DbAccessException {
         return insert(sql, (Object)null);
     }
-
-    /**
-     * Execute an SQL INSERT query without replacement parameters.
-     * @param sql The SQL to execute.
-     * the <code>ResultSet</code> of auto-generated keys.
-     * @return An object generated by the handler.
-     * @throws DbAccessException if a database access error occurs
-     * @since 1.6
-     */
-    public int insert(String sql ,Object... params) throws DbAccessException {
-        return insert(prepareConnection(), true, sql, params);
-    }
-
 
 
     /**
@@ -351,7 +188,6 @@ public class QueryRunner  extends AbstractQueryRunner {
     /**
      * Executes the given INSERT SQL statement.
      * @param conn The connection to use for the query call.
-     * @param closeConn True if the connection should be closed, false otherwise.
      * @param sql The SQL statement to execute.
      * @param rsh The handler used to create the result object from
      * the <code>ResultSet</code> of auto-generated keys.
@@ -360,7 +196,7 @@ public class QueryRunner  extends AbstractQueryRunner {
      * @throws DbAccessException If there are database or parameter errors.
      * @since 1.6
      */
-    public <T> T insert(Connection conn, boolean closeConn, String sql, ResultSetHandler<T> rsh, Object... params)
+    public <T> T insert(Connection conn, String sql, ResultSetHandler<T> rsh, Object... params)
             throws DbAccessException {
 
         PreparedStatement stmt = null;
@@ -380,9 +216,7 @@ public class QueryRunner  extends AbstractQueryRunner {
         } finally {
             closeQuietly(resultSet);
             closeQuietly(stmt);
-            if (closeConn) {
-                close(conn);
-            }
+            close(conn);
         }
 
         return generatedKeys;
@@ -391,8 +225,6 @@ public class QueryRunner  extends AbstractQueryRunner {
 
     /**
      * Executes the given INSERT SQL statement.
-     * @param conn The connection to use for the query call.
-     * @param closeConn True if the connection should be closed, false otherwise.
      * @param sql The SQL statement to execute.
      * the <code>ResultSet</code> of auto-generated keys.
      * @param params The query replacement parameters.
@@ -400,13 +232,14 @@ public class QueryRunner  extends AbstractQueryRunner {
      * @throws DbAccessException If there are database or parameter errors.
      * @since 1.6
      */
-    public int insert(Connection conn, boolean closeConn, String sql,  Object... params)
+    protected int insert(String sql,  Object... params)
             throws DbAccessException {
-
+        Connection conn = null ;
         PreparedStatement stmt = null;
         ResultSet resultSet = null ;
         int rows = 0 ;
         try {
+            conn = this.prepareConnection() ;
             stmt = this.prepareStatement(conn ,sql) ;
             this.fillStatement(stmt, params);
             rows = stmt.executeUpdate();
@@ -416,9 +249,7 @@ public class QueryRunner  extends AbstractQueryRunner {
         } finally {
             closeQuietly(resultSet);
             closeQuietly(stmt);
-            if (closeConn) {
-                close(conn);
-            }
+            close(conn);
         }
 
         return rows;

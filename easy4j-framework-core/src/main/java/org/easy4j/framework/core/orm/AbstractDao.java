@@ -13,7 +13,7 @@ import java.util.Map;
  * @author: liuyong
  * @since 1.0
  */
-public abstract class AbstractDao<M> {
+public abstract class AbstractDao<M> extends QueryRunner{
 
     protected String tableName ;
 
@@ -22,8 +22,6 @@ public abstract class AbstractDao<M> {
     protected BeanHandler<M> beanHandler ;
 
     protected BeanListHandler<M> beanListHander ;
-
-    protected static QueryRunner queryRunner ;
 
     public AbstractDao(){
         init();
@@ -50,7 +48,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected M selectOne(String sql, Object... params) {
-        return queryRunner.query(sql,beanHandler ,params);
+        return super.query(sql,beanHandler ,params);
     }
 
     /**
@@ -60,7 +58,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected List<M> selectList(String sql, Object... params) {
-        return queryRunner.query(sql,beanListHander,params);
+        return super.query(sql,beanListHander,params);
     }
 
     /**
@@ -70,7 +68,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected Map<String,Object> selectMap(String sql ,Object ... params){
-        return queryRunner.query(sql, new MapHandler(), params);
+        return super.query(sql, new MapHandler(), params);
     }
 
     /**
@@ -80,7 +78,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected List<Map<String,Object>> selectMapList(String sql ,Object ... params){
-        return queryRunner.query(sql, new MapListHandler(), params);
+        return super.query(sql, new MapListHandler(), params);
     }
 
 
@@ -91,7 +89,7 @@ public abstract class AbstractDao<M> {
      * @return 影响的行数
      */
     protected int insert(String sql ,Object ... params){
-        return  queryRunner.insert(sql ,params);
+        return  super.insert(sql ,params);
     }
 
     /**
@@ -103,7 +101,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected <T> T insert(String sql ,Class<T> returnType, Object ... params){
-        return queryRunner.insert(sql, Handlers.getInstance(returnType) , params);
+        return super.insert(sql, Handlers.getInstance(returnType) , params);
     }
 
     /**
@@ -113,7 +111,7 @@ public abstract class AbstractDao<M> {
      * @return
      */
     protected int update(String sql ,Object ... params){
-        return queryRunner.update(sql ,params);
+        return super.update(sql ,params);
     }
 
 
