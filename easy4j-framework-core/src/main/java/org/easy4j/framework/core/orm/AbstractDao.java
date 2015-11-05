@@ -83,16 +83,6 @@ public abstract class AbstractDao<M> extends QueryRunner{
 
 
     /**
-     * 执行插入sql
-     * @param sql
-     * @param params
-     * @return 影响的行数
-     */
-    protected int insert(String sql ,Object ... params){
-        return  super.insert(sql ,params);
-    }
-
-    /**
      * 执行插入sql ,返回主键
      * @param sql
      * @param returnType
@@ -101,7 +91,7 @@ public abstract class AbstractDao<M> extends QueryRunner{
      * @return
      */
     protected <T> T insert(String sql ,Class<T> returnType, Object ... params){
-        return super.insert(sql, Handlers.getInstance(returnType) , params);
+        return insert(sql, Handlers.getInstance(returnType) , params);
     }
 
     /**
