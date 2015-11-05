@@ -64,7 +64,7 @@ public class BaseDao<M> extends AbstractDao<M> {
         }
         sets.deleteCharAt(sets.length() - 1);
         params[index] = IdVal ;
-        return update(sets.toString(),Id + "=?" ,params);
+        return update(sets.toString(), "where " + Id + "=?" ,params);
     }
 
     public int update(String sets, String condition, Object... params) {

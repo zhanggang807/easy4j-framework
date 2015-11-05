@@ -13,7 +13,7 @@
         <!-- 基本属性 url、user、password -->
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/xk_enjoyw?characterEncoding=UTF-8"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value="123456"/>
 
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="1"/>
