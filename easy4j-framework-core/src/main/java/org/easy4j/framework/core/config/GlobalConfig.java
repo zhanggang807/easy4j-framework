@@ -13,7 +13,7 @@ import java.util.Properties;
  * @version 1.0
  * @created date 15-10-16
  */
-public class GlobalConfig {
+public class GlobalConfig implements Config {
 
     private static Properties easy4jProperties = new Properties();
 
@@ -21,6 +21,7 @@ public class GlobalConfig {
 
     public static final String  CHARSET_NAME  = getString("project.charset.name",DEFAULT_CHARSET_NAME) ;
     public static final Charset CHARSET       =  Charset.forName(CHARSET_NAME);
+
 
     static {
 
