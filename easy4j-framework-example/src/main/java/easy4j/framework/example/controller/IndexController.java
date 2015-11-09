@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author bjliuyong
@@ -25,25 +22,12 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
-    @Autowired
-    private IndexDao indexDao;
-
     @RequestMapping(value = "/")
      public String indexVm(HttpServletRequest request ,HttpServletResponse response,Model model) {
-        UserGroup userGroup = new UserGroup();
-        userGroup.setUid(100000);
-        userGroup.setGid(120000);
-        userGroup.setCreated(new Date());
-        userGroup.setModified(new Date());
-        Long id = indexDao.save(userGroup,Long.class);
-        Mapping mapping = EntityMapping.getMapping(UserGroup.class);
 
-        Map<String,Object> columnValMap = null ;
 
-        List<UserGroup> userGroupList = indexDao.queryList(null);
-        userGroup.setId(32);
-        userGroup.setUid(110);
-        int i = indexDao.update(userGroup);
+        List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+
         model.addAttribute("userGroupList" , userGroupList) ;
         return "index";
 
@@ -84,7 +68,5 @@ public class IndexController {
     }
 
 
-    public void setIndexDao(IndexDao indexDao) {
-        this.indexDao = indexDao;
-    }
+
 }

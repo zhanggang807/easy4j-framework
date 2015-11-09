@@ -13,7 +13,7 @@ import java.util.Date;
  * @created date 15-11-9
  */
 @RunWith(TestSupport.class)
-public class MainTest  {
+public class IndexDaoTest  {
 
     @Autowired
     private IndexDao indexDao ;
@@ -26,6 +26,11 @@ public class MainTest  {
         userGroup.setCreated(new Date());
         userGroup.setModified(new Date());
         Long id = indexDao.save(userGroup,Long.class);
+
+        userGroup.setId(32);
+        userGroup.setUid(110);
+        int i = indexDao.update(userGroup);
+
         System.out.println(id);
     }
 
