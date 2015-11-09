@@ -95,7 +95,7 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
         velocityProperties.put("output.encoding", GlobalConfig.CHARSET_NAME);
         velocityProperties.put("resource.loader.path","/WEB-INF/vm,classpath:tpl/");
 
-        String layoutUrl = AppConfig.get(VelocityConstants.VELOCITY_LAYOUT_URL);
+        String layoutUrl = GlobalConfig.getString(VelocityConstants.VELOCITY_LAYOUT_URL);
 
         if(!Strings.isBlank(layoutUrl)){
             velocityProperties.put(VelocityConstants.VELOCITY_LAYOUT_URL,layoutUrl);
