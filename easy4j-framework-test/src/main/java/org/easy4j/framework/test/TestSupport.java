@@ -1,8 +1,6 @@
 package org.easy4j.framework.test;
 
-import org.easy4j.framework.core.util.ArrayUtils;
 import org.easy4j.framework.web.startup.ScanPackage;
-import org.easy4j.framework.web.startup.config.DefualtScanPackage;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.springframework.context.ApplicationContext;
