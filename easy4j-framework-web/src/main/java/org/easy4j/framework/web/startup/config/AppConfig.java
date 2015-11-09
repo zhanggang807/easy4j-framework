@@ -1,10 +1,13 @@
 package org.easy4j.framework.web.startup.config;
 
+import org.springframework.context.annotation.Configuration;
+
 /**
  * @author bjliuyong
  * @version 1.0
  * @created date 15-9-11
  */
+@Configuration
 public class AppConfig  {
 
     /**
