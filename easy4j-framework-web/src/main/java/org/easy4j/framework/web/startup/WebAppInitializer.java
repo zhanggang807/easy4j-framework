@@ -1,13 +1,10 @@
 package org.easy4j.framework.web.startup;
 
-import org.easy4j.framework.core.config.GlobalConfig;
+import org.easy4j.framework.core.util.ArrayUtils;
 import org.easy4j.framework.web.startup.config.AppConfig;
+import org.easy4j.framework.web.startup.config.DefualtScanPackage;
 import org.easy4j.framework.web.startup.config.WebMvcConfig;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -17,11 +14,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
 
 
 /**
@@ -34,27 +26,7 @@ import java.util.Properties;
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    public static String scanBasePackage ;
-
-    public static String[] scanExtMvcPackages ;
-    public static String[] scanExtAppPackages ;
-
-
-    static {
-        scanBasePackage    = GlobalConfig.getString(AppConfig.BASE_PACKAGE);
-        String appPackages = GlobalConfig.getString(AppConfig.BASE_APP_PACKAGE);
-        String mvcPackages = GlobalConfig.getString(AppConfig.BASE_MVC_PACKAGE);
-
-        if(mvcPackages != null && mvcPackages.length() > 0){
-            scanExtMvcPackages = StringUtils.commaDelimitedListToStringArray(mvcPackages);
-        }
-        appPackages  =
-                appPackages == null ?
-                        "org.easy4j.framework.web.bean.processor" : ("org.easy4j.framework.web.bean.processor," + appPackages) ;
-
-        scanExtAppPackages = StringUtils.commaDelimitedListToStringArray(appPackages);
-    }
-
+    private ScanPackage scanPackage = new DefualtScanPackage();
 
     /**
      * {@inheritDoc}
@@ -67,10 +39,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
         AnnotationAndXmlConfigWebApplicationContext rootAppContext = new AnnotationAndXmlConfigWebApplicationContext();
 
-        register(rootAppContext ,
-                new String[]{   scanBasePackage + ".service" ,
-                                scanBasePackage + ".dao" ,
-                                scanBasePackage + ".manager"} ,scanExtAppPackages);
+        rootAppContext.scan((String[])ArrayUtils.addAll(scanPackage.getBasePackages(),scanPackage.getInfrastructurePackages()));
 
         Class<?>[] configClasses = getRootConfigClasses();
         if (!ObjectUtils.isEmpty(configClasses)) {
@@ -90,8 +59,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected WebApplicationContext createServletApplicationContext() {
         AnnotationConfigWebApplicationContext servletAppContext = new AnnotationConfigWebApplicationContext();
 
-        register(servletAppContext , new String[]{
-                scanBasePackage + ".controller" , scanBasePackage + ".action"} ,scanExtMvcPackages);
+        servletAppContext.scan(scanPackage.getMvcBasePackages());
 
         Class<?>[] configClasses = getServletConfigClasses();
         if (!ObjectUtils.isEmpty(configClasses)) {
@@ -99,31 +67,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         }
         return servletAppContext;
     }
-
-    private void register(AnnotationConfigWebApplicationContext annotationConfigWebApplicationContext,String basePackage[] , String[] extScanPackages){
-
-        int baseLen = basePackage == null ? 0 : basePackage.length ;
-        int extLen = extScanPackages == null ? 0 : extScanPackages.length ;
-
-        if(baseLen + extLen == 0)
-            return;
-
-        String[] scanPackages = new String[(baseLen + extLen)];
-
-        if(basePackage != null) {
-            System.arraycopy(basePackage ,0  ,scanPackages ,0 ,baseLen);
-        }
-
-        if(extScanPackages != null){
-            System.arraycopy(extScanPackages ,0  ,scanPackages ,baseLen ,extLen);
-        }
-
-        if(scanPackages.length > 0 ){
-            annotationConfigWebApplicationContext.scan(scanPackages);
-        }
-
-    }
-
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -159,9 +102,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
 
         //clear
-        scanBasePackage = null ;
-        scanExtMvcPackages = null ;
-        scanExtAppPackages = null ;
     }
 }
 
