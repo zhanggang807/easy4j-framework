@@ -14,8 +14,9 @@
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
-            <artifactId>${project.parent.artifactId}-spring</artifactId>
+            <artifactId>${project.parent.artifactId}-web</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

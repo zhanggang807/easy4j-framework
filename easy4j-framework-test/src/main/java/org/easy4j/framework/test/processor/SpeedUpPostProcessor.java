@@ -1,4 +1,4 @@
-package org.easy4j.framework.test;
+package org.easy4j.framework.test.processor;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;

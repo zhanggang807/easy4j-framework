@@ -1,6 +1,5 @@
 package org.easy4j.framework.test;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.ResourceEntityResolver;

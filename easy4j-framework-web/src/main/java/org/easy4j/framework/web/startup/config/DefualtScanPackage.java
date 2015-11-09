@@ -2,10 +2,9 @@ package org.easy4j.framework.web.startup.config;
 
 import org.easy4j.framework.core.config.GlobalConfig;
 import org.easy4j.framework.core.util.ArrayUtils;
+import org.easy4j.framework.core.util.base.Strings;
 import org.easy4j.framework.web.startup.ScanPackage;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author bjliuyong
@@ -43,13 +42,13 @@ public class DefualtScanPackage implements ScanPackage  {
         String[] packages01 = new String[]{basePackage + ".service",
                 basePackage + ".dao" ,
                 basePackage + ".manager"} ;
-        return (String[])ArrayUtils.addAll(packages01 , baseAppPackage.split(","));
+        return (String[])ArrayUtils.addAll(packages01 , Strings.isEmpty(baseAppPackage)? null : baseAppPackage.split(","));
     }
 
     @Override
     public String[] getMvcBasePackages() {
         String[] packages01 = new String[]{basePackage + ".controller" , basePackage + ".action"} ;
-        return (String[])ArrayUtils.addAll(packages01 ,baseMvcPackage.split(","));
+        return (String[])ArrayUtils.addAll(packages01 ,Strings.isEmpty(baseMvcPackage)? null :baseMvcPackage.split(","));
     }
 
     @Override
