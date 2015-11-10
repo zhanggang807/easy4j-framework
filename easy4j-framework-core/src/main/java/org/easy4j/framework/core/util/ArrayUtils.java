@@ -9,6 +9,18 @@ import java.lang.reflect.Array;
  */
 public class ArrayUtils {
 
+
+    /**
+     * An empty immutable <code>Long</code> array.
+     */
+    public static final Long[] EMPTY_LONG_OBJECT_ARRAY = new Long[0];
+
+
+    /**
+     * An empty immutable <code>String</code> array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     /**
      * <p>Adds all the elements of the given arrays into a new array.</p>
      * <p>The new array contains all of the element of <code>array1</code> followed
@@ -41,6 +53,27 @@ public class ArrayUtils {
         System.arraycopy(array1, 0, joinedArray, 0, array1.length);
         System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
         return joinedArray;
+    }
+
+    /**
+     * <p>Converts an array of primitive longs to objects.</p>
+     *
+     * <p>This method returns <code>null</code> for a <code>null</code> input array.</p>
+     *
+     * @param array  a <code>long</code> array
+     * @return a <code>Long</code> array, <code>null</code> if null array input
+     */
+    public static Long[] toObject(long[] array) {
+        if (array == null) {
+            return null;
+        } else if (array.length == 0) {
+            return EMPTY_LONG_OBJECT_ARRAY;
+        }
+        final Long[] result = new Long[array.length];
+        for (int i = 0; i < array.length; i++) {
+            result[i] = new Long(array[i]);
+        }
+        return result;
     }
 
     // Clone
