@@ -2,7 +2,7 @@ package org.easy4j.framework.web.startup;
 
 import org.easy4j.framework.core.util.ArrayUtils;
 import org.easy4j.framework.web.startup.config.AppConfig;
-import org.easy4j.framework.web.startup.config.DefualtScanPackage;
+import org.easy4j.framework.web.startup.config.DefaultScanPackage;
 import org.easy4j.framework.web.startup.config.WebMvcConfig;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,7 +26,7 @@ import javax.servlet.ServletRegistration;
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    private ScanPackage scanPackage = new DefualtScanPackage();
+    private ScanPackage scanPackage = new DefaultScanPackage();
 
     /**
      * {@inheritDoc}

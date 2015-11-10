@@ -11,7 +11,7 @@ import org.easy4j.framework.web.startup.ScanPackage;
  * @version 1.0
  * @created date 15-11-9
  */
-public class DefualtScanPackage implements ScanPackage  {
+public class DefaultScanPackage implements ScanPackage  {
 
 
     /*********************************************************
