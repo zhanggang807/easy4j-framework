@@ -414,32 +414,6 @@ public class Strings {
         return buf.toString();
     }
 
-    public static String join(long[] array,char separator){
-        return  join(array, separator ,0 ,array.length);
-    }
-
-    public static String join(long[] array, char separator, int startIndex, int endIndex) {
-        if (array == null) {
-            return null;
-        }
-        int bufSize = (endIndex - startIndex);
-        if (bufSize <= 0) {
-            return EMPTY;
-        }
-
-        bufSize *= (String.valueOf(array[0]).length() + 1);
-        StringBuffer buf = new StringBuffer(bufSize);
-
-        for (int i = startIndex; i < endIndex; i++) {
-            if (i > startIndex) {
-                buf.append(separator);
-            }
-            buf.append(array[i]);
-        }
-        return buf.toString();
-    }
-
-
 
     public static void main(String args[]){
 
