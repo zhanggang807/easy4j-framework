@@ -17,6 +17,8 @@ import java.util.List;
  * @version 1.0
  * @created date 15-9-10
  *
+ * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
+ *
  * MVC 默认配置启动类
  *
  * EnableWebMvc equal <mvc:annotation-driven />
@@ -85,10 +87,26 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         converters.add(position,stringHttpMessageConverter);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>This implementation is empty.
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
+        registry.addResourceHandler("/**").addResourceLocations("/","/www/","classpath:/META-INF/www/");
+
+    }
+
+
+    /**
+     * <p> if configure resource handler ,so we don't configure DefaultServletHandler </p>
+     * @see WebMvcConfig method addResourceHandlers;
+     * @param configurer
+     */
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+        //configurer.enable();
     }
 
 }
