@@ -20,6 +20,12 @@ javaweb , 开源框架很多， 使用起来需要进行很多配置才能满足
     velocity模板路劲，首先自动从WEB-INF/vm 下的文件查找， 然后从classpath:tpl查找 ，自动读取velocityTools bean 当做velocity 工具
 ，velocityTools bean 必须为Map的实例
 
+3. 静态资源文件
+
+   静态资源文件 ，处理方式，默认匹配配置/** , 位置配置包含 "/","/www/","classpath:META-INF/www/" , 默认会从这三个目录去读取
+如果还是读不到 ， 就返回404啦 ，其中"/","/www/" 分别指向工程webapp/ ， 以及webapp/www/目录  ，最佳实践， 不变的可共享的，
+提供第三方用的资源 ， 建议放到"classpath:META-INF/www/"中
+
 
 
 
