@@ -67,7 +67,17 @@ public class BaseDao<M> extends AbstractDao<M> {
         return update(sets.toString(), "where " + Id + "=?" ,params);
     }
 
-    public int update(String sets, String condition, Object... params) {
+    /**
+     * <p>
+     *     update sql
+     *     eg: update("set name=? ,age=?" , "where id = ? " ,[params])
+     * </p>
+     * @param sets don't append `set`  eg: right === > name=?  error ====> set name=?
+     * @param condition should append where  eg : right ====> where id=?  error ====> id = ?
+     * @param params
+     * @return
+     */
+    protected int update(String sets, String condition, Object... params) {
         String sql = SQLBuilder.generateUpdateSQL(tableName, sets, condition);
         return update(sql,params);
     }
