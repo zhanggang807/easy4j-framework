@@ -42,6 +42,21 @@ public class SQLBuilder {
 
 
     public static String generateUpdateSQL(String tableName,String sets ,String conditions){
+
+        int len = sets.length();
+        int index = 0 ;
+        for(; index < len ; ){
+            char c = sets.charAt(index);
+            if(c == ' '){
+                index++ ;
+            }
+            break;
+        }
+
+        String setStr = sets.substring(index , index + 3);
+
+        if(setStr.equalsIgnoreCase("set"))
+            return join("update",tableName,sets ,conditions) ;
         return  join("update",tableName,"set",sets ,conditions) ;
     }
 

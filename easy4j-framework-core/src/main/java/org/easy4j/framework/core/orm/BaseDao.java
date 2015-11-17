@@ -70,7 +70,7 @@ public class BaseDao<M> extends AbstractDao<M> {
     /**
      * <p>
      *     update sql
-     *     eg: update("name=? ,age=?" , "where id = ? " ,[params])
+     *     eg: update("set name=? ,age=?" , "where id = ? " ,[params])
      * </p>
      * @param sets don't append `set`  eg: right === > name=?  error ====> set name=?
      * @param condition should append where  eg : right ====> where id=?  error ====> id = ?
