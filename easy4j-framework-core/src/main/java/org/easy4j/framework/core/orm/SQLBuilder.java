@@ -53,9 +53,9 @@ public class SQLBuilder {
             break;
         }
 
-        String setStr = sets.substring(index , index + 3);
+        String setStr = sets.substring(index , index + 4);
 
-        if(setStr.equalsIgnoreCase("set"))
+        if(setStr.equalsIgnoreCase("set "))
             return join("update",tableName,sets ,conditions) ;
         return  join("update",tableName,"set",sets ,conditions) ;
     }
