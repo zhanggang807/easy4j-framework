@@ -429,4 +429,18 @@ public  abstract class AbstractQueryRunner {
         DbUtils.closeQuietly(rs);
     }
 
+    protected void close(ResultSet rs  ,Statement stmt, Connection connection){
+
+    }
+
+    protected void close(Statement stmt, Connection conn){
+        try{
+            DbUtils.close(stmt);
+        } catch (SQLException s) {
+
+        } finally {
+            close(conn);
+        }
+    }
+
 }

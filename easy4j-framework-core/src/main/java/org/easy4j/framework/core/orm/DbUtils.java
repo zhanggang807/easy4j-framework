@@ -66,7 +66,7 @@ public final class DbUtils {
     public static void closeQuietly(Connection conn) {
         try {
             close(conn);
-        } catch (DbAccessException e) { // NOPMD
+        } catch (DbAccessException e) {
             // quiet
         }
     }
