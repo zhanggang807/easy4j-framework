@@ -66,4 +66,21 @@ public class Pager<E> extends ArrayList<E> implements List<E> {
     public int getTotalPage(){
         return total / pageSize ;
     }
+
+    public int getDisplayStartPage(int midNumber){
+        return pageNumber > midNumber ? pageNumber - midNumber : 1 ;
+    }
+
+    public int getDisplayEndPage(int midNumber){
+
+        int end = midNumber * 2 ;
+
+        if(getTotalPage() < end){
+            return getTotalPage() ;
+        } else if (pageNumber < midNumber ) {
+            return  end ;
+        }  else {
+            return pageNumber + 3 ;
+        }
+    }
 }
