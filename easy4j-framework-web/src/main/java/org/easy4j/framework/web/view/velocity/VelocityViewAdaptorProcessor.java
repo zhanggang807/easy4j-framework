@@ -57,6 +57,7 @@ public class VelocityViewAdaptorProcessor implements ViewAdaptorProcessor {
         Properties velocityProperties = loadDefaultVelocityConfigFile();
 
         velocityProperties.setProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CACHE, "true");
+        velocityProperties.setProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CACHE, "false");
 
         mergeVelocityConfigFile(velocityProperties);
 
