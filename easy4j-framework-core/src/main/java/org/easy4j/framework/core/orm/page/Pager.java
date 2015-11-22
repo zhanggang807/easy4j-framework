@@ -32,7 +32,7 @@ public class Pager<E> extends ArrayList<E> implements List<E> {
     }
 
     public int getStartRowNumber(){
-        return (pageNumber - 1) * pageSize ;
+        return (pageNumber - 1) * pageSize + 1;
     }
 
     public int getEndRowNumber(){
