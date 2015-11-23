@@ -6,4 +6,6 @@ package org.easy4j.framework.core.config;
  * @created date 15-11-9
  */
 public interface Config {
+
+
 }

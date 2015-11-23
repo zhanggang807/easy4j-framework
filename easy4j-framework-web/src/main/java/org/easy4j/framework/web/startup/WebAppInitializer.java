@@ -1,5 +1,6 @@
 package org.easy4j.framework.web.startup;
 
+import org.easy4j.framework.core.config.GlobalConfig;
 import org.easy4j.framework.core.util.ArrayUtils;
 import org.easy4j.framework.web.startup.config.AppConfig;
 import org.easy4j.framework.web.startup.config.DefaultScanPackage;
@@ -26,7 +27,7 @@ import javax.servlet.ServletRegistration;
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    private ScanPackage scanPackage = new DefaultScanPackage();
+    private ScanPackage scanPackage = ScanPackage.defualtInstance ;
 
     /**
      * {@inheritDoc}
@@ -91,7 +92,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected Filter[] getServletFilters() {
 
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding("utf-8");
+        encodingFilter.setEncoding(GlobalConfig.CHARSET_NAME);
 
         HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
 

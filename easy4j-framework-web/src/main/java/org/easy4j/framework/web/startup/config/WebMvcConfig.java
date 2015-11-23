@@ -1,12 +1,15 @@
 package org.easy4j.framework.web.startup.config;
 
 import org.easy4j.framework.core.config.GlobalConfig;
+import org.easy4j.framework.core.util.ClassScanner;
+import org.easy4j.framework.web.startup.ScanPackage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.ClassUtils;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.ArrayList;
@@ -33,7 +36,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        System.out.println("=====addInterceptors====");
+        try {
+            List<Class<?>> classes = ClassScanner.getClassListBySuperClass(ScanPackage.defualtInstance.getBasePackageName(), HandlerInterceptor.class);
+            for(Class clazz : classes) {
+                HandlerInterceptor handlerInterceptor = (HandlerInterceptor)BeanUtils.instantiate(clazz);
+                registry.addInterceptor(handlerInterceptor).addPathPatterns("/**/**");
+
+                System.out.println("=====addInterceptors==== add= " + clazz.getName());
+            }
+
+
+        } catch (Exception e) {
+            //
+        }
+
 
     }
 

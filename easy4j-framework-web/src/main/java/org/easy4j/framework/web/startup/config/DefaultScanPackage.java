@@ -55,4 +55,9 @@ public class DefaultScanPackage implements ScanPackage  {
     public String[] getInfrastructurePackages() {
         return new String[]{"org.easy4j.framework.web.bean.processor"};
     }
+
+    @Override
+    public String getBasePackageName() {
+        return basePackage;
+    }
 }
