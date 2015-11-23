@@ -1,6 +1,7 @@
 package org.easy4j.framework.core.orm;
 
 import org.easy4j.framework.core.orm.handler.Handlers;
+import org.easy4j.framework.core.orm.page.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
@@ -105,6 +106,15 @@ public class BaseDao<M> extends AbstractDao<M> {
     public List<M> queryList(int pageNumber ,int pageSize ,String condition ,Object ... params){
         String sql = SQLBuilder.generateSelectSqlForPager( SQLBuilder.ALL_COLUMNS , tableName, condition , pageNumber , pageSize  );
         return selectList(sql, params);
+    }
+
+    protected Pager<M> pager(int pageNumber,int pageSize,String condition ,Object ... params){
+        int total = queryCount(condition ,params);
+        if(total == 0){
+            return null ;
+        }
+        List<M> data = queryList(pageNumber , pageSize ,condition,params);
+        return new Pager<M>(data ,pageNumber , pageSize , total);
     }
 
 
