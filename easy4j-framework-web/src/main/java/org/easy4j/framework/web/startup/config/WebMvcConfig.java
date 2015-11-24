@@ -104,6 +104,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
+     *
+     * add static resource path
+     *
      * {@inheritDoc}
      * <p>This implementation is empty.
      */
