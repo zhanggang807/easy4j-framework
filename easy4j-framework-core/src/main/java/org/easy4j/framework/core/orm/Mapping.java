@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class Mapping {
 
-    private final String[] fields;
-    private final String[] columns ;
+    private String[] fields;
+    private String[] columns ;
 
     public Mapping(int size){
         fields = new String[size];
@@ -24,6 +24,24 @@ public class Mapping {
 
     public String[] getFields(){
         return this.fields;
+    }
+
+    public void reset(int size){
+
+        String[] oldFields = fields ;
+        String[] oldColumns = columns ;
+        fields  = new String[size];
+        columns = new String[size];
+        int j = 0 ;
+
+        for (int i = 0 ; i < oldFields.length ; i++ ) {
+            if(oldFields[i] != null ) {
+                fields[j] = oldFields[i] ;
+                columns[j] = oldColumns[j] ;
+                j++ ;
+            }
+        }
+
     }
 
     void put(int position ,String key ,String value){

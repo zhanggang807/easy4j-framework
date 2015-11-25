@@ -1,10 +1,10 @@
 package org.easy4j.framework.core.orm;
 
+import org.easy4j.framework.core.annotation.AnnotationUtils;
 import org.easy4j.framework.core.orm.annotation.Column;
 import org.easy4j.framework.core.orm.annotation.Table;
 import org.easy4j.framework.core.util.ReflectUtils;
 import org.easy4j.framework.core.util.base.Strings;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -27,23 +27,27 @@ public class EntityMapping {
         List<Field> fields = ReflectUtils.findAllField(entityClass);
         Mapping mapping = new Mapping(fields.size());
 
-        int count = 0 ;;
+        int count = 0 ;
 
         for(Field field : fields ){
-            Annotation[] annotations = field.getAnnotations();
-            boolean isAdded = false ;
-            for (Annotation ann : annotations){
-                if (ann.annotationType().equals(Column.class)){
-                    mapping.put(count ,field.getName(),((Column)ann).value()) ;
-                    isAdded = true ;
-                    break;
-                }
-            }
-            if(!isAdded){
+            Annotation annotation = AnnotationUtils.findAnnotation(field,Column.class);
+
+            if(annotation == null ) {
                 String columnName = field.getName();
-                mapping.put(count ,columnName, Strings.humpToUnderLine(columnName)) ;
+                mapping.put(count++ ,columnName, Strings.humpToUnderLine(columnName)) ;
+                continue;
             }
-            count ++ ;
+
+            Column column = (Column)annotation ;
+            if(column.ignore()) {
+                continue;
+            }
+
+            mapping.put(count++ ,field.getName(),column.value()) ;
+        }
+
+        if( count != fields.size() ) {
+            mapping.reset(count);
         }
 
         mappings.put(getTableName(entityClass),mapping);
