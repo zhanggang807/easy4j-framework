@@ -37,9 +37,9 @@ public class IndexDaoTest  {
 
     @Test
     public void testQuery(){
-        UserGroup userGroup = indexDao.queryObject("where uid = ?", new Object[]{100000});
+        UserGroup userGroup = indexDao.queryObject("where uid = ?", 100000);
         System.out.println(userGroup);
-        List<UserGroup> userGroupList = indexDao.queryList(1, 10, "where created < ?", new Object[]{new Date()});
+        List<UserGroup> userGroupList = indexDao.queryList(1, 10, "where created < ?", new Date());
         System.out.println(userGroupList.size());
         for (UserGroup userGroup1 : userGroupList){
             System.out.println(userGroup1);
