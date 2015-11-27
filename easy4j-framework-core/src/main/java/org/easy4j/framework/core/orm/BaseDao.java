@@ -2,9 +2,7 @@ package org.easy4j.framework.core.orm;
 
 import org.easy4j.framework.core.orm.handler.Handlers;
 import org.easy4j.framework.core.orm.page.Pager;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**

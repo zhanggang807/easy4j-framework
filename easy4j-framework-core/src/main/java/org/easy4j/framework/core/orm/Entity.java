@@ -11,6 +11,17 @@ public abstract class Entity<ID> {
     @Id
     protected ID id;
 
+    public Entity() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Entity{");
+        sb.append("id=").append(id);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public ID getId() {
         return id;
     }

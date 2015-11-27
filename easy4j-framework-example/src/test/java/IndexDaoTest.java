@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author bjliuyong
@@ -32,6 +33,17 @@ public class IndexDaoTest  {
         int i = indexDao.update(userGroup);
 
         System.out.println(id);
+    }
+
+    @Test
+    public void testQuery(){
+        UserGroup userGroup = indexDao.queryObject("where uid = ?", new Object[]{100000});
+        System.out.println(userGroup);
+        List<UserGroup> userGroupList = indexDao.queryList(1, 10, "where created < ?", new Object[]{new Date()});
+        System.out.println(userGroupList.size());
+        for (UserGroup userGroup1 : userGroupList){
+            System.out.println(userGroup1);
+        }
     }
 
     public void setIndexDao(IndexDao indexDao) {

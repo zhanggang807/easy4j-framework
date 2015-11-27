@@ -1,11 +1,11 @@
 # easy4j-framework
-easy4j-framework
+### easy4j-framework
 
 javaweb , 开源框架很多， 使用起来需要进行很多配置才能满足需求，那么能不能避免这种麻烦 ，然后还能使用这些框架带来的便利
 ，那么easy4j可以满足你的愿望，easy4j深度定制springmvc ，让开发人员还按照springmvc模式开发应用系统，让您在一分钟内搭建一个
 基于springmvc的web构建
 
-###Quick starter
+### Quick starter
 
 环境： jdk7.0+ ,tomcat7.0+
 

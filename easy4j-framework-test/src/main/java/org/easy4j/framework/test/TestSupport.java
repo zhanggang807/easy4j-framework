@@ -32,7 +32,6 @@ public class TestSupport extends BlockJUnit4ClassRunner {
         return applicationContext;
     }
 
-
     @Override
     protected Object createTest() throws Exception {
         Object testInstance = super.createTest();

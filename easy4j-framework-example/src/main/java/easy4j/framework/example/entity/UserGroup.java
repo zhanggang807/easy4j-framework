@@ -20,6 +20,21 @@ public class UserGroup extends Entity{
 
     private Date modified ;
 
+    public UserGroup() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("UserGroup{");
+        sb.append(super.toString());
+        sb.append(", uid=").append(uid);
+        sb.append(", gid=").append(gid);
+        sb.append(", created=").append(created);
+        sb.append(", modified=").append(modified);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public int getUid() {
         return uid;
     }
